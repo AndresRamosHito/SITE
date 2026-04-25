@@ -65,7 +65,14 @@ hr.hairline{border:0;height:1px;background:var(--rule);margin:48px 0}
 .nav{position:sticky;top:0;z-index:50;background:rgba(239,233,221,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--rule-soft)}
 .nav__inner{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:32px;padding:18px 0}
 .brand{display:flex;align-items:center;gap:12px}
-.brand__mark{width:32px;height:32px;background:var(--forest);color:var(--paper);display:grid;place-items:center;font-family:"Fraunces",serif;font-style:italic;font-size:1.2rem;font-weight:600;border-radius:50%}
+.brand__mark{
+  width:40px;height:40px;
+  display:block;
+  object-fit:contain;
+  border-radius:50%;
+  /* tiny lift so the round logo doesn't feel like it's sitting on the baseline */
+  transform:translateY(-1px);
+}
 .brand__text{font-family:"Fraunces",serif;font-weight:500;font-variation-settings:"opsz" 144,"SOFT" 100;font-size:1.35rem;letter-spacing:-.01em}
 .brand__sub{font-family:"JetBrains Mono",monospace;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;opacity:.55;display:block;margin-top:-2px}
 .nav__links{display:flex;justify-content:center;gap:28px;font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase}
@@ -378,6 +385,81 @@ hr.hairline{border:0;height:1px;background:var(--rule);margin:48px 0}
 .foot__col a:hover{color:var(--ochre-2);opacity:1}
 .foot__bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-top:32px;font-family:"JetBrains Mono",monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;opacity:.5}
 @media(max-width:760px){.foot__top{grid-template-columns:1fr 1fr;gap:40px}.foot__brand{grid-column:1/-1}}
+
+/* ---------- FOOTER SOCIAL ROW ---------- */
+.foot__social{
+  display:flex;gap:12px;margin-top:20px;
+}
+.foot__social a{
+  width:40px;height:40px;
+  display:grid;place-items:center;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  color:var(--paper);
+  opacity:.7;
+  transition:all .2s ease;
+}
+.foot__social a:hover{
+  opacity:1;
+  background:var(--ochre);
+  border-color:var(--ochre);
+  color:var(--ink);
+  transform:translateY(-2px);
+}
+
+/* ---------- FOLLOW BLOCK (home) ---------- */
+.follow{padding:80px 0 0}
+.follow__inner{
+  display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;
+  padding:48px;
+  background:var(--paper-2);
+  border-radius:2px;
+  border:1px solid var(--rule-soft);
+}
+.follow__txt h3{
+  font-family:"Fraunces",serif;
+  font-variation-settings:"opsz" 144,"SOFT" 60;
+  font-weight:380;
+  font-size:clamp(1.8rem,3.4vw,2.8rem);
+  line-height:1;letter-spacing:-.02em;
+  margin:14px 0;
+}
+.follow__txt h3 em{font-style:italic;color:var(--forest)}
+.follow__txt p{color:rgba(27,26,23,.78);font-size:1.05rem;max-width:38ch}
+.follow__cards{display:flex;flex-direction:column;gap:14px}
+.follow__card{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:18px;align-items:center;
+  padding:20px 24px;
+  background:var(--paper);
+  border:1px solid var(--rule-soft);
+  border-radius:2px;
+  transition:all .25s ease;
+}
+.follow__card svg{flex-shrink:0;color:var(--ink)}
+.follow__card:hover{
+  background:var(--forest);color:var(--paper);
+  transform:translateX(4px);
+  border-color:var(--forest);
+}
+.follow__card:hover svg{color:var(--ochre-2)}
+.follow__plat{
+  display:block;
+  font-family:"JetBrains Mono",monospace;
+  font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;
+  opacity:.55;margin-bottom:2px;
+}
+.follow__handle{
+  display:block;
+  font-family:"Fraunces",serif;font-style:italic;
+  font-size:1.3rem;line-height:1;letter-spacing:-.01em;
+}
+.follow__go{font-family:"Fraunces",serif;font-style:italic;font-size:1.4rem;color:var(--ochre)}
+.follow__card:hover .follow__go{color:var(--ochre-2)}
+@media(max-width:760px){
+  .follow__inner{grid-template-columns:1fr;gap:32px;padding:32px}
+}
 
 /* ---------- TRADE BLOCK (Acineta barkeri + others) ---------- */
 .trade-block{
