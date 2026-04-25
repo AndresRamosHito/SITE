@@ -288,7 +288,7 @@ HOME_BODY = f"""
 
     <article class="specimen">
       <div class="specimen__plate"><span>OA — Plate II</span><span>Coll. 2022</span></div>
-      <div class="specimen__img"><img src="{IMG}/anceps-flowers.jpg" alt="Laelia anceps"></div>
+      <div class="specimen__img"><img src="{IMG}/anceps-flowers.JPG" alt="Laelia anceps"></div>
       <h3 class="specimen__name">Laelia anceps</h3>
       <p class="specimen__author">Lindl.</p>
       <span class="specimen__status">Cultural icon · Widespread</span>
@@ -298,7 +298,7 @@ HOME_BODY = f"""
 
     <article class="specimen">
       <div class="specimen__plate"><span>OA — Plate III</span><span>Coll. 2022</span></div>
-      <div class="specimen__img"><img src="{IMG}/acineta-barkeri-flowers.jpg" alt="Acineta barkeri"></div>
+      <div class="specimen__img"><img src="{IMG}/a-barkeri-flowers.jpg" alt="Acineta barkeri"></div>
       <h3 class="specimen__name">Acineta barkeri</h3>
       <p class="specimen__author">(Bateman) Lindl.</p>
       <span class="specimen__status">Endangered · Endemic</span>
@@ -318,7 +318,7 @@ HOME_BODY = f"""
 
     <article class="specimen">
       <div class="specimen__plate"><span>OA — Plate V</span><span>Coll. 2023</span></div>
-      <div class="specimen__img"><img src="{IMG}/epi-parkinsonianum-grand.jpg" alt="Epidendrum parkinsonianum"></div>
+      <div class="specimen__img"><img src="{IMG}/epi-parkinsonianum-grand.JPG" alt="Epidendrum parkinsonianum"></div>
       <h3 class="specimen__name">Epidendrum parkinsonianum</h3>
       <p class="specimen__author">Hook.</p>
       <span class="specimen__status">Canopy specialist · Under monitoring</span>
@@ -341,7 +341,7 @@ HOME_BODY = f"""
   </div>
   <div class="essay">
     <div class="essay__media">
-      <img class="a" src="{IMG}/climate-simulator.jpg" alt="RAR Climate Replicator">
+      <img class="a" src="{IMG}/Climate-simulator.JPG" alt="RAR Climate Replicator">
     </div>
     <div class="essay__txt">
       <h3>Recreating the cloud forest, <em>indoors</em>.</h3>
@@ -442,11 +442,11 @@ CYPRIPEDIUM = pageheader(
 
 <section class="wrap reveal">
   <div class="gallery" style="grid-auto-rows:320px;margin-bottom:64px">
-    <figure class="g"><img src="{IMG}/cypripedium-a.jpg" alt="Cypripedium in habitat"><figcaption>In habitat</figcaption></figure>
-    <figure class="g g--tall"><img src="{IMG}/cypripedium-b.jpg" alt="Cypripedium flower detail"><figcaption>Flower detail</figcaption></figure>
-    <figure class="g"><img src="{IMG}/cypripedium-molle.jpg" alt="Cypripedium molle"><figcaption><em>Cypripedium molle</em></figcaption></figure>
-    <figure class="g g--wide"><img src="{IMG}/cypripedium-size-comp.jpg" alt="Size comparison"><figcaption>Size comparison with a human hand</figcaption></figure>
-    <figure class="g"><img src="{IMG}/cypripedium-size-comp-b.jpg" alt="Size comparison detail"><figcaption>Inflorescence scale</figcaption></figure>
+    <figure class="g"><img src="{IMG}/cypripedium-a.JPG" alt="Cypripedium in habitat"><figcaption>In habitat</figcaption></figure>
+    <figure class="g g--tall"><img src="{IMG}/cypripedium-b.JPG" alt="Cypripedium flower detail"><figcaption>Flower detail</figcaption></figure>
+    <figure class="g"><img src="{IMG}/cypripedium-molle.jpeg" alt="Cypripedium molle"><figcaption><em>Cypripedium molle</em></figcaption></figure>
+    <figure class="g g--wide"><img src="{IMG}/cypripedium-size%20comp.JPG" alt="Size comparison"><figcaption>Size comparison with a human hand</figcaption></figure>
+    <figure class="g"><img src="{IMG}/cypripedium-size-comp-b.JPG" alt="Size comparison detail"><figcaption>Inflorescence scale</figcaption></figure>
   </div>
 </section>
 
@@ -485,7 +485,7 @@ ACINETA = pageheader(
 <section class="wrap reveal">
   <div class="profile">
     <div class="profile__img">
-      <img src="{IMG}/acineta-barkeri-front.jpg" alt="Acineta barkeri">
+      <img src="{IMG}/acineta-barkeri-front.JPG" alt="Acineta barkeri">
     </div>
     <div class="profile__data">
       <dl class="datasheet">
@@ -506,10 +506,10 @@ ACINETA = pageheader(
 
 <section class="wrap reveal">
   <div class="gallery" style="grid-auto-rows:300px;margin:48px 0 64px">
-    <figure class="g g--wide"><img src="{IMG}/acineta-barkeri-flowers.jpg" alt="Acineta flowers"><figcaption>Inflorescence</figcaption></figure>
-    <figure class="g"><img src="{IMG}/acineta-barkeri-canopy.jpg" alt="In canopy"><figcaption>In the canopy</figcaption></figure>
-    <figure class="g"><img src="{IMG}/acineta-barkeri-insitu.jpg" alt="In situ"><figcaption>In situ</figcaption></figure>
-    <figure class="g g--wide"><img src="{IMG}/acineta-barkeri-ground.jpg" alt="Fallen specimen"><figcaption>Ground-level observation</figcaption></figure>
+    <figure class="g g--wide"><img src="{IMG}/a-barkeri-flowers.jpg" alt="Acineta flowers"><figcaption>Inflorescence</figcaption></figure>
+    <figure class="g"><img src="{IMG}/acineta-canopy.jpg" alt="In canopy"><figcaption>In the canopy</figcaption></figure>
+    <figure class="g"><img src="{IMG}/Acineta_barkeri_insitu.JPG" alt="In situ"><figcaption>In situ</figcaption></figure>
+    <figure class="g g--wide"><img src="{IMG}/acineta-ground.jpg" alt="Fallen specimen"><figcaption>Ground-level observation</figcaption></figure>
   </div>
 </section>
 
@@ -534,8 +534,8 @@ ACINETA = pageheader(
       <p>Documenting these sites is part of our monitoring work. We don't publish locations, but the photographic record is a direct input to enforcement conversations with state environmental authorities.</p>
     </div>
     <div class="trade-block__imgs">
-      <img src="{IMG}/acineta-barkeri-trade.jpg" alt="Wild-collected Acineta on sale at a roadside market">
-      <img src="{IMG}/acineta-barkeri-trade-b.jpg" alt="Wild-collected Acineta on sale">
+      <img src="{IMG}/a-barkeri-illegal-trade.jpg" alt="Wild-collected Acineta on sale at a roadside market">
+      <img src="{IMG}/a-barkeri-illegal-trade-b.jpg" alt="Wild-collected Acineta on sale">
     </div>
   </div>
 </section>
@@ -582,7 +582,7 @@ PROSTHECHEA = pageheader(
 
 <section class="wrap reveal">
   <figure class="hero__frame" style="margin:48px 0 64px;aspect-ratio:16/9">
-    <img src="{IMG}/prosthechea-vitellina-situ.jpg" alt="Prosthechea vitellina in habitat">
+    <img src="{IMG}/vitellina-situ.jpg" alt="Prosthechea vitellina in habitat">
     <figcaption class="hero__caption">In situ — Orchidarc Reserve, Veracruz</figcaption>
   </figure>
 </section>
@@ -623,7 +623,7 @@ LAELIA_ANCEPS = pageheader(
 <section class="wrap reveal">
   <div class="profile">
     <div class="profile__img">
-      <img src="{IMG}/anceps-flowers.jpg" alt="Laelia anceps flower detail">
+      <img src="{IMG}/anceps-flowers.JPG" alt="Laelia anceps flower detail">
     </div>
     <div class="profile__data">
       <dl class="datasheet">
@@ -643,12 +643,12 @@ LAELIA_ANCEPS = pageheader(
 
 <section class="wrap reveal">
   <div class="gallery" style="grid-auto-rows:280px;margin:48px 0 64px">
-    <figure class="g"><img src="{IMG}/anceps-flowers-b.jpg" alt="Anceps flowers"><figcaption>Inflorescence</figcaption></figure>
+    <figure class="g"><img src="{IMG}/anceps-flowers-b.JPG" alt="Anceps flowers"><figcaption>Inflorescence</figcaption></figure>
     <figure class="g g--tall"><img src="{IMG}/anceps-forest.jpg" alt="In cloud forest"><figcaption>In the forest</figcaption></figure>
     <figure class="g"><img src="{IMG}/anceps-situ.jpg" alt="In situ"><figcaption>In situ</figcaption></figure>
-    <figure class="g"><img src="{IMG}/l-anceps-insitu.jpg" alt="Epiphytic specimen"><figcaption>Epiphytic habit</figcaption></figure>
-    <figure class="g g--wide"><img src="{IMG}/anceps-day-of-the-dead.jpg" alt="Day of the Dead altar with anceps"><figcaption>Altar collection, Day of the Dead</figcaption></figure>
-    <figure class="g"><img src="{IMG}/anceps-situ-flower.jpg" alt="Flower close-up"><figcaption>Flower close-up</figcaption></figure>
+    <figure class="g"><img src="{IMG}/L_anceps_insitu.jpg" alt="Epiphytic specimen"><figcaption>Epiphytic habit</figcaption></figure>
+    <figure class="g g--wide"><img src="{IMG}/anceps-day-of-the-dead-collection.jpg" alt="Day of the Dead altar with anceps"><figcaption>Altar collection, Day of the Dead</figcaption></figure>
+    <figure class="g"><img src="{IMG}/anceps-situ-flower.JPG" alt="Flower close-up"><figcaption>Flower close-up</figcaption></figure>
   </div>
 </section>
 
@@ -707,11 +707,11 @@ LAELIA_HALBINGERIANA = pageheader(
 
 <section class="wrap reveal">
   <div class="gallery" style="grid-auto-rows:280px;margin:48px 0 64px">
-    <figure class="g"><img src="{IMG}/l-halbingeriana-a.jpg" alt="Halbingeriana flower"><figcaption>Flower detail</figcaption></figure>
-    <figure class="g"><img src="{IMG}/l-halbingeriana-b.jpg" alt=""><figcaption>Inflorescence</figcaption></figure>
-    <figure class="g"><img src="{IMG}/l-halbingeriana-c.jpg" alt=""><figcaption>Habit</figcaption></figure>
-    <figure class="g"><img src="{IMG}/l-halbingeriana-d.jpg" alt=""><figcaption>Lip detail</figcaption></figure>
-    <figure class="g"><img src="{IMG}/l-halbingeriana-e.jpg" alt=""><figcaption>In situ</figcaption></figure>
+    <figure class="g"><img src="{IMG}/l-halbingeriana-a.JPG" alt="Halbingeriana flower"><figcaption>Flower detail</figcaption></figure>
+    <figure class="g"><img src="{IMG}/l-halbingeriana-b.JPG" alt=""><figcaption>Inflorescence</figcaption></figure>
+    <figure class="g"><img src="{IMG}/l-halbingeriana-c.JPG" alt=""><figcaption>Habit</figcaption></figure>
+    <figure class="g"><img src="{IMG}/l-halbingeriana-d.JPG" alt=""><figcaption>Lip detail</figcaption></figure>
+    <figure class="g"><img src="{IMG}/l-halbingeriana-e.JPG" alt=""><figcaption>In situ</figcaption></figure>
   </div>
 </section>
 
@@ -750,7 +750,7 @@ LAELIA_FURFURACEA = pageheader(
 <section class="wrap reveal">
   <div class="profile">
     <div class="profile__img">
-      <img src="{IMG}/laelia-furfuracea.jpg" alt="Laelia furfuracea">
+      <img src="{IMG}/laelia-furfuracea.JPG" alt="Laelia furfuracea">
     </div>
     <div class="profile__data">
       <dl class="datasheet">
@@ -771,7 +771,7 @@ LAELIA_FURFURACEA = pageheader(
   <div class="gallery" style="grid-auto-rows:280px;margin:48px 0 64px">
     <figure class="g g--wide"><img src="{IMG}/furfuracea-grand.jpg" alt=""><figcaption>In full bloom</figcaption></figure>
     <figure class="g"><img src="{IMG}/furfuracea-situ-b.jpg" alt=""><figcaption>On oak</figcaption></figure>
-    <figure class="g"><img src="{IMG}/l-furfuracea-insitu.jpg" alt=""><figcaption>In situ</figcaption></figure>
+    <figure class="g"><img src="{IMG}/L_furfuracea_insitu.JPG" alt=""><figcaption>In situ</figcaption></figure>
   </div>
 </section>
 
@@ -803,7 +803,7 @@ EPIDENDRUM = pageheader(
 ) + f"""
 <section class="wrap reveal">
   <figure class="hero__frame" style="margin:32px 0 64px;aspect-ratio:16/10">
-    <img src="{IMG}/epi-parkinsonianum-grand.jpg" alt="Epidendrum parkinsonianum">
+    <img src="{IMG}/epi-parkinsonianum-grand.JPG" alt="Epidendrum parkinsonianum">
     <figcaption class="hero__caption">A mature specimen in the canopy</figcaption>
   </figure>
 </section>
@@ -811,7 +811,7 @@ EPIDENDRUM = pageheader(
 <section class="wrap reveal">
   <div class="profile">
     <div class="profile__img">
-      <img src="{IMG}/epi-parkinsonianum.jpg" alt="Epidendrum parkinsonianum">
+      <img src="{IMG}/epi-parkinsonianum.JPG" alt="Epidendrum parkinsonianum">
     </div>
     <div class="profile__data">
       <dl class="datasheet">
@@ -831,9 +831,9 @@ EPIDENDRUM = pageheader(
 
 <section class="wrap reveal">
   <div class="gallery" style="grid-auto-rows:300px;margin:48px 0 64px">
-    <figure class="g"><img src="{IMG}/epi-parkinsonianum-grand-b.jpg" alt=""><figcaption>Specimen scale</figcaption></figure>
-    <figure class="g"><img src="{IMG}/epidendrum-insitu.jpg" alt=""><figcaption>In the canopy</figcaption></figure>
-    <figure class="g"><img src="{IMG}/epidendrum-insitu-2.jpg" alt=""><figcaption>Habit</figcaption></figure>
+    <figure class="g"><img src="{IMG}/epi-parkinsonianum-grand-b.JPG" alt=""><figcaption>Specimen scale</figcaption></figure>
+    <figure class="g"><img src="{IMG}/Epidendrum_insitu.jpg" alt=""><figcaption>In the canopy</figcaption></figure>
+    <figure class="g"><img src="{IMG}/Epidendrum_insitu2.jpg" alt=""><figcaption>Habit</figcaption></figure>
   </div>
 </section>
 
@@ -875,7 +875,7 @@ RESEARCH = pageheader(
 
 <section class="wrap reveal">
   <figure class="hero__frame" style="aspect-ratio:16/9;margin-bottom:48px">
-    <img src="{IMG}/climate-simulator.jpg" alt="RAR Climate Replicator">
+    <img src="{IMG}/Climate-simulator.JPG" alt="RAR Climate Replicator">
     <figcaption class="hero__caption">RAR Climate Replicator — prototype chamber</figcaption>
   </figure>
 </section>
@@ -907,9 +907,9 @@ RESEARCH = pageheader(
 
 <section class="wrap reveal">
   <div class="gallery" style="grid-auto-rows:300px;margin:32px 0 80px">
-    <figure class="g"><img src="{IMG}/climate-simulator-b.jpg" alt="Climate Replicator detail"><figcaption>Control electronics</figcaption></figure>
-    <figure class="g"><img src="{IMG}/climate-simulator-c.jpg" alt="Climate Replicator detail"><figcaption>Chamber interior</figcaption></figure>
-    <figure class="g"><img src="{IMG}/climate-simulator-d.jpg" alt="Climate Replicator detail"><figcaption>Water-cycle module</figcaption></figure>
+    <figure class="g"><img src="{IMG}/Climate-simulator-b.JPG" alt="Climate Replicator detail"><figcaption>Control electronics</figcaption></figure>
+    <figure class="g"><img src="{IMG}/Climate-simulator-c.JPG" alt="Climate Replicator detail"><figcaption>Chamber interior</figcaption></figure>
+    <figure class="g"><img src="{IMG}/Climate-simulator-d.JPG" alt="Climate Replicator detail"><figcaption>Water-cycle module</figcaption></figure>
   </div>
 </section>
 
@@ -972,7 +972,7 @@ EXTINCT = pageheader(
 ) + f"""
 <section class="wrap reveal">
   <figure class="essay__hero">
-    <img src="{IMG}/ophrys-apifera.jpg" alt="Ophrys apifera">
+    <img src="{IMG}/ophrys-apifera.png" alt="Ophrys apifera">
     <figcaption>Fig. 1 — <em>Ophrys apifera</em>, the bee orchid. The labellum mimics the body of a female bee.</figcaption>
   </figure>
 </section>
@@ -1016,36 +1016,36 @@ EXTINCT = pageheader(
 
 HERBARIUM_ENTRIES = [
     # (name, author, status, range, image, href)
-    ("Laelia anceps",            "Lindl.",                  "Cultural icon",      "Mexico (widespread)",      f"{IMG}/anceps-flowers.jpg",              "laelia-anceps.html"),
+    ("Laelia anceps",            "Lindl.",                  "Cultural icon",      "Mexico (widespread)",      f"{IMG}/anceps-flowers.JPG",              "laelia-anceps.html"),
     ("Laelia halbingeriana",     "Salazar &amp; Soto Arenas","Narrow endemic",    "Eastern Sierra Madre",    f"{IMG}/l-halbingeriana.jpg",             "laelia-halbingeriana.html"),
-    ("Laelia furfuracea",        "Lindl.",                  "Under protection",   "Endemic · Oaxaca",         f"{IMG}/laelia-furfuracea.jpg",           "laelia-furfuracea.html"),
+    ("Laelia furfuracea",        "Lindl.",                  "Under protection",   "Endemic · Oaxaca",         f"{IMG}/laelia-furfuracea.JPG",           "laelia-furfuracea.html"),
     ("Laelia speciosa",          "(Kunth) Schltr.",         "Under protection",   "Endemic · Central MX",     f"{IMG}/laelia-speciosa.jpg",             "#"),
     ("Laelia albida",            "Bateman ex Lindl.",       "Cultural use",       "Mexico",                    f"{IMG}/laelia-albida-black.jpg",         "#"),
-    ("Acineta barkeri",          "(Bateman) Lindl.",        "Endangered",         "Endemic · Veracruz",       f"{IMG}/acineta-barkeri-flowers.jpg",     "acineta-barkeri.html"),
+    ("Acineta barkeri",          "(Bateman) Lindl.",        "Endangered",         "Endemic · Veracruz",       f"{IMG}/a-barkeri-flowers.jpg",     "acineta-barkeri.html"),
     ("Prosthechea vitellina",    "(Lindl.) W.E.Higgins",    "Endangered",         "MX → Nicaragua",            f"{IMG}/prosthechea-vitellina.jpg",       "prosthechea-vitellina.html"),
-    ("Prosthechea cochleata",    "(L.) W.E.Higgins",        "Under monitoring",   "MX → South America",        f"{IMG}/prosthechea-cochleata.jpg",       "#"),
+    ("Prosthechea cochleata",    "(L.) W.E.Higgins",        "Under monitoring",   "MX → South America",        f"{IMG}/prosthechea-cochleata.JPG",       "#"),
     ("Cypripedium spp.",         "—",                       "In assessment",      "Cofre de Perote",           f"{IMG}/cypripedium.jpg",                 "cypripedium.html"),
     ("× Dinedema mariae",        "Orchidarc, 2025",         "Newly described",    "Endemic · Veracruz",       f"{IMG}/dinedema-mariae.jpg",             "#"),
-    ("Epidendrum parkinsonianum","Hook.",                   "Canopy specialist",  "MX → Panama",               f"{IMG}/epi-parkinsonianum.jpg",          "epidendrum-parkinsonianum.html"),
+    ("Epidendrum parkinsonianum","Hook.",                   "Canopy specialist",  "MX → Panama",               f"{IMG}/epi-parkinsonianum.JPG",          "epidendrum-parkinsonianum.html"),
     ("Mormodes maculata",        "(Klotzsch) L.O.Williams", "Under monitoring",   "Mexico (cloud forest)",     f"{IMG}/mormodes-maculata.jpg",           "#"),
     ("Gongora galeata",          "(Lindl.) Rchb.f.",        "Under monitoring",   "Endemic · Mexico",          f"{IMG}/gongora-galeata.jpg",             "#"),
-    ("Rhynchostele maculata",    "(La Llave &amp; Lex.) Soto Arenas &amp; Salazar","Under monitoring","MX &amp; Guatemala", f"{IMG}/rhynchostele-maculata.jpg",   "#"),
-    ("Rhynchostele membranacea", "(Lindl.) Soto Arenas &amp; Salazar","Under monitoring","Mexico",             f"{IMG}/rhynchostele-membranacea.jpg",    "#"),
-    ("Artorima erubescens",      "(Lindl.) Dressler &amp; Pollard","Endemic",     "Oaxaca highlands",         f"{IMG}/artorima.jpg",                    "#"),
-    ("Alamania punicea",         "Lex.",                    "Cliff specialist",   "Endemic · Oaxaca",          f"{IMG}/alamania.jpg",                    "#"),
-    ("Bletia adenocarpa",        "Rchb.f.",                 "Under monitoring",   "Mexico",                    f"{IMG}/bletia-adenocarpa.jpg",           "#"),
+    ("Rhynchostele maculata",    "(La Llave &amp; Lex.) Soto Arenas &amp; Salazar","Under monitoring","MX &amp; Guatemala", f"{IMG}/rhynchostele-maculata.JPG",   "#"),
+    ("Rhynchostele membranacea", "(Lindl.) Soto Arenas &amp; Salazar","Under monitoring","Mexico",             f"{IMG}/rhynchostele-membranacea.JPG",    "#"),
+    ("Artorima erubescens",      "(Lindl.) Dressler &amp; Pollard","Endemic",     "Oaxaca highlands",         f"{IMG}/artorima.JPG",                    "#"),
+    ("Alamania punicea",         "Lex.",                    "Cliff specialist",   "Endemic · Oaxaca",          f"{IMG}/alamania.JPG",                    "#"),
+    ("Bletia adenocarpa",        "Rchb.f.",                 "Under monitoring",   "Mexico",                    f"{IMG}/bletia-adenocarpa.JPG",           "#"),
     ("Habenaria spp.",           "—",                       "Under monitoring",   "Cloud forest terrestrial",  f"{IMG}/habenaria.jpg",                   "#"),
     ("Lepanthes spp.",           "—",                       "Miniatures",         "Cloud forest",              f"{IMG}/lepanthes-mini.jpg",              "#"),
     ("Pabstiella biriricensis",  "—",                       "Under study",        "Cloud forest",              f"{IMG}/pabstiella.jpg",                  "#"),
-    ("Acianthera spp.",          "—",                       "Under monitoring",   "Cloud forest",              f"{IMG}/acianthera.jpg",                  "#"),
-    ("Pleurothallis spp.",       "—",                       "Under monitoring",   "Cloud forest",              f"{IMG}/pleurothallis.jpg",               "#"),
-    ("Trichosalpinx spp.",       "—",                       "Under monitoring",   "Cloud forest",              f"{IMG}/trichosalpinx.jpg",               "#"),
-    ("Meiracyllium spp.",        "—",                       "Under monitoring",   "Mexico &amp; Guatemala",    f"{IMG}/meiracyllium.jpg",                "#"),
-    ("Coelia macrostachya",      "Lindl.",                  "Under monitoring",   "Mexico",                    f"{IMG}/coelia-macrostachya.jpg",         "#"),
-    ("Cranichis spp.",           "—",                       "Terrestrial",        "Cloud forest",              f"{IMG}/cranichis.jpg",                   "#"),
-    ("Funkiella spp.",           "—",                       "Terrestrial",        "Mexico",                    f"{IMG}/funkiella.jpg",                   "#"),
+    ("Acianthera spp.",          "—",                       "Under monitoring",   "Cloud forest",              f"{IMG}/acianthera-macro.jpg",                  "#"),
+    ("Pleurothallis spp.",       "—",                       "Under monitoring",   "Cloud forest",              f"{IMG}/Pleurothallis_cultivado.jpg",               "#"),
+    ("Trichosalpinx spp.",       "—",                       "Under monitoring",   "Cloud forest",              f"{IMG}/Trichosalpinx_cultivado.jpg",               "#"),
+    ("Meiracyllium spp.",        "—",                       "Under monitoring",   "Mexico &amp; Guatemala",    f"{IMG}/Meriacylium_cultivado.jpg",                "#"),
+    ("Coelia macrostachya",      "Lindl.",                  "Under monitoring",   "Mexico",                    f"{IMG}/Coelia_macrostachya_insitu.jpg",         "#"),
+    ("Cranichis spp.",           "—",                       "Terrestrial",        "Cloud forest",              f"{IMG}/cranichis.JPG",                   "#"),
+    ("Funkiella spp.",           "—",                       "Terrestrial",        "Mexico",                    f"{IMG}/funkiella.JPG",                   "#"),
     ("Pterostemma karwinskii",   "Schltr.",                 "Endemic",            "Mexico",                    f"{IMG}/p-karwinskii.jpg",                "#"),
-    ("Unknown species",          "Under study",             "Not yet identified", "Veracruz cloud forest",     f"{IMG}/unknown-species.jpg",             "#"),
+    ("Unknown species",          "Under study",             "Not yet identified", "Veracruz cloud forest",     f"{IMG}/SinID.jpg",             "#"),
 ]
 
 def herbarium_card(name, author, status, range_, img, href):
@@ -1079,21 +1079,21 @@ HERBARIUM = pageheader(
 GALLERY_IMAGES = [
     (f"{IMG}/anceps-cliff.jpg",             "Laelia anceps on cliff face",          "tall"),
     (f"{IMG}/waterfall.jpg",                "Cloud forest waterfall",               "wide"),
-    (f"{IMG}/l-halbingeriana-c.jpg",        "Laelia halbingeriana",                 ""),
-    (f"{IMG}/acineta-barkeri-flowers.jpg",  "Acineta barkeri",                       "tall"),
+    (f"{IMG}/l-halbingeriana-c.JPG",        "Laelia halbingeriana",                 ""),
+    (f"{IMG}/a-barkeri-flowers.jpg",  "Acineta barkeri",                       "tall"),
     (f"{IMG}/aerial-cofre-de-perote.jpg",   "Aerial · Cofre de Perote",              "wide"),
-    (f"{IMG}/cypripedium-a.jpg",            "Cypripedium",                          ""),
-    (f"{IMG}/epi-parkinsonianum-grand.jpg", "Epidendrum parkinsonianum",            ""),
+    (f"{IMG}/cypripedium-a.JPG",            "Cypripedium",                          ""),
+    (f"{IMG}/epi-parkinsonianum-grand.JPG", "Epidendrum parkinsonianum",            ""),
     (f"{IMG}/dinedema-moreflowers.jpg",     "× Dinedema mariae",                    "tall"),
     (f"{IMG}/researchers-in-canopy.jpg",    "Researchers in the canopy",             "wide"),
-    (f"{IMG}/anceps-day-of-the-dead.jpg",   "Day of the Dead altar",                ""),
+    (f"{IMG}/anceps-day-of-the-dead-collection.jpg",   "Day of the Dead altar",                ""),
     (f"{IMG}/hero-cloud-forest.jpg",        "Cloud forest canopy",                  "tall"),
     (f"{IMG}/reserve-ixhuacan.jpg",         "Reserve, Ixhuacán de los Reyes",       ""),
     (f"{IMG}/cloud-rock-habitat.jpg",       "Cloud forest rock habitat",            ""),
     (f"{IMG}/furfuracea-grand.jpg",         "Laelia furfuracea in bloom",           "wide"),
-    (f"{IMG}/lepanthes-1.jpg",              "Lepanthes — miniature",                 ""),
-    (f"{IMG}/prosthechea-vitellina-situ.jpg","Prosthechea vitellina in situ",       "tall"),
-    (f"{IMG}/orchid-rescue.jpg",            "Orchid rescue",                        ""),
+    (f"{IMG}/Lepanthes%201.jpg",              "Lepanthes — miniature",                 ""),
+    (f"{IMG}/vitellina-situ.jpg","Prosthechea vitellina in situ",       "tall"),
+    (f"{IMG}/orchid-resc8e.jpg",            "Orchid rescue",                        ""),
     (f"{IMG}/andres-with-halbingeriana.jpg","Fieldwork · Laelia halbingeriana",     ""),
 ]
 
@@ -1123,17 +1123,17 @@ GALLERY = pageheader(
 STORIES_LIST = [
     ("Extinct strength", "Essay · 2025",
      "What the bee orchid can tell us about the bumblebee that disappeared.",
-     f"{IMG}/ophrys-apifera.jpg", "extinct-strength.html"),
+     f"{IMG}/ophrys-apifera.png", "extinct-strength.html"),
     ("A new × Dinedema from the cloud forest", "Field report · 2025",
      "Notes on the discovery, description and publication of × Dinedema mariae — Orchidarc's first contribution to the taxonomic record of Mexican orchids.",
      f"{IMG}/dinedema-mariae.jpg",
      "https://www.researchgate.net/publication/393387931_A_new_nothogenus_and_a_new_nothospecies_in_the_subtribe_Laeliinae_Orchidaceae_from_Mexico"),
     ("Counting Cypripedium", "Conservation · 2024",
      "How we mapped the largest known Cypripedium population in Mesoamerica — and why the work is just beginning.",
-     f"{IMG}/cypripedium-a.jpg", "cypripedium.html"),
+     f"{IMG}/cypripedium-a.JPG", "cypripedium.html"),
     ("On the altars of Allsaints", "Film notes · 2025",
      "The making of Lily of Allsaints — a year in the cloud forest, the cemeteries, and the family histories of Veracruz.",
-     f"{IMG}/anceps-day-of-the-dead.jpg",
+     f"{IMG}/anceps-day-of-the-dead-collection.jpg",
      "https://www.youtube.com/watch?v=9ozJdv3ggG0"),
 ]
 
@@ -1169,10 +1169,13 @@ MEXICO_TOURS = pageheader(
     "Small-group field expeditions led by working orchid biologists. Veracruz and Oaxaca, in the heart of the Mexican orchid season."
 ) + f"""
 <section class="wrap reveal">
-  <figure class="hero__frame" style="margin:32px 0 64px">
+  <figure class="hero__frame" style="margin:32px 0 32px">
     <img src="{IMG}/waterfall.jpg" alt="Cloud forest waterfall">
     <figcaption class="hero__caption">PL. 03 — Cloud forest waterfall, Veracruz</figcaption>
   </figure>
+  <p style="text-align:center;margin-bottom:64px">
+    <a class="btn" href="https://drive.google.com/file/d/1H7ckHHIqTYHGTRim2Nvwt1e4zlQQVHwc/view?usp=drive_link" target="_blank" rel="noopener">Download the full tour brochure (PDF)</a>
+  </p>
 </section>
 
 <section class="section wrap reveal">
@@ -1219,7 +1222,10 @@ MEXICO_TOURS = pageheader(
     <div>
       <h3 class="block__title">Enquire</h3>
       <p>Tours are arranged individually. To enquire about availability, group composition or a custom itinerary, write to <a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a>.</p>
-      <p style="margin-top:24px"><a class="btn btn--filled" href="mailto:andresr@orchidarc.org?subject=Mexico%20Orchid%20Expedition%20enquiry">Send an enquiry</a></p>
+      <p style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--filled" href="mailto:andresr@orchidarc.org?subject=Mexico%20Orchid%20Expedition%20enquiry">Send an enquiry</a>
+        <a class="btn" href="https://drive.google.com/file/d/1H7ckHHIqTYHGTRim2Nvwt1e4zlQQVHwc/view?usp=drive_link" target="_blank" rel="noopener">Brochure (PDF)</a>
+      </p>
     </div>
   </div>
 </section>
@@ -1317,7 +1323,8 @@ TAKE_ACTION = pageheader(
       <span class="bigcard__num">01</span>
       <h3 class="bigcard__title">Donate</h3>
       <p>One-time or recurring contributions of any size. Your gift directly supports field expeditions, monitoring infrastructure, IUCN assessment work and our documentary slate.</p>
-      <p class="muted">Donation portal coming soon — to give now, please write to <a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a> for bank transfer details (UK or Mexico).</p>
+      <p><a class="btn btn--filled" href="https://www.paypal.com/donate/?hosted_button_id=ZPBGSJ42SECCA" target="_blank" rel="noopener">Donate via PayPal</a></p>
+      <p class="muted" style="margin-top:14px">For UK or Mexico bank transfer details, write to <a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a>.</p>
     </div>
     <div class="bigcard">
       <span class="bigcard__num">02</span>
@@ -1362,7 +1369,7 @@ STORE = pageheader(
   <div class="gallery" style="grid-auto-rows:340px;margin-bottom:48px">
     <figure class="g"><img src="{IMG}/laelia-collection-b.jpg" alt="Laelia collection"><figcaption>Detail</figcaption></figure>
     <figure class="g"><img src="{IMG}/laelia-collection-c.jpg" alt="Laelia collection"><figcaption>Styled</figcaption></figure>
-    <figure class="g"><img src="{IMG}/anceps-day-of-the-dead.jpg" alt="Laelia anceps"><figcaption>The inspiration — <em>Laelia anceps</em></figcaption></figure>
+    <figure class="g"><img src="{IMG}/anceps-day-of-the-dead-collection.jpg" alt="Laelia anceps"><figcaption>The inspiration — <em>Laelia anceps</em></figcaption></figure>
   </div>
 
   <div class="prose">
@@ -1381,13 +1388,13 @@ SOCIALS = pageheader(
 ) + """
 <section class="section wrap reveal">
   <div class="socials-grid">
-    <a class="soc" href="https://www.youtube.com/@orchidarc" target="_blank" rel="noopener">
+    <a class="soc" href="https://www.youtube.com/channel/UCTxs17CLsXiwm5GgsLcLMYQ" target="_blank" rel="noopener">
       <span class="soc__plat">YouTube</span>
       <h3 class="soc__handle">@orchidarc</h3>
       <p>Documentaries, field reports, behind-the-scenes from the cloud forest.</p>
       <span class="soc__go">Visit channel →</span>
     </a>
-    <a class="soc" href="https://www.instagram.com/orchidarc" target="_blank" rel="noopener">
+    <a class="soc" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
       <span class="soc__plat">Instagram</span>
       <h3 class="soc__handle">@orchidarc</h3>
       <p>Photographs from the field, day-by-day during the season.</p>
@@ -1406,7 +1413,7 @@ SOCIALS = pageheader(
       <span class="soc__go">Write to us →</span>
     </a>
   </div>
-  <p class="muted" style="margin-top:48px;text-align:center">Some links above are placeholders — please update with your actual handles in <code>build.py</code>.</p>
+  <p class="muted" style="margin-top:48px;text-align:center">Follow us for ongoing updates from the field — and the next film release.</p>
 </section>
 """
 
