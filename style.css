@@ -386,6 +386,101 @@ hr.hairline{border:0;height:1px;background:var(--rule);margin:48px 0}
 .foot__bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-top:32px;font-family:"JetBrains Mono",monospace;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;opacity:.5}
 @media(max-width:760px){.foot__top{grid-template-columns:1fr 1fr;gap:40px}.foot__brand{grid-column:1/-1}}
 
+/* ---------- HERO WORDMARK (home) ---------- */
+.hero__wordmark{
+  display:block;
+  height:clamp(56px, 9vw, 120px);
+  width:auto;
+  max-width:min(560px, 70%);
+  margin:48px 0 16px;
+  /* Softens the JPEG-derived edges and ties color into the palette */
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,.4));
+}
+@media(max-width:640px){
+  .hero__wordmark{margin:32px 0 8px}
+}
+
+/* ---------- FOOTER WORDMARK ---------- */
+.foot__wordmark{
+  display:block;
+  height:auto;
+  width:clamp(180px, 16vw, 260px);
+  margin-bottom:20px;
+  /* Invert the dark-on-light wordmark so it reads on the dark footer */
+  filter:brightness(0) invert(1) opacity(.92);
+}
+
+/* ---------- INSTAGRAM FEED GRID (home) ---------- */
+.ig-feed{padding:80px 0 0}
+.ig-feed__head{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  flex-wrap:wrap;gap:24px;
+  margin-bottom:32px;
+  padding-bottom:20px;
+  border-bottom:1px solid var(--rule-soft);
+}
+.ig-feed__title{
+  font-family:"Fraunces",serif;
+  font-variation-settings:"opsz" 144,"SOFT" 60;
+  font-weight:380;
+  font-size:clamp(1.8rem,3.4vw,2.6rem);
+  line-height:1;letter-spacing:-.02em;
+  margin-top:14px;
+}
+.ig-feed__title em{font-style:italic;color:var(--forest)}
+.ig-feed__follow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:"JetBrains Mono",monospace;
+  font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:10px 16px;
+  border:1px solid var(--ink);
+  border-radius:999px;
+  transition:all .25s ease;
+}
+.ig-feed__follow:hover{
+  background:var(--ink);color:var(--paper);
+  transform:translateY(-2px);
+}
+.ig-feed__arrow{font-family:"Newsreader",serif;font-size:1rem}
+.ig-grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:8px;
+}
+.ig-tile{
+  position:relative;
+  aspect-ratio:1/1;
+  overflow:hidden;
+  background:#000;
+  border-radius:2px;
+}
+.ig-tile img{
+  width:100%;height:100%;
+  object-fit:cover;
+  filter:saturate(.95);
+  transition:transform .8s ease,filter .4s ease;
+}
+.ig-tile:hover img{
+  transform:scale(1.06);
+  filter:saturate(1.05);
+}
+.ig-tile::after{
+  content:"";
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(15,36,24,0) 50%, rgba(15,36,24,.5) 100%);
+  opacity:0;
+  transition:opacity .3s;
+  pointer-events:none;
+}
+.ig-tile:hover::after{opacity:1}
+@media(max-width:880px){
+  .ig-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:540px){
+  .ig-grid{grid-template-columns:repeat(2,1fr)}
+  .ig-feed__head{align-items:flex-start;flex-direction:column}
+}
+
 /* ---------- FOOTER SOCIAL ROW ---------- */
 .foot__social{
   display:flex;gap:12px;margin-top:20px;

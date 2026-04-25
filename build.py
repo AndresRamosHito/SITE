@@ -93,7 +93,7 @@ FOOTER = """<footer class="foot">
   <div class="wrap">
     <div class="foot__top">
       <div class="foot__brand">
-        <h2>Orchidarc.</h2>
+        <img class="foot__wordmark" src="images/logo-wordmark.png" alt="Orchidarc">
         <p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p>
         <div class="foot__social">
           <a href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener" aria-label="Instagram">
@@ -179,6 +179,8 @@ HOME_BODY = f"""
     <span>Veracruz · 19°25′N · 97°06′W</span>
     <span>Vol. IV / 2026</span>
   </div>
+
+  <img class="hero__wordmark" src="images/logo-wordmark.png" alt="Orchidarc" loading="eager">
 
   <h1 class="hero__title">
     Saving the <em>wild orchids</em> of <span class="pollen">México</span>.
@@ -410,6 +412,41 @@ HOME_BODY = f"""
         <a class="action__card" href="store.html"><div><h4>The Laelia collection</h4><p>Garments · Sales fund the reserve</p></div><span>↗</span></a>
       </div>
     </div>
+  </div>
+</section>
+
+<section class="ig-feed wrap reveal">
+  <div class="ig-feed__head">
+    <div>
+      <span class="ph__eyebrow">From the field</span>
+      <h3 class="ig-feed__title">Recent on <em>Instagram</em>.</h3>
+    </div>
+    <a class="ig-feed__follow" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
+      <span>@orchidarcngo</span>
+      <span class="ig-feed__arrow">↗</span>
+    </a>
+  </div>
+
+  <div class="ig-grid">
+    <a class="ig-tile" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <img src="{IMG}/anceps-cliff.jpg" alt="Laelia anceps on cliff face" loading="lazy">
+    </a>
+    <a class="ig-tile" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <img src="{IMG}/andres-with-halbingeriana.jpg" alt="Fieldwork with Laelia halbingeriana" loading="lazy">
+    </a>
+    <a class="ig-tile" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <img src="{IMG}/cypripedium-a.JPG" alt="Cypripedium" loading="lazy">
+    </a>
+    <a class="ig-tile" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <img src="{IMG}/dinedema-moreflowers.jpg" alt="× Dinedema mariae" loading="lazy">
+    </a>
+    <a class="ig-tile" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <img src="{IMG}/anceps-day-of-the-dead-collection.jpg" alt="Day of the Dead orchid altar" loading="lazy">
+    </a>
+    <a class="ig-tile" href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener">
+      <img src="{IMG}/researchers-in-canopy.jpg" alt="Researchers in the canopy" loading="lazy">
+    </a>
   </div>
 </section>
 
