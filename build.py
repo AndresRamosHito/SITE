@@ -62,6 +62,7 @@ def nav(active: str = "") -> str:
     items = [
         ("films",    "films.html",     "Films"),
         ("species",  "herbarium.html", "Species"),
+        ("gallery",  "gallery.html",   "Gallery"),
         ("research", "research.html",  "Research"),
         ("about",    "about.html",     "About"),
         ("stories",  "stories.html",   "Stories"),
@@ -115,6 +116,7 @@ FOOTER = """<footer class="foot">
         <ul>
           <li><a href="films.html">Films</a></li>
           <li><a href="herbarium.html">Herbarium</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
           <li><a href="research.html">Research</a></li>
           <li><a href="cypripedium.html">Cypripedium</a></li>
           <li><a href="stories.html">Stories</a></li>
@@ -1534,7 +1536,7 @@ PAGES = [
     ("prosthechea-vitellina.html",  "Prosthechea vitellina — Orchidarc",             "Species profile: Prosthechea vitellina — endangered Central American orchid thriving on Orchidarc's reserve.",                                       PROSTHECHEA,         "species"),
     ("extinct-strength.html",       "Extinct strength — Orchidarc",                  "Essay: what the bee orchid can tell us about the bumblebee that disappeared.",                                                                        EXTINCT,             "research"),
     ("herbarium.html",              "Digital Herbarium — Orchidarc",                 "An ongoing index of orchid species documented and monitored by Orchidarc in the field.",                                                              HERBARIUM,           "species"),
-    ("gallery.html",                "Gallery — Orchidarc",                           "Photographs from Orchidarc's reserve, expeditions and research sites across Mexico.",                                                                 GALLERY,             ""),
+    ("gallery.html",                "Gallery — Orchidarc",                           "Photographs from Orchidarc's reserve, expeditions and research sites across Mexico.",                                                                 GALLERY,             "gallery"),
     ("stories.html",                "Stories & Field Notes — Orchidarc",             "Essays and field reports from Orchidarc's research and films.",                                                                                       STORIES,             "stories"),
     ("mexico-tours.html",           "Mexico Orchid Expeditions — Orchidarc",         "Small-group field expeditions in the cloud forests of Veracruz and Oaxaca, led by working orchid biologists.",                                       MEXICO_TOURS,        ""),
     ("about.html",                  "About — Orchidarc",                             "About Orchidarc — a UK-registered conservation NGO working at the intersection of field biology, conservation practice and documentary cinema.",      ABOUT,               "about"),
