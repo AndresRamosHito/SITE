@@ -131,18 +131,6 @@ if (path === 'orchids-of-mexico.html') {
   if (ogImage) ogImage.setAttribute('content', omxPoster);
 }
 
-// Homepage direct poster card for the feature documentary.
-if ((path === '' || path === 'index.html')) {
-  const filmsSection = document.querySelector('#films .indev');
-  if (filmsSection && !document.querySelector('.omx-home-poster')) {
-    const wrap = document.createElement('div');
-    wrap.className = 'omx-home-poster';
-    wrap.style.cssText = 'display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;margin-top:26px;padding:18px;border:1px solid rgba(27,26,23,.16);background:rgba(255,255,255,.22)';
-    wrap.innerHTML = `<a href="orchids-of-mexico.html" aria-label="Open Orchids of Mexico project page"><img src="${omxPoster}" alt="Orchids of Mexico documentary poster" style="width:100%;display:block;border:1px solid rgba(27,26,23,.12)"></a><div><p style="margin:0 0 16px;color:rgba(27,26,23,.74)">A feature documentary on partnership, adhesion, and deception in the most diverse plant family on Earth.</p><a class="btn" href="orchids-of-mexico.html">Open the feature project page</a></div>`;
-    filmsSection.appendChild(wrap);
-  }
-}
-
 // Films page poster card for the feature documentary.
 if (path === 'films.html') {
   const indev = document.querySelector('.indev');
