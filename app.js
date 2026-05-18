@@ -88,9 +88,11 @@ if (specimensGrid && !document.querySelector('#species a[href="mexipedium-xeroph
   specimensGrid.appendChild(mexipedium);
 }
 
+const path = window.location.pathname.split('/').pop() || 'index.html';
+const omxPoster = 'images/orchids-of-mexico/orchids-of-mexico-poster.jpg';
+
 // Orchids of Mexico documentary page refinements.
 // Keeps the static page editable while allowing fast image/layout tuning.
-const path = window.location.pathname.split('/').pop() || 'index.html';
 if (path === 'orchids-of-mexico.html') {
   const style = document.createElement('style');
   style.textContent = `
@@ -98,6 +100,10 @@ if (path === 'orchids-of-mexico.html') {
     .thread-overlay { background: linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.04)) !important; }
     .thread-card::after { content:""; position:absolute; inset:0; background:rgba(255,244,224,.06); pointer-events:none; z-index:1; }
     .thread-content { text-shadow: 0 2px 18px rgba(0,0,0,.58); }
+    .omx-poster-frame { margin-top: 32px; max-width: 390px; border: 1px solid rgba(27,26,23,.16); background: #050505; padding: 10px; box-shadow: 0 24px 70px rgba(15,36,24,.18); }
+    .omx-poster-frame img { width: 100%; display:block; }
+    .omx-poster-frame figcaption { padding: 10px 2px 0; color: rgba(27,26,23,.64); font: 500 .66rem JetBrains Mono, monospace; letter-spacing:.08em; text-transform:uppercase; }
+    @media(max-width:1100px){ .omx-poster-frame { max-width: 520px; } }
   `;
   document.head.appendChild(style);
 
@@ -112,27 +118,40 @@ if (path === 'orchids-of-mexico.html') {
     }
     if (cap) cap.textContent = 'Stanhopea tigrina, one of Mexico’s most spectacular orchid lineages.';
   }
+
+  const heroText = document.querySelector('.film-grid > div:first-child');
+  if (heroText && !document.querySelector('.omx-poster-frame')) {
+    const fig = document.createElement('figure');
+    fig.className = 'omx-poster-frame';
+    fig.innerHTML = `<img src="${omxPoster}" alt="Orchids of Mexico documentary poster"><figcaption>Official development poster.</figcaption>`;
+    heroText.appendChild(fig);
+  }
+
+  const ogImage = document.querySelector('meta[property="og:image"]');
+  if (ogImage) ogImage.setAttribute('content', omxPoster);
 }
 
-// Homepage link to the Orchids of Mexico feature page.
-if ((path === '' || path === 'index.html') && !document.querySelector('a[href="orchids-of-mexico.html"]')) {
+// Homepage direct poster card for the feature documentary.
+if ((path === '' || path === 'index.html')) {
   const filmsSection = document.querySelector('#films .indev');
-  if (filmsSection) {
-    const p = document.createElement('p');
-    p.style.marginTop = '22px';
-    p.innerHTML = '<a class="btn" href="orchids-of-mexico.html">Open the feature project page</a>';
-    filmsSection.appendChild(p);
+  if (filmsSection && !document.querySelector('.omx-home-poster')) {
+    const wrap = document.createElement('div');
+    wrap.className = 'omx-home-poster';
+    wrap.style.cssText = 'display:grid;grid-template-columns:180px 1fr;gap:24px;align-items:center;margin-top:26px;padding:18px;border:1px solid rgba(27,26,23,.16);background:rgba(255,255,255,.22)';
+    wrap.innerHTML = `<a href="orchids-of-mexico.html" aria-label="Open Orchids of Mexico project page"><img src="${omxPoster}" alt="Orchids of Mexico documentary poster" style="width:100%;display:block;border:1px solid rgba(27,26,23,.12)"></a><div><p style="margin:0 0 16px;color:rgba(27,26,23,.74)">A feature documentary on partnership, adhesion, and deception in the most diverse plant family on Earth.</p><a class="btn" href="orchids-of-mexico.html">Open the feature project page</a></div>`;
+    filmsSection.appendChild(wrap);
   }
 }
 
-// Films page link to the Orchids of Mexico feature page.
-if (path === 'films.html' && !document.querySelector('.indev a[href="orchids-of-mexico.html"]')) {
+// Films page poster card for the feature documentary.
+if (path === 'films.html') {
   const indev = document.querySelector('.indev');
-  if (indev) {
-    const p = document.createElement('p');
-    p.style.marginTop = '22px';
-    p.innerHTML = '<a class="btn" href="orchids-of-mexico.html">Open project page</a>';
-    indev.appendChild(p);
+  if (indev && !document.querySelector('.omx-film-poster')) {
+    const wrap = document.createElement('div');
+    wrap.className = 'omx-film-poster';
+    wrap.style.cssText = 'display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:center;margin-top:28px;padding:20px;border:1px solid rgba(27,26,23,.16);background:rgba(255,255,255,.22)';
+    wrap.innerHTML = `<a href="orchids-of-mexico.html" aria-label="Open Orchids of Mexico project page"><img src="${omxPoster}" alt="Orchids of Mexico documentary poster" style="width:100%;display:block;border:1px solid rgba(27,26,23,.12)"></a><div><p style="margin:0 0 16px;color:rgba(27,26,23,.74)">View the full project page, development reel, scientific threads, field imagery, team and support information.</p><a class="btn" href="orchids-of-mexico.html">Open project page</a></div>`;
+    indev.appendChild(wrap);
   }
 }
 
