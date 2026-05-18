@@ -88,6 +88,54 @@ if (specimensGrid && !document.querySelector('#species a[href="mexipedium-xeroph
   specimensGrid.appendChild(mexipedium);
 }
 
+// Orchids of Mexico documentary page refinements.
+// Keeps the static page editable while allowing fast image/layout tuning.
+const path = window.location.pathname.split('/').pop() || 'index.html';
+if (path === 'orchids-of-mexico.html') {
+  const style = document.createElement('style');
+  style.textContent = `
+    .thread-card img { opacity: .82 !important; }
+    .thread-overlay { background: linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,.04)) !important; }
+    .thread-card::after { content:""; position:absolute; inset:0; background:rgba(255,244,224,.06); pointer-events:none; z-index:1; }
+    .thread-content { text-shadow: 0 2px 18px rgba(0,0,0,.58); }
+  `;
+  document.head.appendChild(style);
+
+  const synopsisFigure = document.querySelector('.essay-section .essay-grid figure.essay-image');
+  if (synopsisFigure) {
+    const img = synopsisFigure.querySelector('img');
+    const cap = synopsisFigure.querySelector('figcaption');
+    if (img) {
+      img.src = 'images/orchids-of-mexico/sthanhopea-tigrina.png';
+      img.alt = 'Stanhopea tigrina flower from Mexico';
+      img.className = 'vertical';
+    }
+    if (cap) cap.textContent = 'Stanhopea tigrina, one of Mexico’s most spectacular orchid lineages.';
+  }
+}
+
+// Homepage link to the Orchids of Mexico feature page.
+if ((path === '' || path === 'index.html') && !document.querySelector('a[href="orchids-of-mexico.html"]')) {
+  const filmsSection = document.querySelector('#films .indev');
+  if (filmsSection) {
+    const p = document.createElement('p');
+    p.style.marginTop = '22px';
+    p.innerHTML = '<a class="btn" href="orchids-of-mexico.html">Open the feature project page</a>';
+    filmsSection.appendChild(p);
+  }
+}
+
+// Films page link to the Orchids of Mexico feature page.
+if (path === 'films.html' && !document.querySelector('.indev a[href="orchids-of-mexico.html"]')) {
+  const indev = document.querySelector('.indev');
+  if (indev) {
+    const p = document.createElement('p');
+    p.style.marginTop = '22px';
+    p.innerHTML = '<a class="btn" href="orchids-of-mexico.html">Open project page</a>';
+    indev.appendChild(p);
+  }
+}
+
 // Subscribe form
 // To wire to a real provider, replace the body of the submit handler with a fetch().
 // Buttondown example:
