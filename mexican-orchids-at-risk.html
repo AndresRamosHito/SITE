@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mexican Orchids at Risk  EOrchidarc</title>
+<title>Mexican Orchids at Risk — Orchidarc</title>
 <meta name="description" content="Interactive working list of Mexican orchid species included in NOM-059 risk categories, with Orchidarc's long-term vision for IUCN Red List assessments.">
-<meta property="og:title" content="Mexican Orchids at Risk  EOrchidarc">
+<meta property="og:title" content="Mexican Orchids at Risk — Orchidarc">
 <meta property="og:description" content="A searchable Orchidarc conservation resource for Mexican orchids listed under NOM-059, designed as a foundation for future IUCN assessment work.">
 <meta property="og:image" content="/images/prosthechea-vitellina.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -62,7 +62,7 @@ function render(){
   else if(sort.value==='distribution') out.sort((a,b)=>a.distribution.localeCompare(b.distribution) || a.name.localeCompare(b.name));
   else out.sort((a,b)=>a.name.localeCompare(b.name));
   count.textContent = `${out.length} taxa shown`;
-  rows.innerHTML = out.map(s=>`<tr><td class="name"><em>${esc(s.name)}</em></td><td class="cat"><span>${esc(s.category)}</span><br><small>${labels[s.category]}</small></td><td>${s.distribution==='endémica'?'Endemic to Mexico':'Not endemic to Mexico'}</td><td class="notes">${esc(s.notes||' E)}</td><td class="notes">Assessment record pending</td></tr>`).join('');
+  rows.innerHTML = out.map(s=>`<tr><td class="name"><em>${esc(s.name)}</em></td><td class="cat"><span>${esc(s.category)}</span><br><small>${labels[s.category]}</small></td><td>${s.distribution==='endémica'?'Endemic to Mexico':'Not endemic to Mexico'}</td><td class="notes">${esc(s.notes||'—')}</td><td class="notes">Assessment record pending</td></tr>`).join('');
 }
 [q,cat,dist,sort].forEach(el=>el.addEventListener('input', render));
 renderStats(); render();
