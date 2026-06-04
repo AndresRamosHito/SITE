@@ -143,6 +143,18 @@ if (path === 'films.html') {
   }
 }
 
+// Research page conference poster insertion.
+if (path === 'research.html') {
+  const publications = document.querySelector('#publications .publication-grid');
+  if (publications && !document.querySelector('.emo-poster-card')) {
+    const poster = document.createElement('article');
+    poster.className = 'publication emo-poster-card';
+    poster.style.paddingBottom = '22px';
+    poster.innerHTML = `<strong>Conference poster</strong><p>Encuentro Mexicano de Orquideología poster and Orchidarc research/outreach material.</p><figure style="margin:16px 0 0;border:1px solid rgba(27,26,23,.16);background:#050505"><img src="images/Poster-EMO-2022.jpg" alt="Encuentro Mexicano de Orquideología poster" style="display:block;width:100%;height:auto"></figure>`;
+    publications.appendChild(poster);
+  }
+}
+
 // Subscribe form
 // To wire to a real provider, replace the body of the submit handler with a fetch().
 // Buttondown example:
