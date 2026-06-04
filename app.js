@@ -31,6 +31,55 @@ if ('IntersectionObserver' in window && revealEls.length) {
   revealEls.forEach(showReveal);
 }
 
+const path = window.location.pathname.split('/').pop() || 'index.html';
+const omxPoster = 'images/orchids-of-mexico/orchids-of-mexico-poster.jpg';
+
+// Add Reserve to the shared header navigation when older static pages do not include it yet.
+const navLinks = document.getElementById('navlinks');
+if (navLinks && !navLinks.querySelector('a[href="reserve.html"], a[href="/reserve.html"]')) {
+  const reserveLink = document.createElement('a');
+  reserveLink.href = path === 'index.html' ? 'reserve.html' : '/reserve.html';
+  reserveLink.textContent = 'Reserve';
+  if (path === 'reserve.html') reserveLink.className = 'is-active';
+  reserveLink.addEventListener('click', () => navLinks.classList.remove('open'));
+  const speciesLink = Array.from(navLinks.querySelectorAll('a')).find(a => /Species/i.test(a.textContent || '') || /herbarium/i.test(a.getAttribute('href') || ''));
+  if (speciesLink) speciesLink.insertAdjacentElement('afterend', reserveLink);
+  else navLinks.appendChild(reserveLink);
+}
+
+// Homepage Reserve block.
+if (path === 'index.html') {
+  const hero = document.querySelector('.hero');
+  if (hero && !document.querySelector('.reserve-home-card')) {
+    const style = document.createElement('style');
+    style.textContent = `
+      .reserve-home-card{margin-top:28px;margin-bottom:28px}
+      .reserve-home-card__inner{display:grid;grid-template-columns:1fr .9fr;gap:34px;align-items:center;border:1px solid rgba(27,26,23,.18);background:rgba(255,255,255,.22);padding:24px}
+      .reserve-home-card__eyebrow{display:block;color:#5c6b4a;font:500 .68rem JetBrains Mono,monospace;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+      .reserve-home-card h2{margin:0;color:#0f2418;font:420 clamp(2rem,5vw,4rem)/.96 Fraunces,Georgia,serif;letter-spacing:-.03em}
+      .reserve-home-card p{color:rgba(27,26,23,.74);font-size:1.08rem;max-width:64ch}
+      .reserve-home-card figure{margin:0;border:1px solid rgba(27,26,23,.16);background:#050505;overflow:hidden}
+      .reserve-home-card img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover}
+      .reserve-home-card figcaption{padding:10px 12px;background:rgba(239,233,221,.94);color:rgba(27,26,23,.64);font:500 .62rem JetBrains Mono,monospace;letter-spacing:.08em;text-transform:uppercase}
+      @media(max-width:820px){.reserve-home-card__inner{grid-template-columns:1fr}}
+    `;
+    document.head.appendChild(style);
+    hero.insertAdjacentHTML('afterend', `
+      <section class="section wrap reserve-home-card">
+        <div class="reserve-home-card__inner">
+          <div>
+            <span class="reserve-home-card__eyebrow">Orchidarc Reserve · Veracruz</span>
+            <h2>A living <em>cloud-forest archive</em>.</h2>
+            <p>The Orchidarc Reserve protects 14 hectares of cloud-forest and riparian habitat in Ixhuacán de los Reyes, with approximately 50 native orchid species documented on site.</p>
+            <p><a class="btn" href="reserve.html">Open the reserve page</a></p>
+          </div>
+          <figure><a href="reserve.html"><img src="images/reserve-main.jpg" alt="Orchidarc Reserve, Ixhuacán de los Reyes, Veracruz"></a><figcaption>Orchidarc Reserve, Ixhuacán de los Reyes</figcaption></figure>
+        </div>
+      </section>
+    `);
+  }
+}
+
 // Homepage specimen-card factual cleanup.
 // Keeps the minified homepage stable while aligning visible labels with the herbarium/species pages.
 const specimenCards = Array.from(document.querySelectorAll('#species .specimen'));
@@ -87,9 +136,6 @@ if (specimensGrid && !document.querySelector('#species a[href="mexipedium-xeroph
   `;
   specimensGrid.appendChild(mexipedium);
 }
-
-const path = window.location.pathname.split('/').pop() || 'index.html';
-const omxPoster = 'images/orchids-of-mexico/orchids-of-mexico-poster.jpg';
 
 // Orchids of Mexico documentary page refinements.
 // Keeps the static page editable while allowing fast image/layout tuning.
