@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /orquidea/
+
+Disallow: /orquidea/capture
+Disallow: /orquidea/admin/
+Disallow: /orquidea/onboarding
+Disallow: /orquidea/login
+
+Sitemap: https://www.orchidarc.org/orquidea/sitemap.xml
