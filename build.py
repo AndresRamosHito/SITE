@@ -78,7 +78,7 @@ def nav(active: str = "") -> str:
       <img class="brand__mark" src="images/logo-mark.png" alt="Orchidarc">
       <span>
         <span class="brand__text">Orchidarc</span>
-        <span class="brand__sub">Est. 2022 · Sheffield, UK</span>
+        <span class="brand__sub">Est. 2024 · Sheffield, UK</span>
       </span>
     </a>
     <nav class="nav__links" id="navlinks">
@@ -143,7 +143,7 @@ FOOTER = """<footer class="foot">
       </div>
     </div>
     <div class="foot__bottom">
-      <span>© Orchidarc 2022–2026 — All rights reserved</span>
+      <span>© Orchidarc 2024–2026 — All rights reserved</span>
       <span>Designed in the cloud forest · Built with care</span>
     </div>
   </div>
@@ -195,7 +195,7 @@ HOME_BODY = f"""
     <p>Orchidarc is a UK-registered conservation NGO working in the cloud forests of Mexico. We protect wild orchid populations through field research, habitat restoration, IUCN Red List assessment — and the documentary films we make to bring those forests to the world.</p>
     <aside>
       <dl>
-        <dt>— Founded</dt><dd>2022, Sheffield, UK</dd>
+        <dt>— Founded</dt><dd>2024, Sheffield, UK</dd>
         <dt>— Charity no.</dt><dd>1208062</dd>
         <dt>— Reserve</dt><dd>14 ha · Ixhuacán de los Reyes</dd>
         <dt>— Endangered species protected</dt><dd>3 (Mexican Red List)</dd>
@@ -385,11 +385,11 @@ HOME_BODY = f"""
         <div><div class="stat__num">≈1300</div><div class="stat__label">Orchid species in Mexico</div></div>
         <div><div class="stat__num">≈600</div><div class="stat__label">Endemic to Mexico</div></div>
         <div><div class="stat__num">14 ha</div><div class="stat__label">Cloud forest under management</div></div>
-        <div><div class="stat__num">2022</div><div class="stat__label">Year founded · Sheffield, UK</div></div>
+        <div><div class="stat__num">2024</div><div class="stat__label">Year founded · Sheffield, UK</div></div>
       </div>
     </div>
     <div class="about__col">
-      <p>Founded in 2022 and registered with the UK Charity Commission, Orchidarc operates primarily in Veracruz and Oaxaca, with research collaborations in the United Kingdom, Japan, Ecuador and Costa Rica.</p>
+      <p>Founded in 2024 and registered with the UK Charity Commission, Orchidarc operates primarily in Veracruz and Oaxaca, with research collaborations in the United Kingdom, Japan, Ecuador and Costa Rica.</p>
       <p>We are a small team — and that's intentional. Every project we take on is led directly by the people doing the field work, the science, and the storytelling.</p>
       <div class="about__pillars">
         <div class="pillar"><span class="pillar__num">01 — Research</span><div><h4>Field & laboratory</h4><p>Taxonomy, IUCN Red List assessment, orchid bioadhesives, and the RAR Climate Replicator for habitat simulation.</p></div></div>
@@ -1297,12 +1297,12 @@ ABOUT = pageheader(
 <section class="section wrap reveal">
   <div class="about">
     <div class="about__col">
-      <p class="about__lede">We were registered with the UK Charity Commission in 2022 (no. <strong>1208062</strong>), with operations primarily in Mexico and field collaborations in the United Kingdom, Japan, Ecuador and Costa Rica.</p>
+      <p class="about__lede">We were registered with the UK Charity Commission in 2024 (no. <strong>1208062</strong>), with operations primarily in Mexico and field collaborations in the United Kingdom, Japan, Ecuador and Costa Rica.</p>
       <div class="about__stats">
         <div><div class="stat__num">≈1300</div><div class="stat__label">Orchid species in Mexico</div></div>
         <div><div class="stat__num">≈600</div><div class="stat__label">Endemic to Mexico</div></div>
         <div><div class="stat__num">14 ha</div><div class="stat__label">Cloud forest under management</div></div>
-        <div><div class="stat__num">2022</div><div class="stat__label">Year founded</div></div>
+        <div><div class="stat__num">2024</div><div class="stat__label">Year founded</div></div>
       </div>
     </div>
     <div class="about__col">
