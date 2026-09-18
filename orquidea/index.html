@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OrquIDea — Citizen science for Mexico's wild orchids | Orchidarc</title>
+<meta name="description" content="OrquIDea is Orchidarc's citizen-science app for observing, photographing and documenting wild orchids responsibly without exposing sensitive locations.">
+<meta property="og:title" content="OrquIDea — Citizen science for Mexico's wild orchids">
+<meta property="og:description" content="Observe, photograph and document wild orchids responsibly. Sensitive locations are protected at the data layer.">
+<meta property="og:image" content="https://www.orchidarc.org/images/hero-cloud-forest.jpg">
+<meta property="og:url" content="https://www.orchidarc.org/orquidea/">
+<meta name="theme-color" content="#0f2418">
+<link rel="canonical" href="https://www.orchidarc.org/orquidea/">
+<link rel="icon" type="image/png" href="/images/favicon.png">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<style>
+  .orq-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(340px,.95fr);gap:54px;align-items:center;padding-top:78px;padding-bottom:64px}
+  .orq-kicker{display:inline-block;margin-bottom:18px;color:var(--moss);font:500 .72rem JetBrains Mono,monospace;letter-spacing:.16em;text-transform:uppercase}
+  .orq-title{margin:0;color:var(--forest);font:360 clamp(3.4rem,8vw,7rem)/.9 Fraunces,Georgia,serif;letter-spacing:-.04em}
+  .orq-title .id{color:#b43a8d}
+  .orq-lede{max-width:62ch;margin-top:28px;color:rgba(27,26,23,.78);font-size:1.3rem;line-height:1.45}
+  .orq-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+  .orq-fallback{margin-top:14px;color:rgba(27,26,23,.62);font:500 .66rem/1.55 JetBrains Mono,monospace;letter-spacing:.03em}
+  .orq-fallback a{text-decoration:underline;text-underline-offset:3px}
+  .orq-visual{margin:0;border:1px solid var(--rule);background:#050505;overflow:hidden;box-shadow:0 22px 60px rgba(15,36,24,.16)}
+  .orq-visual img{width:100%;aspect-ratio:4/5;object-fit:cover;opacity:.88}
+  .orq-visual figcaption{padding:12px 14px;background:var(--paper);color:rgba(27,26,23,.6);font:500 .62rem JetBrains Mono,monospace;letter-spacing:.08em;text-transform:uppercase}
+  .orq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .orq-card{border:1px solid var(--rule);background:rgba(255,255,255,.24);padding:24px;min-height:250px}
+  .orq-card span{display:block;margin-bottom:14px;color:var(--ochre);font:500 .66rem JetBrains Mono,monospace;letter-spacing:.12em;text-transform:uppercase}
+  .orq-card h2{margin:0 0 12px;color:var(--forest);font:420 1.65rem/1.05 Fraunces,Georgia,serif}
+  .orq-card p{margin:0;color:rgba(27,26,23,.72)}
+  .orq-band{margin:72px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:42px 0}
+  .orq-band__inner{display:grid;grid-template-columns:.75fr 1.25fr;gap:44px;align-items:start}
+  .orq-band h2{margin:0;color:var(--forest);font:400 clamp(2.2rem,5vw,4.2rem)/.95 Fraunces,Georgia,serif}
+  .orq-band p{margin:0 0 16px;color:rgba(27,26,23,.76);font-size:1.08rem}
+  .orq-note{border-left:3px solid var(--ochre);padding-left:18px}
+  @media(max-width:900px){.orq-hero,.orq-band__inner{grid-template-columns:1fr}.orq-grid{grid-template-columns:1fr}.orq-visual{max-width:620px}}
+</style>
+</head>
+<body>
+<div class="ticker" aria-hidden="true">
+  <div class="ticker__track">
+    <span>UK Charity no. 1208062</span>
+    <span>OrquIDea — observe, photograph, document; never collect</span>
+    <span>Citizen science · México</span>
+    <span>Sensitive locations protected</span>
+    <span>UK Charity no. 1208062</span>
+    <span>OrquIDea — observe, photograph, document; never collect</span>
+    <span>Citizen science · México</span>
+    <span>Sensitive locations protected</span>
+  </div>
+</div>
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a href="/" class="brand">
+      <img class="brand__mark" src="/images/logo-mark.png" alt="Orchidarc">
+      <span><span class="brand__text">Orchidarc</span><span class="brand__sub">Est. 2024 · Sheffield, UK</span></span>
+    </a>
+    <nav class="nav__links" id="navlinks">
+      <a href="/films.html">Films</a>
+      <a href="/herbarium.html">Species</a>
+      <a href="/reserve.html">Reserve</a>
+      <a href="/gallery.html">Gallery</a>
+      <a href="/research.html">Research</a>
+      <a href="/about.html">About</a>
+      <a href="/stories.html">Stories</a>
+      <a href="/orquidea/" class="is-active">OrquIDea</a>
+      <a href="/store.html">Store</a>
+    </nav>
+    <button class="nav__toggle" id="navtoggle" aria-label="Menu">Menu</button>
+    <a href="https://orquidea.orchidarc.org/" class="nav__cta" target="_blank" rel="noopener">Open app</a>
+  </div>
+</header>
+
+<main>
+  <section class="wrap orq-hero">
+    <div>
+      <span class="orq-kicker">Citizen science · Orchidarc</span>
+      <h1 class="orq-title">Orqu<span class="id">ID</span>ea.</h1>
+      <p class="orq-lede">A mobile-first community for observing, photographing and documenting Mexico's wild orchids responsibly. Build a life list, help identify records, join seasonal challenges and contribute useful observations without publishing exact sensitive localities.</p>
+      <div class="orq-actions">
+        <a class="btn btn--filled" href="https://orquidea.orchidarc.org/" target="_blank" rel="noopener">Open OrquIDea</a>
+        <a class="btn" href="/support/">App support</a>
+      </div>
+      <p class="orq-fallback">If the custom app domain does not load, use the current beta deployment: <a href="https://orchid-map-oaxaca.lovable.app/" target="_blank" rel="noopener">orchid-map-oaxaca.lovable.app</a>.</p>
+    </div>
+    <figure class="orq-visual">
+      <img src="/images/hero-cloud-forest.jpg" alt="Cloud forest habitat supporting wild orchids in Mexico">
+      <figcaption>Observe · photograph · document · never collect</figcaption>
+    </figure>
+  </section>
+
+  <section class="section wrap">
+    <div class="orq-grid">
+      <article class="orq-card"><span>01 · Record</span><h2>Document what you find.</h2><p>Photograph wild orchids, create observation records and build a personal life list without turning field discovery into a collecting incentive.</p></article>
+      <article class="orq-card"><span>02 · Identify</span><h2>Community identification.</h2><p>Discuss sightings, suggest taxa and agree on identifications so records improve through participation rather than a single opaque decision.</p></article>
+      <article class="orq-card"><span>03 · Protect</span><h2>Locations are treated as sensitive data.</h2><p>Public map and feed behavior is designed around server-side location masking. Sensitive records should never depend on hiding coordinates only in the interface.</p></article>
+    </div>
+  </section>
+
+  <section class="orq-band">
+    <div class="wrap orq-band__inner">
+      <h2>Conservation first.</h2>
+      <div>
+        <p>OrquIDea is deliberately designed for responsible observation. Leaderboards emphasize diversity and verified participation rather than raw sighting volume, reducing incentives to repeatedly disturb accessible plants.</p>
+        <p class="orq-note"><strong>No rewards for collecting.</strong> The app is for observation, photography and conservation records. Exact localities of sensitive orchids are not intended for public disclosure.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="prose">
+      <h2 class="section__title">A bridge between <em>community and conservation</em>.</h2>
+      <p>OrquIDea complements Orchidarc's digital herbarium and field monitoring. The project is currently focused on Mexico, with Spanish-language mobile use at its core. AMO — Asociación Mexicana de Orquideología — is a confirmed partner society in the project context.</p>
+      <p>The application includes a Mexican orchid catalog, community sightings, maps, challenges, society spaces, and a confidential illegal-trade reporting route. Public access must preserve the project's location-masking and privacy rules.</p>
+      <p><a class="btn btn--filled" href="https://orquidea.orchidarc.org/" target="_blank" rel="noopener">Launch the web app</a></p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot__top">
+      <div class="foot__brand"><h2>Orchidarc.</h2><p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p></div>
+      <div class="foot__col"><h5>Work</h5><ul><li><a href="/films.html">Films</a></li><li><a href="/orquidea/">OrquIDea</a></li><li><a href="/herbarium.html">Herbarium</a></li><li><a href="/gallery.html">Gallery</a></li><li><a href="/research.html">Research</a></li></ul></div>
+      <div class="foot__col"><h5>Get involved</h5><ul><li><a href="https://orquidea.orchidarc.org/" target="_blank" rel="noopener">Open OrquIDea</a></li><li><a href="/take-action.html">Donate</a></li><li><a href="/mexico-tours.html">Mexico tours</a></li><li><a href="/store.html">Store</a></li></ul></div>
+      <div class="foot__col"><h5>App & legal</h5><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms & Community Rules</a></li><li><a href="/support/">Support</a></li><li><a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a></li></ul></div>
+    </div>
+    <div class="foot__bottom"><span>© Orchidarc 2024–2026 — All rights reserved</span><span>OrquIDea · Citizen science with sensitive-location protection</span></div>
+  </div>
+</footer>
+<script>
+  const t=document.getElementById('navtoggle');
+  const l=document.getElementById('navlinks');
+  if(t&&l){t.addEventListener('click',()=>l.classList.toggle('open'));l.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>l.classList.remove('open')));}
+</script>
+</body>
+</html>
