@@ -1,3 +1,35 @@
+
+
+// Add Expeditions to the shared header navigation, and point the footer's
+// "Mexico tours" entry at it. Runs on a timeout so it lands after the Reserve
+// link has been inserted by the block below.
+(function () {
+  const addExpeditions = () => {
+    const page = window.location.pathname.split('/').pop() || 'index.html';
+    const links = document.getElementById('navlinks');
+    if (links && !links.querySelector('a[href="expeditions.html"], a[href="/expeditions.html"]')) {
+      const a = document.createElement('a');
+      a.href = page === 'index.html' ? 'expeditions.html' : '/expeditions.html';
+      a.textContent = 'Expeditions';
+      if (page === 'expeditions.html') a.className = 'is-active';
+      a.addEventListener('click', () => links.classList.remove('open'));
+      const all = Array.from(links.querySelectorAll('a'));
+      const anchor = all.find(x => /reserve\.html$/.test(x.getAttribute('href') || ''))
+        || all.find(x => /Species/i.test(x.textContent || '') || /herbarium/i.test(x.getAttribute('href') || ''));
+      if (anchor) anchor.insertAdjacentElement('afterend', a);
+      else links.appendChild(a);
+    }
+    document.querySelectorAll('.foot__col a[href$="mexico-tours.html"]').forEach(x => {
+      x.setAttribute('href', (x.getAttribute('href') || '').replace('mexico-tours.html', 'expeditions.html'));
+      x.textContent = 'Expeditions';
+    });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => window.setTimeout(addExpeditions, 0));
+  } else {
+    window.setTimeout(addExpeditions, 0);
+  }
+})();
 // Orchidarc — shared front-end behaviour
 
 // Mobile nav
