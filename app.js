@@ -47,6 +47,19 @@ if (navLinks && !navLinks.querySelector('a[href="reserve.html"], a[href="/reserv
   else navLinks.appendChild(reserveLink);
 }
 
+// Keep OrquIDea visible in the shared site navigation.
+// The website landing page remains on orchidarc.org; the live app opens on its own canonical domain.
+if (navLinks && !navLinks.querySelector('a[href="/orquidea/"], a[href="orquidea/"]')) {
+  const orquideaLink = document.createElement('a');
+  orquideaLink.href = '/orquidea/';
+  orquideaLink.textContent = 'OrquIDea';
+  if (window.location.pathname.startsWith('/orquidea')) orquideaLink.className = 'is-active';
+  orquideaLink.addEventListener('click', () => navLinks.classList.remove('open'));
+  const storiesLink = Array.from(navLinks.querySelectorAll('a')).find(a => /Stories/i.test(a.textContent || '') || /stories\.html/i.test(a.getAttribute('href') || ''));
+  if (storiesLink) storiesLink.insertAdjacentElement('afterend', orquideaLink);
+  else navLinks.appendChild(orquideaLink);
+}
+
 // Homepage Reserve block.
 if (path === 'index.html') {
   const hero = document.querySelector('.hero');
