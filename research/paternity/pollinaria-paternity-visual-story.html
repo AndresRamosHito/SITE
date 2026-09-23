@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pollinaria and paternity: how orchid pollen shapes the next generation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF2EC; --bar:#FFFFFF; --text:#1F2A24; --muted:#5E6B63; --rule:#D3DBD4; --accent:#3F7A4C; --pink:#B5467F;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#141A17;--bar:#1E2622;--text:#E7EEE9;--muted:#9AA8A0;--rule:#33403A;--accent:#8CC79A;--pink:#E08AB6;}
+}
+:root[data-theme="dark"]{--bg:#141A17;--bar:#1E2622;--text:#E7EEE9;--muted:#9AA8A0;--rule:#33403A;--accent:#8CC79A;--pink:#E08AB6;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Nunito,"Trebuchet MS",system-ui,sans-serif;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%}
+#stagewrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+canvas{display:block;border-radius:6px;background:#000}
+#bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bar);border-top:1px solid var(--rule);flex-wrap:wrap}
+body.rec #bar{display:none}
+body.rec{cursor:none}
+button,select{font:700 15px Nunito,system-ui,sans-serif;color:var(--text);background:var(--bg);border:1px solid var(--rule);border-radius:6px;height:36px;padding:0 12px;cursor:pointer}
+button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#play{min-width:84px}
+#time{font:600 14px Nunito,system-ui,sans-serif;color:var(--muted);min-width:92px;font-variant-numeric:tabular-nums}
+#scrubwrap{position:relative;flex:1;min-width:220px;height:36px}
+#scrub{position:absolute;inset:0;width:100%;margin:0;accent-color:var(--accent)}
+#marks{position:absolute;left:8px;right:8px;top:0;height:8px;pointer-events:none}
+#marks span{position:absolute;top:0;width:2px;height:8px;background:var(--muted);opacity:.6}
+#chap{font:700 14px Nunito,system-ui,sans-serif;color:var(--muted);min-width:200px}
+.grp{display:flex;gap:6px;align-items:center}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stagewrap"><canvas id="cv" width="1600" height="900" aria-label="Animation: how orchid pollinaria concentrate paternity and shape the next generation"></canvas></div>
+  <div id="bar">
+    <button id="play" aria-label="Play or pause">Play</button>
+    <span id="time">0:00 / 0:00</span>
+    <div id="scrubwrap"><div id="marks"></div><input id="scrub" type="range" min="0" max="1000" step="1" value="0" aria-label="Timeline"></div>
+    <span id="chap"></span>
+    <div class="grp">
+      <button id="prevc" aria-label="Previous chapter">Prev</button>
+      <button id="nextc" aria-label="Next chapter">Next</button>
+      <select id="speed" aria-label="Speed"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option></select>
+      <button id="stops" aria-pressed="false" title="Pause at the end of every chapter">Pause per chapter</button>
+      <button id="caps" aria-pressed="true">Captions</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+"use strict";
+/* =====================================================================
+   Pollinaria and paternity: a visual story of the orchid paternity model.
+   Version 2. Every frame is a pure function of time t, so the timeline
+   can be scrubbed, paused and stepped for voice-over recording.
+   ===================================================================== */
+const W=1600,H=900,TAU=Math.PI*2;
+const cv=document.getElementById("cv"),ctx=cv.getContext("2d");
+const FONT='Nunito,"Trebuchet MS",system-ui,sans-serif';
+
+/* ---------- maths helpers ---------- */
+const clamp=(v,a,b)=>v<a?a:v>b?b:v;
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const seg=(t,a,b)=>clamp((t-a)/(b-a),0,1);
+const eseg=(t,a,b)=>ease(seg(t,a,b));
+function mk(seed){let s=seed>>>0;return function(){s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function normalR(R){let u=0;while(u===0)u=R();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*R());}
+function poissonR(R,l){if(l<=0)return 0;const L=Math.exp(-l);let k=0,p=1;do{k++;p*=R();}while(p>L);return k-1;}
+function gammaR(R,a){if(a<1)return gammaR(R,a+1)*Math.pow(R(),1/a);const d=a-1/3,c=1/Math.sqrt(9*d);for(;;){let x,v;do{x=normalR(R);v=1+c*x;}while(v<=0);v=v*v*v;const u=R();if(u<1-0.0331*x*x*x*x)return d*v;if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v;}}
+function pickW(R,items,wts){let s=0;for(const w of wts)s+=w;let u=R()*s;for(let i=0;i<items.length;i++){u-=wts[i];if(u<=0)return items[i];}return items[items.length-1];}
+function shuffle(R,a){for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ---------- colours ---------- */
+const hsl=(h,s,l,a)=>a===undefined?`hsl(${h},${s}%,${l}%)`:`hsla(${h},${s}%,${l}%,${a})`;
+const HUES=[352,24,205,100,168,290,238,48];
+const alleleCol=id=>{if(id>=16)return (id&1)?"#2E2E33":"#F2F2F2";const h=HUES[(id>>1)%8];return (id&1)?hsl(h,62,38):hsl(h,80,68);};
+const sireCol=f=>hsl(HUES[f%8],65,50);
+const C={skyTop:"#B7D7E8",skyBot:"#EAF3EE",hill:"#A8C79A",hill2:"#90B882",trees:"#6E9A67",grass:"#7EAA66",soil:"#6B5A45",soil2:"#4F4033",
+  sepal:"#B9B77E",petal:"#C58FAE",lip:"#8A2F66",lipDark:"#561A40",throat:"#DDA7C6",column:"#FCF5F9",stem:"#4E8A4A",leaf:"#5E9F57",leafDark:"#4A8545",
+  wilt:"#B39C82",fruit:"#6E9E4E",fruitDark:"#557F3B",pollen:"#F2C12E",pollenDark:"#C99A12",visc:"#6A4A2E",
+  capBg:"rgba(18,30,24,0.8)",ink:"#1F2A24",gold:"#F2B632",card:"#FBFBF8"};
+
+/* ---------- drawing primitives ---------- */
+function ell(x,y,rx,ry,rot,fill,stroke,lw){ctx.beginPath();ctx.ellipse(x,y,Math.max(.01,rx),Math.max(.01,ry),rot||0,0,TAU);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function circ(x,y,r,fill,stroke,lw){ell(x,y,r,r,0,fill,stroke,lw);}
+function rrect(x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
+function mixHex(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);const r=Math.round(lerp(pa>>16,pb>>16,t)),g=Math.round(lerp(pa>>8&255,pb>>8&255,t)),bl=Math.round(lerp(pa&255,pb&255,t));return `rgb(${r},${g},${bl})`;}
+function text(s,x,y,size,col,align,weight,italic){ctx.font=`${italic?"italic ":""}${weight||700} ${size}px ${FONT}`;ctx.fillStyle=col;ctx.textAlign=align||"left";ctx.textBaseline="middle";ctx.fillText(s,x,y);}
+function lines(s,maxW,size,weight){ctx.font=`${weight||700} ${size}px ${FONT}`;const out=[];let line="";for(const w of s.split(" ")){const t=line?line+" "+w:w;if(ctx.measureText(t).width>maxW&&line){out.push(line);line=w;}else line=t;}if(line)out.push(line);return out;}
+function para(s,x,y,maxW,size,col,lh,align,weight){const L=lines(s,maxW,size,weight);L.forEach((l,i)=>text(l,x,y+i*lh,size,col,align,weight));return L.length;}
+function fade(a,fn){if(a<=0)return;ctx.save();ctx.globalAlpha*=a;fn();ctx.restore();}
+function card(x,y,w,h,r){rrect(x,y,w,h,r||16);ctx.fillStyle=C.card;ctx.fill();ctx.strokeStyle="rgba(0,0,0,0.08)";ctx.lineWidth=1;ctx.stroke();}
+function arrow(x1,y1,x2,y2,col,lw){ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=lw||2;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();const a=Math.atan2(y2-y1,x2-x1);ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-12*Math.cos(a-0.4),y2-12*Math.sin(a-0.4));ctx.lineTo(x2-12*Math.cos(a+0.4),y2-12*Math.sin(a+0.4));ctx.closePath();ctx.fill();}
+
+/* Allele badge: two beads in a pill */
+function beads(x,y,a,b,r,alpha){if(alpha<=0)return;ctx.save();ctx.globalAlpha*=alpha;r=r||7;rrect(x-r*2.6,y-r*1.45,r*5.2,r*2.9,r*1.45);ctx.fillStyle="rgba(255,255,255,0.94)";ctx.fill();ctx.strokeStyle="rgba(40,50,45,0.35)";ctx.lineWidth=1;ctx.stroke();circ(x-r*1.2,y,r,alleleCol(a),"rgba(0,0,0,0.25)",1);circ(x+r*1.2,y,r,alleleCol(b),"rgba(0,0,0,0.25)",1);ctx.restore();}
+
+/* Chromosome with one gene locus marked */
+function chromo(x,y,len,w,allele,alpha,label){fade(alpha,()=>{const h1=len*0.42,h2=len*0.52;rrect(x-w/2,y-len/2,w,h1,w/2);ctx.fillStyle="#9EA3B8";ctx.fill();rrect(x-w/2,y-len/2+h1+len*0.06,w,h2,w/2);ctx.fill();
+  ctx.fillStyle=alleleCol(allele);ctx.fillRect(x-w/2,y-len/2+len*0.18,w,len*0.1);ctx.strokeStyle="rgba(0,0,0,0.25)";ctx.lineWidth=1;rrect(x-w/2,y-len/2,w,h1,w/2);ctx.stroke();rrect(x-w/2,y-len/2+h1+len*0.06,w,h2,w/2);ctx.stroke();
+  if(label)text(label,x,y+len/2+22,18,"#FFFFFF","center",700);});}
+
+/* Orchid flower, front view, centred on its column. s = size scale. */
+function flower(x,y,s,o){
+  /* Stylised Eulophia alta, front view, centred on the column.
+     Lanceolate bronze-maroon tepals over green, three-lobed labellum:
+     side lobes around the column, white disc with dark keels, frilled crimson midlobe.
+     Anther cap near (0,-10.5); stigma under the column tip near (0,1). */
+  o=o||{};const open=o.open===undefined?1:o.open;if(open<=0)return;
+  const w=o.wilt||0;ctx.save();ctx.translate(x,y);ctx.globalAlpha*=(o.alpha===undefined?1:o.alpha)*(1-w*0.55);
+  const sc=s*(0.25+0.75*open)*(1-w*0.35);ctx.scale(sc,sc);ctx.rotate(w*0.5);
+  const col=c=>w>0?mixHex(c,C.wilt,w):c;const lw=Math.max(0.25,0.6/sc*Math.min(s,3));const det=s>2.5;
+  const lance=(ang,len,wd,base,cBase,cTip,edge)=>{ctx.save();ctx.rotate(ang);const L=len*open;
+    ctx.beginPath();ctx.moveTo(-wd*0.45,-base);ctx.bezierCurveTo(-wd*1.05,-base-L*0.3,-wd*0.8,-base-L*0.75,0,-base-L);ctx.bezierCurveTo(wd*0.8,-base-L*0.75,wd*1.05,-base-L*0.3,wd*0.45,-base);ctx.closePath();
+    const g=ctx.createLinearGradient(0,-base,0,-base-L);g.addColorStop(0,col(cBase));g.addColorStop(0.35,col(mixHexRaw(cBase,cTip,0.6)));g.addColorStop(1,col(cTip));ctx.fillStyle=g;ctx.fill();
+    ctx.strokeStyle=col(edge);ctx.lineWidth=lw;ctx.stroke();
+    if(det){ctx.strokeStyle=col("#A7B86A");ctx.globalAlpha*=0.5;ctx.lineWidth=0.35;ctx.beginPath();ctx.moveTo(0,-base);ctx.lineTo(0,-base-L*0.9);ctx.stroke();ctx.globalAlpha/=0.5;
+      ctx.fillStyle=col("#4E2626");ctx.globalAlpha*=0.35;const R=mk(Math.round(ang*100)+7);for(let k=0;k<22;k++){const u=0.25+R()*0.7;ctx.beginPath();ctx.arc((R()-.5)*wd*1.3*(1-u*0.6),-base-L*u,0.35,0,TAU);ctx.fill();}ctx.globalAlpha/=0.35;}
+    ctx.restore();};
+  // petals and dorsal sepal
+  // lateral sepals sit tight against the labellum in E. alta, so they are hidden behind it
+  lance(0.78,40,8.5,5,"#7E8E45","#6A3434","#4A2424");lance(-0.78,40,8.5,5,"#7E8E45","#6A3434","#4A2424");
+  lance(0,42,7.5,6,"#8A9A4E","#6A3232","#4A2424");
+  // labellum: side lobes
+  for(const d of [-1,1]){ctx.beginPath();ctx.moveTo(d*3,-9);ctx.bezierCurveTo(d*13,-11,d*15,4,d*9,14*open);ctx.lineTo(d*4,12*open);ctx.closePath();
+    const g=ctx.createLinearGradient(d*14,0,d*3,0);g.addColorStop(0,col("#6B2C34"));g.addColorStop(1,col("#9DAF5A"));ctx.fillStyle=g;ctx.fill();ctx.strokeStyle=col("#4A1C24");ctx.lineWidth=lw;ctx.stroke();}
+  // midlobe: frilled crimson
+  const my=22*open;
+  ctx.beginPath();const N=40;for(let k=0;k<=N;k++){const a=TAU*(k/N);const fr=1+0.07*Math.sin(k*5.3)+0.04*Math.sin(k*11.7);const px=Math.cos(a)*12.5*fr,py=my+Math.sin(a)*11*open*fr;if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.closePath();
+  const mg=ctx.createRadialGradient(0,my-2,1,0,my+4,15);mg.addColorStop(0,col("#C4405C"));mg.addColorStop(1,col("#8C1D3A"));ctx.fillStyle=mg;ctx.fill();
+  if(det){const R=mk(5);ctx.fillStyle=col("#E07A92");for(let k=0;k<70;k++){const a=R()*Math.PI,r=Math.sqrt(R());circ(Math.cos(a)*11*r,my-2+Math.sin(a)*10*open*r,0.35+R()*0.35,null);ctx.fill();}}
+  // white disc with dark keels
+  ctx.beginPath();ctx.moveTo(-6,-2);ctx.bezierCurveTo(-7,8,-6,my-2,0,my-1);ctx.bezierCurveTo(6,my-2,7,8,6,-2);ctx.closePath();ctx.fillStyle=col("#F7F3EC");ctx.fill();
+  ctx.strokeStyle=col("#7A1E30");ctx.lineWidth=Math.max(0.35,0.9/sc*Math.min(s,3));for(const d of [-2.6,2.6]){ctx.beginPath();ctx.moveTo(d,my-9);ctx.lineTo(d*1.1,my-3);ctx.stroke();}
+  // column: yellow-green with orange anther cap
+  ell(0,-5,4.4,7.2,0,col("#D2DB7E"),col("#8C9442"),lw);ell(0,-10.5,3.3,2.7,0,col("#E57A2A"),col("#A8501A"),lw*0.8);
+  if(o.stigma){ell(0,1,2.4,1.9,0,"rgba(120,110,60,0.55)");ell(-.6,.5,.8,.5,0,"rgba(255,255,255,0.8)");}
+  if(o.pollinarium!==false&&!o.bigParcel){ell(-1.3,-10,1.1,1.4,0,C.pollen);ell(1.3,-10,1.1,1.4,0,C.pollen);}
+  ctx.restore();
+}
+function mixHexRaw(a,b,t){const pa=parseInt(a.slice(1),16),pb=parseInt(b.slice(1),16);const h=v=>v.toString(16).padStart(2,"0");return "#"+h(Math.round(lerp(pa>>16,pb>>16,t)))+h(Math.round(lerp(pa>>8&255,pb>>8&255,t)))+h(Math.round(lerp(pa&255,pb&255,t)));}
+function capsule(x,y,s,sw,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.globalAlpha*=(o.alpha===undefined?1:o.alpha);ctx.scale(s,s);
+  const split=o.split||0;
+  ctx.strokeStyle=C.stem;ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(0,-18*sw);ctx.lineTo(0,-24);ctx.stroke();
+  const body=o.grey?"#9C9A8F":C.fruit;
+  if(split>0){[-1,1].forEach(d=>{ctx.save();ctx.rotate(d*split*0.5);ell(d*3*split,0,5.5*sw,17*sw,0,body,C.fruitDark,.8);ctx.restore();});}
+  else{const g=ctx.createLinearGradient(-8*sw,0,8*sw,0);g.addColorStop(0,o.grey?"#8A887E":"#5E8E40");g.addColorStop(0.5,o.grey?"#A9A79C":"#8BB866");g.addColorStop(1,o.grey?"#8A887E":"#5E8E40");ell(0,0,8*sw,17*sw,0,g,C.fruitDark,.8);ctx.strokeStyle="rgba(40,70,30,0.45)";ctx.lineWidth=.7;[-3,0,3].forEach(dx=>{ctx.beginPath();ctx.moveTo(dx*sw,-15*sw);ctx.quadraticCurveTo(dx*1.6*sw,0,dx*sw,15*sw);ctx.stroke();});}
+  ctx.restore();}
+
+/* Bee: local frame faces +x. Pollinarium geometry is in this frame so pickup is seamless. */
+function bee(x,y,s,ang,t,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.scale(s,s);
+  const flap=o.still?0.3:Math.abs(Math.sin(t*55));
+  ctx.strokeStyle="#2A2320";ctx.lineWidth=1.3;for(const sx of [-4,2,8]){ctx.beginPath();ctx.moveTo(sx,5);ctx.lineTo(sx-3,12);ctx.moveTo(sx,-5);ctx.lineTo(sx-3,-12);ctx.stroke();}
+  ctx.save();ctx.beginPath();ctx.ellipse(-12,0,15,10.5,0,0,TAU);ctx.fillStyle="#F2B632";ctx.fill();ctx.clip();ctx.fillStyle="#2A2320";for(const bx of [-22,-14,-6])ctx.fillRect(bx,-12,4,24);ctx.restore();
+  ell(-12,0,15,10.5,0,null,"#2A2320",.8);
+  circ(4,0,8.5,"#7A5532");if(s>2){ctx.strokeStyle="rgba(240,200,120,0.6)";ctx.lineWidth=0.4;const R=mk(5);for(let i=0;i<30;i++){const a=R()*TAU;ctx.beginPath();ctx.moveTo(4+Math.cos(a)*7,Math.sin(a)*7);ctx.lineTo(4+Math.cos(a)*9.5,Math.sin(a)*9.5);ctx.stroke();}}
+  circ(15,0,6.5,"#2A2320");ell(17,-3,2,2.6,0,"#555");ell(17,3,2,2.6,0,"#555");
+  ctx.strokeStyle="#2A2320";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(19,-3);ctx.quadraticCurveTo(25,-8,27,-12);ctx.moveTo(19,3);ctx.quadraticCurveTo(25,8,27,12);ctx.stroke();
+  ctx.globalAlpha*=0.55;ell(0,-11-8*flap,5,13*(0.5+0.5*flap),-0.35,"#FFFFFF","rgba(80,90,100,0.6)",.6);ell(0,11+8*flap,5,13*(0.5+0.5*flap),0.35,"#FFFFFF","rgba(80,90,100,0.6)",.6);
+  ctx.globalAlpha/=0.55;
+  if(o.parcel)pollinarium(o.parcel);
+  ctx.restore();}
+/* pollinarium in bee-local units: viscidium at (22,0), stipe to (28,0), two pollinia near (31,+-2.8) */
+function pollinarium(p){const g=p.grains;ctx.save();
+  if(!p.noStalk){ctx.strokeStyle=C.pollenDark;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(22,0);ctx.lineTo(28.5,0);ctx.stroke();circ(22,0,1.5,C.visc);}
+  const pol=p.empty?[]:(p.one?[p.one]:[-1,1]);
+  for(const d of pol){ell(31.5,d*2.8,3.4,2.4,0,C.pollen,C.pollenDark,.5);
+    if(g){ctx.save();ctx.beginPath();ctx.ellipse(31.5,d*2.8,3.2,2.2,0,0,TAU);ctx.clip();const R=mk(7+d);for(let i=0;i<26;i++){circ(31.5+(R()-.5)*6.4,d*2.8+(R()-.5)*4.4,.42,alleleCol(g[(i+(d>0?1:0))%2]));}ctx.restore();}}
+  ctx.restore();}
+function inBeeFrame(x,y,s,ang,fn){ctx.save();ctx.translate(x,y);ctx.rotate(ang);ctx.scale(s,s);fn();ctx.restore();}
+
+/* Dust seed: testa with an embryo carrying one maternal and one paternal allele */
+function seedShape(x,y,s,a,b,alpha,ring){ctx.save();ctx.globalAlpha*=alpha===undefined?1:alpha;ctx.translate(x,y);ctx.scale(s,s);
+  ell(0,0,19,7.5,0,"rgba(238,226,196,0.95)","rgba(120,95,60,0.6)",.8);ell(0,0,10,5.6,0,"#C9B089");circ(-4.3,0,3.8,alleleCol(a),"rgba(0,0,0,0.3)",.6);circ(4.3,0,3.8,alleleCol(b),ring||"rgba(0,0,0,0.3)",ring?1.6:.6);ctx.restore();}
+
+/* ---------- world: the founding meadow ---------- */
+const GY=700;
+const PX=i=>140+i*190;
+const FLOWERING=[0,1,2,3,4,5,7];
+const FS=1.5;
+const flowerPos=(x,slot,sc)=>{sc=sc||1;return slot===0?[x+6*sc,GY-340*sc]:[x+46*sc,GY-250*sc];};
+function plant(x,sc,st){
+  const g=st.grow===undefined?1:st.grow;if(g<=0)return;const a=1-(st.fade||0);if(a<=0)return;
+  ctx.save();ctx.globalAlpha*=a;const w=st.wilt||0;
+  const lc=w>0?mixHex(C.leaf,C.wilt,w):C.leaf,lc2=w>0?mixHex(C.leafDark,C.wilt,w):C.leafDark,sc2=w>0?mixHex(C.stem,C.wilt,w):C.stem;
+  const lg=clamp(g*1.6,0,1);
+  ell(x-34*sc*lg,GY-14*sc,44*sc*lg,13*sc*lg,-0.35-w*0.3,lc2);ell(x+36*sc*lg,GY-16*sc,46*sc*lg,13*sc*lg,0.35+w*0.3,lc);ell(x+2,GY-28*sc*lg,11*sc*lg,32*sc*lg,0.1,lc);
+  ctx.strokeStyle="rgba(255,255,255,0.18)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x-6,GY-12*sc);ctx.lineTo(x-70*sc*lg,GY-26*sc*lg);ctx.moveTo(x+6,GY-14*sc);ctx.lineTo(x+74*sc*lg,GY-30*sc*lg);ctx.stroke();
+  if(st.flowering!==false){const sg=clamp((g-0.3)/0.7,0,1);if(sg>0){
+    const top=flowerPos(x,0,sc);const tx=lerp(x,top[0],sg),ty=lerp(GY,top[1],sg);
+    ctx.strokeStyle=sc2;ctx.lineWidth=3.2*sc;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(x,GY-8);ctx.quadraticCurveTo(x-8*sc,lerp(GY,ty,0.5),tx,ty+26*sc*sg);ctx.stroke();
+    const fl=st.flowers||[];
+    if(sg>0.75){const lo=flowerPos(x,1,sc);ctx.lineWidth=2.4*sc;ctx.beginPath();ctx.moveTo(x-3*sc,GY-190*sc);ctx.quadraticCurveTo(x+20*sc,GY-205*sc,lo[0]-6*sc,lo[1]+22*sc);ctx.stroke();}
+    fl.forEach((f,i)=>{if(!f)return;const p=flowerPos(x,i,sc);if(i===1&&sg<0.75)return;
+      if(f.fruit>0){const fx=p[0],fy=p[1]+14*sc;if(f.fruit<1)flower(p[0],p[1],sc*FS,{open:1,wilt:f.fruit,alpha:1-f.fruit});capsule(fx,fy,sc*1.4,clamp(f.fruit,0.2,1),{split:f.split||0,grey:f.grey});
+        if(f.tag!==undefined&&f.tagA>0){ctx.save();ctx.globalAlpha*=f.tagA;circ(fx+22*sc,fy-6*sc,8*sc,sireCol(f.tag),"#FFFFFF",2);if(f.tag2!==undefined)circ(fx+22*sc,fy+12*sc,4.6*sc,sireCol(f.tag2),"#FFFFFF",1.5);ctx.restore();}
+        if(f.mark>0){ctx.save();ctx.globalAlpha*=f.mark;text(f.pass?"✓":"✕",fx+2*sc,fy-44*sc,26*sc,f.pass?"#2E7D3E":"#8A3A2E","center",800);ctx.restore();}}
+      else flower(p[0],p[1],sc*FS,{open:(f.open===undefined?1:f.open)*sg,wilt:f.wilt||0,alpha:f.alpha,pollinarium:f.pollinarium});});
+  }}
+  ctx.restore();
+  if(st.badge)beads(x+4,GY+40,st.badge[0],st.badge[1],8*Math.max(sc,0.85),st.badge[2]*a);
+}
+function seedling(x,gr,wilt,alpha,sc){if(gr<=0||alpha<=0)return;sc=sc||1;ctx.save();ctx.globalAlpha*=alpha;const c=wilt>0?mixHex(C.leaf,C.wilt,wilt):C.leaf;
+  const h=34*gr*sc*(1-wilt*0.5);ctx.strokeStyle=wilt>0?mixHex(C.stem,C.wilt,wilt):C.stem;ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(x,GY);ctx.lineTo(x+wilt*6,GY-h);ctx.stroke();
+  ell(x-8*gr*sc+wilt*4,GY-h+4+wilt*6,8*gr*sc,4*gr*sc,-0.5-wilt,c);ell(x+8*gr*sc+wilt*6,GY-h+2+wilt*6,8*gr*sc,4*gr*sc,0.5+wilt*0.4,c);ctx.restore();}
+
+const TUFTS=(function(){const R=mk(404);return [...Array(90)].map(()=>({x:R()*1700-50,h:10+R()*16,l:R()}));})();
+const TREES=(function(){const R=mk(505);return [...Array(34)].map((_,i)=>({x:-40+i*52+R()*30,r:26+R()*34}));})();
+function background(t,dim){
+  const g=ctx.createLinearGradient(0,0,0,GY);g.addColorStop(0,C.skyTop);g.addColorStop(1,C.skyBot);ctx.fillStyle=g;ctx.fillRect(-4000,-4000,9600,4000+GY);
+  const sun=ctx.createRadialGradient(1320,110,10,1320,110,420);sun.addColorStop(0,"rgba(255,248,215,0.9)");sun.addColorStop(1,"rgba(255,248,215,0)");ctx.fillStyle=sun;ctx.fillRect(700,-300,1300,900);
+  ctx.fillStyle=C.trees;TREES.forEach(tr=>{circ(tr.x,GY-160,tr.r,C.trees);});ctx.fillRect(-200,GY-160,2000,60);
+  ctx.fillStyle=C.hill;ctx.beginPath();ctx.moveTo(-200,GY);for(let x=-200;x<=1800;x+=40)ctx.lineTo(x,GY-120-40*Math.sin(x/260)-18*Math.sin(x/90+1));ctx.lineTo(1800,GY);ctx.fill();
+  ctx.fillStyle=C.hill2;ctx.beginPath();ctx.moveTo(-200,GY);for(let x=-200;x<=1800;x+=40)ctx.lineTo(x,GY-60-26*Math.sin(x/190+2));ctx.lineTo(1800,GY);ctx.fill();
+  ctx.fillStyle=C.grass;ctx.fillRect(-4000,GY-6,9600,14);
+  ctx.strokeStyle="#6C9A56";ctx.lineWidth=2;TUFTS.forEach(tf=>{const sway=Math.sin(t*1.3+tf.x*0.02)*3;ctx.beginPath();ctx.moveTo(tf.x-4,GY+2);ctx.quadraticCurveTo(tf.x-5,GY-tf.h*0.5,tf.x-8+sway,GY-tf.h);ctx.moveTo(tf.x,GY+2);ctx.quadraticCurveTo(tf.x,GY-tf.h*0.6,tf.x+sway,GY-tf.h*1.2);ctx.moveTo(tf.x+4,GY+2);ctx.quadraticCurveTo(tf.x+5,GY-tf.h*0.5,tf.x+9+sway,GY-tf.h*0.9);ctx.stroke();});
+  const sg=ctx.createLinearGradient(0,GY,0,H);sg.addColorStop(0,C.soil);sg.addColorStop(1,C.soil2);ctx.fillStyle=sg;ctx.fillRect(-4000,GY+6,9600,4000);
+  if(dim){ctx.fillStyle=`rgba(15,25,20,${dim})`;ctx.fillRect(-4000,-4000,9600,9000);}
+}
+function closeupBg(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#27493A");g.addColorStop(1,"#557F52");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  const R=mk(99);for(let i=0;i<22;i++){circ(R()*W,R()*H,30+R()*90,`rgba(255,255,230,${0.035+R()*0.05})`);}}
+function vignette(){const v=ctx.createRadialGradient(800,450,380,800,450,980);v.addColorStop(0,"rgba(0,0,0,0)");v.addColorStop(1,"rgba(0,0,0,0.28)");ctx.fillStyle=v;ctx.fillRect(0,0,W,H);}
+
+function camera(fx,fy,z,sx,sy){ctx.translate(sx,sy);ctx.scale(z,z);ctx.translate(-fx,-fy);}
+const CUX=800,CUY=440,CUS=9;
+const ZMAX=CUS/FS;
+function zoomTo(F,u){const zz=Math.exp(lerp(0,Math.log(ZMAX),u));const k=(zz-1)/(ZMAX-1);camera(F[0],F[1],zz,lerp(F[0],CUX,k),lerp(F[1],CUY,k));}
+
+/* ---------- the founding story, chosen from a seeded draw ---------- */
+function makeStory(seed){
+  const R=mk(seed);
+  const wts={};FLOWERING.forEach(i=>wts[i]=gammaR(R,0.6));
+  const fruits=[],unvisited=[];
+  for(const m of FLOWERING)for(let slot=0;slot<2;slot++){
+    if(m===5&&slot===0){fruits.push({m,slot,f:2,pass:true,story:true});continue;}
+    if(R()<0.7){const cand=FLOWERING.filter(j=>j!==m);const f=pickW(R,cand,cand.map(j=>wts[j]));const fr={m,slot,f,pass:R()<0.5};
+      if(R()<0.3){const c2=cand.filter(j=>j!==f);fr.f2=pickW(R,c2,c2.map(j=>wts[j]));fr.s2=0.15+R()*0.2;}fruits.push(fr);}
+    else unvisited.push({m,slot});
+  }
+  const seedlings=[];
+  fruits.forEach((fr,fi)=>{if(!fr.pass)return;const n=2+poissonR(R,2.3);for(let k=0;k<n;k++){const sire=(fr.f2!==undefined&&R()<fr.s2)?fr.f2:fr.f;seedlings.push({fi,m:fr.m,f:sire,a:fr.m*2+(R()<.5?1:0),b:sire*2+(R()<.5?1:0)});}});
+  const nS=seedlings.length;if(nS<18||nS>28)return null;
+  const nF=fruits.length,nP=fruits.filter(f=>f.pass).length;if(nF<9||nF>12||nP<4||nP>7)return null;
+  if(!fruits.some(f=>f.f2!==undefined&&f.pass))return null;
+  const idx=shuffle(R,seedlings.map((_,i)=>i));const winners=idx.slice(0,8);const wset=new Set(winners);
+  const NSL=28,slotX=k=>70+k*(1460/(NSL-1));
+  const wSlots=[...Array(8)].map((_,k)=>Math.round((k+0.5)*NSL/8-0.5));
+  const free=shuffle(R,[...Array(NSL).keys()].filter(k=>!wSlots.includes(k)));
+  let wi=0,li=0;seedlings.forEach((s,i)=>{s.win=wset.has(i);s.x=slotX(s.win?wSlots[wi++]:free[li++]);s.wrank=s.win?winners.indexOf(i):-1;});
+  const tally=Array(8).fill(0);seedlings.forEach(s=>{if(s.win)tally[s.f]++;});
+  const zeros=FLOWERING.filter(i=>tally[i]===0).length;const mx=Math.max(...tally);
+  if(mx<3||mx>4||zeros<3||tally.filter(v=>v>=2).length<2)return null;
+  if(!seedlings.some(s=>s.win&&s.fi===0))return null;
+  const trips=shuffle(R,fruits.map((_,i)=>i).filter(i=>!fruits[i].story));
+  trips.forEach((fi,k)=>{fruits[fi].t0=0.6+k*0.85;});
+  fruits.forEach(fr=>{fr.dust=[...Array(34)].map(()=>({vx:(R()-.3)*170,vy:-(40+R()*120),sway:R()*TAU,life:4+R()*2.5}));});
+  const flick=[...Array(60)].map(()=>Math.floor(R()*nS));
+  return {fruits,unvisited,seedlings,winners,tally,flick,seed};
+}
+let STORY=null;for(let s=1;s<20000&&!STORY;s++)STORY=makeStory(s);
+
+/* ---------- many generations: a tiny version of the v3.3 regimes ---------- */
+const LOW={lam:1.2,e:0.62,al:0.7,b:3,kmax:4},GRAN={lam:3.5,e:0,al:1.5,b:1,kmax:8};
+function runWorld(reg,seed,N,G,init){
+  const R=mk(seed);let pop=init.map(p=>p.slice());const gens=[];
+  for(let g=0;g<=G;g++){
+    const rec={pop:pop.map(p=>p.slice()),tally:null,colours:new Set(pop.flat()).size};gens.push(rec);if(g===G)break;
+    const fl=[];pop.forEach((p,i)=>{if(R()<0.7)fl.push(i);});if(fl.length<2)break;
+    const w=fl.map(()=>gammaR(R,0.6));const kids=[];
+    fl.forEach(m=>{let nf=0;const nfl=poissonR(R,6);for(let k=0;k<nfl;k++)if(R()<0.25)nf++;
+      for(let k=0;k<nf;k++){
+        const draw=()=>{for(;;){const f=pickW(R,fl,w);if(f!==m)return f;}};
+        let extra=0;const D=poissonR(R,reg.lam);for(let j=0;j<D;j++)if(R()<1-reg.e)extra++;
+        const kk=Math.min(1+extra,reg.kmax);const fathers=[];for(let j=0;j<kk;j++)fathers.push(draw());
+        let shares;if(kk===1)shares=[1];else{const al=fathers.map(()=>reg.al);al[0]*=reg.b;const gs=al.map(a=>gammaR(R,a));const s=gs.reduce((a,b)=>a+b,0);shares=gs.map(x=>x/s);}
+        if(R()>=0.5)continue;const nr=poissonR(R,10);
+        for(let r=0;r<nr;r++){const f=pickW(R,fathers,shares);kids.push({a:pop[m][R()<.5?0:1],b:pop[f][R()<.5?0:1],f});}
+      }});
+    shuffle(R,kids);const keep=kids.slice(0,N);
+    const tally=Array(N).fill(0);keep.forEach(k=>tally[k.f]++);rec.tally=tally;
+    if(keep.length<2)break;pop=keep.map(k=>[k.a,k.b]);
+  }
+  return gens;
+}
+const NW=30,GW=8;
+function initPop(seed){const R=mk(seed);return [...Array(NW)].map(()=>[Math.floor(R()*16),Math.floor(R()*16)]);}
+function topShare(t){const s=t.slice().sort((a,b)=>b-a);const tot=s.reduce((a,b)=>a+b,0);return tot?(s[0]+s[1]+s[2])/tot:0;}
+const WSTAT=(function(){let a=0,b=0,n=0,ca=0,cb=0,reps=0;for(let r=0;r<200;r++){const init=initPop(1000+r);const A=runWorld(LOW,5000+r,NW,GW,init),B=runWorld(GRAN,5000+r,NW,GW,init);
+    if(A.length<GW+1||B.length<GW+1)continue;for(let g=0;g<GW;g++){a+=topShare(A[g].tally);b+=topShare(B[g].tally);n++;}ca+=A[GW].colours;cb+=B[GW].colours;reps++;}
+  return{pollinaria:a/n,loose:b/n,colP:ca/reps,colL:cb/reps};})();
+let WORLD=null;
+for(let r=0;r<400&&!WORLD;r++){const init=initPop(77+r);const A=runWorld(LOW,900+r,NW,GW,init),B=runWorld(GRAN,900+r,NW,GW,init);
+  if(A.length<GW+1||B.length<GW+1)continue;let sa=0,sb=0,wins=0;for(let g=0;g<GW;g++){const x=topShare(A[g].tally),y=topShare(B[g].tally);sa+=x;sb+=y;if(x>y)wins++;}
+  if(sa>sb&&wins>=GW-2&&Math.abs(A[GW].colours-B[GW].colours)<=2)WORLD={A,B};}
+
+/* ---------- chapters ---------- */
+const CH=[];
+function chapter(name,dur,caps,draw){CH.push({name,dur,caps,draw});}
+function founderState(i,o){o=o||{};return{grow:1,flowering:FLOWERING.includes(i),badge:[i*2,i*2+1,o.badge===undefined?1:o.badge],flowers:[{open:1,pollinarium:o.noParcel===i?false:true},{open:1}]};}
+
+/* 1 */
+chapter("A meadow of orchids",14,[
+  [0,"This is a small population of a terrestrial orchid, drawn after Eulophia alta: a bee-pollinated epidendroid with two hard pollinia."],
+  [5,"Each orchid is diploid: it carries two copies of every gene. These copies are called alleles."],
+  [9.5,"We follow one gene, drawing its two alleles as two coloured beads under each plant."]],
+function(t){
+  background(t);
+  for(let i=0;i<8;i++){const st=founderState(i,{badge:eseg(t,5.2+i*0.12,6.4+i*0.12)});st.grow=eseg(t,0.4+i*0.22,3.2+i*0.22);st.flowers.forEach(f=>f.open=eseg(t,3.4+i*0.18,4.8+i*0.18));plant(PX(i),1,st);}
+  const hl=eseg(t,9.5,10.5)*(1-eseg(t,13.4,14));
+  fade(hl,()=>{const x=PX(2)+4,y=GY+40;ctx.strokeStyle="#FFFFFF";ctx.lineWidth=3;rrect(x-30,y-20,60,40,20);ctx.stroke();
+    const bx=800,by=150;card(bx-320,by-72,640,156,20);
+    beads(bx,by-10,4,5,30,1);text("allele 1",bx-110,by-10,26,C.ink,"right",800);text("allele 2",bx+110,by-10,26,C.ink,"left",800);
+    text("two copies of one gene",bx,by+52,20,"#5E6B63","center",700);
+    ctx.strokeStyle="rgba(255,255,255,0.9)";ctx.setLineDash([6,6]);ctx.beginPath();ctx.moveTo(bx-170,by+84);ctx.lineTo(x,y-24);ctx.stroke();ctx.setLineDash([]);});
+  fade(eseg(t,6.8,7.6),()=>text("not flowering this season",PX(6)+4,GY-80,18,"#2F4A36","center"));
+  fade(eseg(t,1.2,2)*(1-eseg(t,8.6,9.3)),()=>{card(470,52,660,134,18);text("model orchid, stylised after",800,82,18,"#5E6B63","center",700);
+    text("Eulophia alta",800,114,32,C.ink,"center",800,true);text("terrestrial, bee-pollinated epidendroid (Cyrtopodiinae)",800,148,18,"#3A4640","center",700);text("two hard pollinia on a stipe with a viscidium",800,170,18,"#3A4640","center",700);});
+});
+
+/* 2: genes */
+chapter("Alleles, pollen and ovules",27,[
+  [0,"Inside every cell of a diploid plant, each gene sits on a pair of chromosomes: one allele on each."],
+  [5.5,"When pollen forms, meiosis separates the pair. Each pollen grain is haploid: it carries only one of the two alleles."],
+  [10.5,"The same happens in the ovary of the plant that will bear the seeds. The egg cell of each ovule carries one allele."],
+  [15,"At fertilisation, one pollen grain and one ovule unite. The seed is diploid again: one maternal allele and one paternal allele."],
+  [19.5,"Which of its two alleles each parent passes on is a matter of chance, like a coin toss."],
+  [22.6,"These markers have no dominance, so there is no 3:1 ratio: each parent simply passes either allele with probability one half."]],
+function(t){
+  closeupBg();
+  // pollen donor (top) and seed parent (bottom)
+  const rows=[{y:250,al:[4,5],lab:"pollen donor",cell:"pollen grains",tint:"#FFF1C4",st:5.5},{y:610,al:[10,11],lab:"seed parent",cell:"ovules",tint:"#F7E3EE",st:10.5}];
+  rows.forEach((r,ri)=>{
+    const a=ri===0?eseg(t,0.2,1.2):eseg(t,9.8,10.8);
+    fade(a,()=>{flower(150,r.y-20,2.1,{pollinarium:false});beads(150,r.y+70,r.al[0],r.al[1],12,1);text(r.lab,150,r.y+112,20,"#FFFFFF","center",800);
+      circ(420,r.y,120,"rgba(255,255,255,0.12)","rgba(255,255,255,0.7)",2.5);text("nucleus",420,r.y-140,17,"rgba(255,255,255,0.85)","center",700);
+      chromo(395,r.y,150,24,r.al[0],eseg(t,ri?10.2:1.2,ri?11:2.2));chromo(445,r.y,150,24,r.al[1],eseg(t,ri?10.4:1.6,ri?11.2:2.6));
+      if(ri===0)fade(eseg(t,2.6,3.6),()=>{text("one gene, one allele on each chromosome",420,r.y+150,18,"#FFFFFF","center",700);});});
+    // meiosis into four haploid cells
+    const m=eseg(t,r.st+0.5,r.st+2.5);
+    fade(m,()=>{arrow(548,r.y,640,r.y,"#FFFFFF",3);text("meiosis",594,r.y-22,18,"#FFFFFF","center",700);
+      for(let k=0;k<4;k++){const cx=lerp(420,700+k*120,m),cy=r.y;const al=r.al[k<2?0:1];
+        if(ri===0){circ(cx,cy,46,r.tint,"#C99A12",2);}else{ell(cx,cy,40,52,0,r.tint,"#B5467F",2);}
+        chromo(cx,cy,70,14,al,1);}
+      fade(eseg(t,r.st+2,r.st+3),()=>text(`${r.cell}: one allele each (haploid)`,880,r.y+84,20,"#FFFFFF","center",700));});
+  });
+  // fertilisation
+  const f=eseg(t,15,17.5);
+  if(t>=15){fade(1,()=>{
+    const px=lerp(1060,1360,f),py=lerp(250,430,f),ox=lerp(940,1360,f),oy=lerp(610,470,f);
+    if(f<1){circ(px,py,46,"#FFF1C4","#C99A12",2);chromo(px,py,70,14,5,1);ell(ox,oy,40,52,0,"#F7E3EE","#B5467F",2);chromo(ox,oy,70,14,10,1);}
+    else{ell(1380,450,110,70,0,"#EEE2C4","#8C7250",3);chromo(1350,450,90,18,10,1);chromo(1410,450,90,18,5,1);
+      text("maternal",1350,540,17,"#FFFFFF","center",700);text("paternal",1410,560,17,"#FFFFFF","center",700);text("seed (diploid)",1380,350,22,"#FFFFFF","center",800);}});}
+  // all combinations
+  const c=eseg(t,19.5,20.8);
+  fade(c,()=>{card(1150,630,420,136,14);text("four equally likely genotypes",1360,656,18,C.ink,"center",800);text("(codominant neutral markers)",1360,680,15,"#5E6B63","center",700);
+    [[10,4],[10,5],[11,4],[11,5]].forEach((p,i)=>beads(1225+i*90,727,p[0],p[1],9,1));});
+});
+
+/* close-up geometry */
+const TOPF2=flowerPos(PX(2),0),TOPF5=flowerPos(PX(5),0);
+const BEE_S=5,PICK=[800,496],UP=-Math.PI/2;
+function beePath(pts,t){if(t<=pts[0][0])return pts[0].slice(1);for(let i=1;i<pts.length;i++){if(t<=pts[i][0]){const a=pts[i-1],b=pts[i];const u=ease((t-a[0])/(b[0]-a[0]));return [lerp(a[1],b[1],u),lerp(a[2],b[2],u),lerp(a[3],b[3],u)];}}return pts[pts.length-1].slice(1);}
+function label(x1,y1,x2,y2,s){ctx.strokeStyle="#FFFFFF";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2-8,y2);ctx.stroke();circ(x1,y1,3.5,"#FFFFFF");text(s,x2,y2,25,"#FFFFFF","left",800);}
+
+/* 3 */
+chapter("The pollinarium",15,[
+  [0,"Let's look closely at one flower."],
+  [3.2,"Orchid pollen is not released as loose grains. In Eulophia it is packed into two hard pollinia."],
+  [7.2,"The pollinia sit on a stipe, a strap of column tissue, which ends in a sticky pad from the rostellum, the viscidium. Together they form the pollinarium."],
+  [11,"Each pollinium holds thousands of haploid pollen grains. About half carry one allele, half the other."]],
+function(t){
+  const z=eseg(t,0.2,2.6);
+  if(t<3){ctx.save();zoomTo(TOPF2,z);background(t);for(let i=0;i<8;i++)plant(PX(i),1,founderState(i));ctx.restore();}
+  const cu=seg(t,2.3,3);
+  fade(cu,()=>{closeupBg();flower(CUX,CUY,CUS,{stigma:true,bigParcel:true});
+    inBeeFrame(PICK[0],PICK[1],BEE_S,UP,()=>pollinarium({grains:eseg(t,10.8,11.6)>0?[4,5]:null}));});
+  fade(eseg(t,3.6,4.6),()=>label(CUX+16,338,1100,230,"pollinia (2)"));
+  fade(eseg(t,7.2,8),()=>{label(CUX+4,370,1100,300,"stipe");label(CUX+6,386,1100,370,"viscidium (sticky)");});
+  fade(eseg(t,8.4,9.2),()=>{label(CUX+10,449,1100,440,"stigma");label(CUX+30,470,1100,510,"column");});
+  fade(eseg(t,10.8,11.8),()=>{const cx=360,cy=300,r=160;ctx.strokeStyle="#FFFFFF";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(CUX-24,338);ctx.lineTo(cx+r*0.92,cy+r*0.35);ctx.stroke();
+    circ(cx,cy,r,"#FFF4CF","#FFFFFF",4);ctx.save();ctx.beginPath();ctx.arc(cx,cy,r-3,0,TAU);ctx.clip();const R=mk(3);for(let i=0;i<170;i++){const a=R()*TAU,d=Math.sqrt(R())*(r-10);circ(cx+Math.cos(a)*d,cy+Math.sin(a)*d,9,alleleCol(4+(i%2)),"rgba(0,0,0,0.2)",1);}ctx.restore();
+    text("inside a pollinium: haploid grains,",cx,cy+r+32,21,"#FFFFFF","center");text("each carrying allele 1 or allele 2",cx,cy+r+58,21,"#FFFFFF","center");});
+});
+
+/* 4 */
+const PATH3=[[0,1750,160,Math.PI*0.85],[2.6,820,640,UP],[3.4,800,640,UP],[4.8,800,PICK[1],UP],[5.3,800,PICK[1],UP],[6.8,800,660,UP],[8.4,-250,180,Math.PI*1.05]];
+chapter("A bee removes the pollinarium",12,[
+  [0,"A bee arrives. Eulophia flowers offer no reward: they attract food-seeking bees by deception."],
+  [3.4,"As it pushes into the flower, the viscidium glues onto its head."],
+  [6.8,"Backing out, it pulls away the whole pollinarium: both pollinia at once."]],
+function(t){
+  if(t<9.4){closeupBg();flower(CUX,CUY,CUS,{stigma:true,bigParcel:true});
+    const [x,y,a]=beePath(PATH3,t);const got=t>=5.05;
+    if(!got)inBeeFrame(PICK[0],PICK[1],BEE_S,UP,()=>pollinarium({grains:[4,5]}));
+    bee(x,y,BEE_S,a,t,{parcel:got?{grains:[4,5]}:null,still:t>3.2&&t<6.6});
+    if(t>4.8&&t<6){fade(1-Math.abs(t-5.2)/0.8,()=>circ(800,PICK[1]-108,26,null,"#FFFFFF",3));}
+  }
+  if(t>=9){fade(seg(t,9,9.6),()=>{const u=eseg(t,9.2,11.2);ctx.save();zoomTo(TOPF2,1-u);background(t);for(let i=0;i<8;i++)plant(PX(i),1,founderState(i,{noParcel:2}));
+    const bx=lerp(TOPF2[0]+10,TOPF2[0]+220,seg(t,9.6,12)),by=TOPF2[1]-40-Math.sin(seg(t,9.6,12)*Math.PI)*60;bee(bx,by,1.7,0,t,{parcel:{}});ctx.restore();});}
+});
+
+/* 5 */
+const PATH4=[[5.4,1750,760,Math.PI*1.1],[7.4,800,700,UP],[8.8,800,599,UP],[9.6,800,599,UP],[11,1780,200,-0.3]];
+chapter("The pollinia reach a stigma",16,[
+  [0,"The bee flies on to another orchid."],
+  [5.2,"The pollinia touch this flower's sticky stigma and break away from the stipe. The whole pollen load is left in this one flower."],
+  [9.6,"Thousands of pollen grains, all from one donor. Pollination triggers ovule development, and the pollen tubes grow down to fertilise the ovules."],
+  [12.6,"The flower fades and the ovary swells into a capsule."]],
+function(t){
+  if(t<5.2){ctx.save();const u=eseg(t,3.6,5.2);zoomTo(TOPF5,u);
+    background(t);for(let i=0;i<8;i++)plant(PX(i),1,founderState(i,{noParcel:2}));
+    const f=eseg(t,0,3.4);const bx=lerp(TOPF2[0]+220,TOPF5[0]+26,f),by=lerp(TOPF2[1]-40,TOPF5[1]-6,f)-Math.sin(f*Math.PI)*130;bee(bx,by,1.7,f<0.9?0:-0.6,t,{parcel:{}});ctx.restore();}
+  fade(seg(t,4.6,5.2),()=>{closeupBg();
+    const wilt=eseg(t,12.6,14.4),cap=eseg(t,13.4,16);
+    flower(CUX,CUY,CUS,{stigma:true,bigParcel:true,wilt:wilt,alpha:1-cap*0.9});
+    if(wilt<0.5)inBeeFrame(PICK[0],PICK[1],BEE_S,UP,()=>pollinarium({grains:[10,11]}));
+    const dep=t>=9.1;
+    if(dep&&cap<1)fade(1-cap,()=>inBeeFrame(800,599,BEE_S,UP,()=>pollinarium({grains:[4,5],noStalk:true})));
+    if(t<11.2){const [x,y,a]=beePath(PATH4,t);bee(x,y,BEE_S,a,t,{parcel:dep?{empty:true}:{grains:[4,5]},still:t>7.4&&t<9.6});}
+    if(t>8.8&&t<10.2)fade(1-Math.abs(t-9.3)/0.9,()=>circ(800,446,30,null,"#FFFFFF",3));
+    // pollen tubes
+    const ins=eseg(t,9.8,10.6)*(1-eseg(t,13,13.6));
+    fade(ins,()=>{const cx=270,cy=390,r=205;ctx.strokeStyle="#FFFFFF";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(792,452);ctx.lineTo(cx+r*0.95,cy-40);ctx.stroke();
+      circ(cx,cy,r,"rgba(20,40,30,0.85)","#FFFFFF",3);ctx.save();ctx.beginPath();ctx.arc(cx,cy,r-3,0,TAU);ctx.clip();
+      const tp=eseg(t,10.4,12.8);orchidSection(cx-20,cy-38,0.78,{dep:true,tubes:tp,fert:tp,poll:false});ctx.restore();
+      text("cut-away: tubes grow to the ovules",cx,cy+r+28,20,"#FFFFFF","center",800);});
+    if(cap>0)capsule(CUX,CUY+30,CUS*0.9,cap,{alpha:cap});});
+});
+
+/* ---------- side sections and comparison artwork ---------- */
+/* Orchid column in side section: front face to the right. Local units; stigmatic cavity at (20,-40). */
+const OV_ROWS=8;
+function ovulePos(k){const r=k%OV_ROWS,c=k<OV_ROWS?-1:1;return[c*9,92+r*21];}
+function orchidSection(x,y,s,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+  rrect(-26,70,52,196,22);const og=ctx.createLinearGradient(-26,0,26,0);og.addColorStop(0,"#6E9E4E");og.addColorStop(0.5,"#9BC474");og.addColorStop(1,"#6E9E4E");ctx.fillStyle=og;ctx.fill();ctx.strokeStyle=C.fruitDark;ctx.lineWidth=2/s;ctx.stroke();
+  rrect(-18,80,36,176,16);ctx.fillStyle="rgba(255,255,240,0.35)";ctx.fill();
+  const fert=o.fert||0;
+  for(let k=0;k<OV_ROWS*2;k++){const [ox,oy]=ovulePos(k);ell(ox,oy,6,4.5,0,fert>0&&k/(OV_ROWS*2)<fert?"#F2C94C":"#F4EDD6","rgba(80,70,40,0.5)",1/s);}
+  ctx.beginPath();ctx.moveTo(18,62);ctx.bezierCurveTo(70,58,150,80,158,150);ctx.bezierCurveTo(130,130,80,112,20,96);ctx.closePath();
+  const lg=ctx.createLinearGradient(20,60,158,150);lg.addColorStop(0,"#F3EEE4");lg.addColorStop(0.35,"#C4405C");lg.addColorStop(1,"#7E1A34");ctx.fillStyle=lg;ctx.fill();
+  rrect(-22,-150,44,226,20);ctx.fillStyle="#D5DC86";ctx.fill();ctx.strokeStyle="rgba(100,110,40,0.55)";ctx.lineWidth=1.5/s;ctx.stroke();
+  ell(0,-158,26,17,0,"#E57A2A","rgba(140,70,20,0.6)",1.5/s);
+  if(o.poll!==false){ell(-7,-160,7,9,0,C.pollen);ell(7,-160,7,9,0,C.pollen);}
+  ctx.beginPath();ctx.moveTo(22,-116);ctx.lineTo(42,-104);ctx.lineTo(22,-92);ctx.closePath();ctx.fillStyle="#BFC86E";ctx.fill();ctx.strokeStyle="rgba(90,100,40,0.5)";ctx.stroke();
+  ell(18,-40,13,32,0,"rgba(150,90,120,0.6)","rgba(110,50,80,0.6)",1.5/s);ell(23,-48,3.5,12,0,"rgba(255,255,255,0.65)");
+  if(o.dep){ell(25,-49,7,9,0,C.pollen,C.pollenDark,1.2/s);ell(25,-31,7,9,0,C.pollen,C.pollenDark,1.2/s);}
+  const p=o.tubes||0;
+  if(p>0){ctx.strokeStyle="rgba(255,236,160,0.95)";ctx.lineWidth=1.6/s;
+    for(let k=0;k<OV_ROWS*2;k++){const [ox,oy]=ovulePos(k);const sx=14,sy=-40+(k%5)*3;const cx=(k%3-1)*8;
+      ctx.beginPath();const N=24;for(let j=0;j<=N;j++){const u=j/N*p;const bx=lerp(lerp(sx,cx,u),lerp(cx,ox,u),u),by=lerp(lerp(sy,40,u),lerp(40,oy,u),u);if(j===0)ctx.moveTo(bx,by);else ctx.lineTo(bx,by);}ctx.stroke();}}
+  ctx.restore();}
+
+/* Insect in side view, facing right. Local sites listed in SITES. */
+function insectSide(x,y,s,t,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+  const flap=o.still?0:Math.sin(t*20)*0.08;
+  ell(-6,-30,36,11,-0.25+flap,"rgba(255,255,255,0.5)","rgba(80,90,100,0.5)",0.5/s*2);ell(-14,-26,28,9,-0.1+flap,"rgba(255,255,255,0.4)","rgba(80,90,100,0.4)",0.5/s*2);
+  const legs=[[18,10,30,26,26,44],[6,12,10,30,8,46],[-8,10,-16,28,-18,44]];
+  legs.forEach(([ax,ay,kx,ky,tx,ty],i)=>{ctx.strokeStyle=o.legHi?"#B77E2E":"#2A2320";ctx.lineCap="round";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(kx,ky);ctx.stroke();ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(kx,ky);ctx.lineTo(tx,ty);ctx.stroke();});
+  ctx.save();ctx.beginPath();ctx.ellipse(-34,4,28,17,0.1,0,TAU);ctx.fillStyle="#E7B238";ctx.fill();ctx.clip();ctx.fillStyle="#2A2320";for(const bx of [-52,-40,-28])ctx.fillRect(bx,-20,5,40);ctx.restore();
+  ell(-34,4,28,17,0.1,null,"#2A2320",1);
+  circ(6,-2,17,"#6E4A2C");ctx.strokeStyle="rgba(240,200,120,0.55)";ctx.lineWidth=0.6;const R=mk(9);for(let i=0;i<40;i++){const a=R()*TAU;ctx.beginPath();ctx.moveTo(6+Math.cos(a)*15,-2+Math.sin(a)*15);ctx.lineTo(6+Math.cos(a)*19,-2+Math.sin(a)*19);ctx.stroke();}
+  circ(34,-4,12,"#2A2320");ell(36,-9,5,7,0.3,"#4B4B55");
+  ctx.strokeStyle="#2A2320";ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(40,-13);ctx.quadraticCurveTo(50,-30,58,-34);ctx.stroke();
+  if(o.prob!==false){ctx.strokeStyle="#3A2A1E";ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(42,5);ctx.quadraticCurveTo(54,12,64,22);ctx.stroke();}
+  if(o.draw)o.draw();
+  ctx.restore();}
+const SITES=[
+  {k:"thorax",lx:6,ly:-19,ang:-Math.PI/2,lab:"thorax",ex:"Stanhopea, on euglossine bees",L:[300,190]},
+  {k:"head",lx:40,ly:-14,ang:-0.9,lab:"head",ex:"many bees; some Ophrys",L:[520,215]},
+  {k:"eye",lx:39,ly:-7,ang:-0.1,lab:"eyes",ex:"Habenaria, on hawkmoths",L:[610,320]},
+  {k:"prob",lx:60,ly:18,ang:0.7,lab:"proboscis",ex:"Platanthera, on moths",L:[560,600]},
+  {k:"abd",lx:-61,ly:6,ang:Math.PI+0.2,lab:"abdomen",ex:"other Ophrys species",L:[130,590]}];
+function miniOrchidPoll(x,y,ang){ctx.save();ctx.translate(x,y);ctx.rotate(ang);circ(0,0,1.8,C.visc);ctx.strokeStyle=C.pollenDark;ctx.lineWidth=0.9;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(9,0);ctx.stroke();ell(12,-2.4,3.4,2.4,0,C.pollen,C.pollenDark,0.4);ell(12,2.4,3.4,2.4,0,C.pollen,C.pollenDark,0.4);ctx.restore();}
+/* Milkweed pollinarium hanging from its corpusculum at the origin. */
+const MW_POL="#D9A93A";
+function milkPoll(x,y,s,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.rotate(o.rot||0);
+  ctx.strokeStyle="#6B4A22";ctx.lineWidth=1.3;
+  const sides=o.only?[o.only]:[-1,1];
+  sides.forEach(d=>{ctx.beginPath();ctx.moveTo(d*2,3);ctx.quadraticCurveTo(d*10,8,d*14,20);ctx.stroke();ctx.save();ctx.translate(d*16,38);ctx.rotate(-d*0.12);ell(0,0,6.5,17,0,MW_POL,"#9A7520",1);ctx.restore();});
+  ctx.beginPath();ctx.moveTo(-4,-5);ctx.lineTo(4,-5);ctx.lineTo(3,5);ctx.lineTo(-3,5);ctx.closePath();ctx.fillStyle="#3A2716";ctx.fill();ctx.strokeStyle="#D9C29A";ctx.lineWidth=0.6;ctx.beginPath();ctx.moveTo(0,-5);ctx.lineTo(0,4);ctx.stroke();
+  ctx.restore();}
+function legDraw(tx,ty,ang,s,col){ctx.save();ctx.translate(tx,ty);ctx.rotate(ang);ctx.scale(s,s);ctx.strokeStyle=col||"#3A2A1E";ctx.lineCap="round";
+  const pts=[[0,0],[16,-2],[40,2],[80,-6],[140,4]],wd=[2.2,3,4.5,6.5];for(let i=0;i<4;i++){ctx.lineWidth=wd[i];ctx.beginPath();ctx.moveTo(pts[i][0],pts[i][1]);ctx.lineTo(pts[i+1][0],pts[i+1][1]);ctx.stroke();}
+  ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(0,0);ctx.quadraticCurveTo(-6,-3,-8,3);ctx.moveTo(0,0);ctx.quadraticCurveTo(-6,3,-8,-3);ctx.stroke();
+  ctx.lineWidth=0.8;for(let i=0;i<12;i++){const x=18+i*10;ctx.beginPath();ctx.moveTo(x,-1);ctx.lineTo(x+5,-7);ctx.moveTo(x,1);ctx.lineTo(x+5,7);ctx.stroke();}
+  ctx.restore();}
+/* Two milkweed anther wings with the guide rail between them, and the stigmatic chamber behind. */
+function guideRail(cx,top,bot,o){o=o||{};
+  fade(o.chamber===undefined?1:o.chamber,()=>{ell(cx,top+120,40,70,0,"rgba(90,40,50,0.55)");});
+  const wing=(d)=>{ctx.beginPath();ctx.moveTo(cx+d*190,top-10);ctx.lineTo(cx+d*5,top-10);ctx.lineTo(cx+d*26,bot);ctx.lineTo(cx+d*170,bot);ctx.closePath();
+    const g=ctx.createLinearGradient(cx+d*190,0,cx,0);g.addColorStop(0,"#C8D7B4");g.addColorStop(1,"#EEF2E2");ctx.fillStyle=g;ctx.globalAlpha*=0.9;ctx.fill();ctx.globalAlpha/=0.9;ctx.strokeStyle="#7E936A";ctx.lineWidth=2;ctx.stroke();};
+  wing(-1);wing(1);
+  fade(o.chamber===undefined?1:o.chamber,()=>{ctx.setLineDash([6,5]);ell(cx,top+120,40,70,0,null,"#FFFFFF",2);ctx.setLineDash([]);});
+}
+
+/* 6 new: attachment */
+const RAIL_X=1200,RAIL_TOP=150,RAIL_BOT=430;
+chapter("Viscidium or corpusculum",28,[
+  [0,"Orchids and milkweeds evolved pollinaria independently, and they attach them to pollinators in different ways."],
+  [4,"The orchid pollinarium carries a viscidium, a sticky pad formed by the rostellum, part of the stigma. It glues on at first contact."],
+  [9,"Glue can hold almost anywhere, so across orchids the pollinarium lands on many body parts: thorax, head, eyes, proboscis or abdomen, set by the shape of each flower."],
+  [15,"The milkweed pollinarium has a corpusculum instead: a tiny mechanical clip, not glue."],
+  [19,"It can only close on something that slides up a narrow slit into it, usually a leg, a claw or a leg hair."],
+  [24,"Glue is versatile in where it places pollen. The clip is constrained, placing it mostly on legs."]],
+function(t){
+  closeupBg();ctx.fillStyle="rgba(0,0,0,0.2)";ctx.fillRect(799,24,2,H-48);
+  text("orchid: viscidium, glue",400,52,30,"#FFFFFF","center",800);text("milkweed: corpusculum, clip",1200,52,30,"#FFFFFF","center",800);
+  // left: one generic pollinator with all orchid attachment sites
+  const IX=380,IY=420,IS=4;
+  fade(eseg(t,3,4),()=>{insectSide(IX,IY,IS,t,{still:true,draw:()=>{SITES.forEach((st,i)=>{const a=eseg(t,4.8+i*1.1,5.4+i*1.1);if(a>0)fade(a,()=>miniOrchidPoll(st.lx,st.ly,st.ang));});}});
+    SITES.forEach((st,i)=>{const a=eseg(t,5+i*1.1,5.8+i*1.1);fade(a,()=>{const sx=IX+st.lx*IS,sy=IY+st.ly*IS;ctx.strokeStyle="rgba(255,255,255,0.85)";ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(st.L[0],st.L[1]+14);ctx.stroke();
+      text(st.lab,st.L[0],st.L[1],22,"#FFFFFF","center",800);text(st.ex,st.L[0],st.L[1]+24,15,"rgba(255,255,255,0.8)","center",700);});});
+    fade(eseg(t,10.5,11.5),()=>text("one composite insect; each site is used by different orchids",400,720,16,"rgba(255,255,255,0.75)","center",700));});
+  // right top: guide rail and clip
+  fade(eseg(t,14.6,15.6),()=>{
+    guideRail(RAIL_X,RAIL_TOP,RAIL_BOT,{chamber:0});
+    const pull=eseg(t,20.4,22.4),up=eseg(t,18.6,20.4);
+    const tipY=lerp(560,RAIL_TOP+20,up)+pull*260,tipX=RAIL_X+pull*170;
+    if(t<22.4||pull<1){}
+    if(pull<=0){ctx.strokeStyle="#8C7248";ctx.lineWidth=1.2;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(RAIL_X-4,RAIL_TOP-6);ctx.lineTo(RAIL_X-80,RAIL_TOP-60);ctx.moveTo(RAIL_X+4,RAIL_TOP-6);ctx.lineTo(RAIL_X+80,RAIL_TOP-60);ctx.stroke();ctx.setLineDash([]);
+      ell(RAIL_X-88,RAIL_TOP-78,8,22,0.4,"rgba(217,169,58,0.55)");ell(RAIL_X+88,RAIL_TOP-78,8,22,-0.4,"rgba(217,169,58,0.55)");
+      milkPoll(RAIL_X,RAIL_TOP-2,1.6,{only:0});}
+    else milkPoll(tipX,tipY-8,1.6,{rot:0});
+    if(up>0)legDraw(tipX,tipY,Math.PI/2+pull*0.3,1.2);
+    fade(eseg(t,16,17)*(1-eseg(t,18.4,18.8)),()=>{text("corpusculum",RAIL_X+150,RAIL_TOP-12,20,"#FFFFFF","left",800);text("guide rail: slit between anther wings",RAIL_X,RAIL_BOT+30,19,"#FFFFFF","center",800);});
+    if(t>20.2&&t<21)fade(1-Math.abs(t-20.5)/0.5,()=>circ(RAIL_X,RAIL_TOP+14,24,null,"#FFFFFF",3));});
+  // right bottom: where the clip ends up
+  fade(eseg(t,22.6,23.6),()=>{ctx.fillStyle="rgba(24,46,34,0.94)";rrect(820,110,760,560,18);ctx.fill();
+    const JX=1180,JY=380,JS=4;insectSide(JX,JY,JS,t,{still:true,legHi:true,draw:()=>{[[26,44],[8,46],[-18,44]].forEach(([x,y],i)=>{if(i!==1)milkPoll(x,y+1,0.34,{});});}});
+    text("legs, claws and leg hairs",1180,640,22,"#FFFFFF","center",800);});
+  fade(eseg(t,24,25),()=>{text("5 sites",400,92,20,C.gold,"center",800);text("mostly 1 site",1200,92,20,C.gold,"center",800);});
+});
+
+/* 7 new: delivery */
+const OS_X=450,OS_Y=400,OS_S=1.3;
+chapter("Stigmatic cavity or stigmatic chamber",31,[
+  [0,"Delivery differs too. Here are both flowers cut open."],
+  [2.6,"In an orchid, the stigma is an open, sticky cavity on the face of the column, just below the rostellum."],
+  [7.4,"In some groups, including Eulophia, the stipe bends after removal, over seconds to hours. This delay reduces self-pollination between flowers of the same plant."],
+  [11.4,"The pollinia only need to touch the cavity. They stick, break free from the stipe, and their pollen tubes grow down to the ovules."],
+  [16.4,"In a milkweed, the guide rail leads to a closed stigmatic chamber hidden behind the anther wings."],
+  [20.4,"As the leg slides up the rail, the pollinium it carries is drawn into the chamber, and the translator arm snaps."],
+  [25.4,"Each milkweed flower has five rails and five chambers. The orchid's open cavity accepts pollinia from many body parts; the chamber only accepts what fits the rail."]],
+function(t){
+  closeupBg();ctx.fillStyle="rgba(0,0,0,0.2)";ctx.fillRect(799,24,2,H-48);
+  text("orchid: open stigmatic cavity",400,52,28,"#FFFFFF","center",800);text("milkweed: closed stigmatic chamber",1200,52,28,"#FFFFFF","center",800);
+  // orchid section
+  const dep=t>=13.2,tub=eseg(t,13.6,16.2);
+  fade(eseg(t,0.4,1.4),()=>orchidSection(OS_X,OS_Y,OS_S,{dep:dep,tubes:tub,fert:tub}));
+  const CAV=[OS_X+18*OS_S,OS_Y-40*OS_S];
+  fade(eseg(t,2.8,3.6)*(1-eseg(t,7,7.4)),()=>{label(CAV[0]+8,CAV[1],620,330,"stigmatic cavity");label(OS_X+32*OS_S,OS_Y-104*OS_S,620,230,"rostellum");label(OS_X,OS_Y-160*OS_S,620,140,"anther cap, pollinia");label(OS_X+20,OS_Y+160*OS_S,620,610,"ovary with ovules");});
+  // reconfiguration inset
+  fade(eseg(t,7.4,8.2)*(1-eseg(t,11,11.4)),()=>{const cx=660,cy=250;circ(cx,cy,110,"rgba(255,255,255,0.1)","rgba(255,255,255,0.7)",2);circ(cx+10,cy+40,34,"#2A2320");ell(cx+24,cy+30,10,13,0.3,"#4B4B55");
+    const b=eseg(t,8,10.6);const a=lerp(-Math.PI/2,-Math.PI/2-1.25,b);const vx=cx+6,vy=cy+6;ctx.strokeStyle=C.pollenDark;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(vx,vy);ctx.lineTo(vx+Math.cos(a)*56,vy+Math.sin(a)*56);ctx.stroke();circ(vx,vy,5,C.visc);
+    ell(vx+Math.cos(a)*68,vy+Math.sin(a)*68,10,14,a+Math.PI/2,C.pollen,C.pollenDark,1);text("stipe bends (some groups only)",cx,cy+130,19,"#FFFFFF","center",800);});
+  // head carrying a pollinarium to the cavity
+  if(t>=11.2&&t<15){const inn=eseg(t,11.4,13),out=eseg(t,13.3,14.6);const hx=lerp(760,CAV[0]+92,inn)+out*200,hy=lerp(330,CAV[1]+8,inn)-out*40;
+    fade(Math.min(1,seg(t,11.2,11.6)*1,1-out),()=>{circ(hx,hy,34,"#2A2320");ell(hx+14,hy-10,10,13,0.3,"#4B4B55");const vx=hx-26,vy=hy-8;ctx.strokeStyle=C.pollenDark;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(vx,vy);ctx.lineTo(vx-42,vy);ctx.stroke();circ(vx,vy,5,C.visc);
+      if(!dep){ell(vx-54,vy-11,10,11,0,C.pollen,C.pollenDark,1);ell(vx-54,vy+11,10,11,0,C.pollen,C.pollenDark,1);}});
+    if(t>13&&t<13.8)fade(1-Math.abs(t-13.3)/0.5,()=>circ(CAV[0]+6,CAV[1],26,null,"#FFFFFF",3));}
+  fade(eseg(t,14,14.8)*(1-eseg(t,16,16.4)),()=>text("pollen tubes",OS_X-60,OS_Y+40,19,"#FFF3C4","right",800));
+  // milkweed rail and chamber
+  const MX=1200,MT=190,MB=470;
+  fade(eseg(t,16,17),()=>{guideRail(MX,MT,MB,{chamber:1});
+    milkPoll(MX,MT-2,1.6,{only:0});
+    const up=eseg(t,20.4,22.4),back=eseg(t,23,24.6);const snapped=t>=22.2;
+    const tipY=lerp(640,MT+30,up)+back*300,tipX=MX+back*180;
+    // carried pollinarium: corpusculum on the leg, pollinium hanging below
+    const cy=tipY+70,cx=tipX;const pY=Math.max(cy+38,MT+120);const inside=cy+38<=MT+120;
+    if(up>0||back>0){
+      const polY=snapped?MT+120:cy+38,polX=snapped?MX:cx+16;
+      ell(polX,polY,6.5*1.6,17*1.6,0,MW_POL,"#9A7520",1.5);
+      if(!snapped){ctx.strokeStyle="#6B4A22";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.quadraticCurveTo(cx+12,cy+12,polX,polY-26);ctx.stroke();}
+      milkPoll(cx,cy,1.6,{only:-1});
+      legDraw(tipX,tipY,Math.PI/2+back*0.3,1.2);}
+    if(t>22&&t<22.8)fade(1-Math.abs(t-22.3)/0.5,()=>{circ(MX+14,MT+150,26,null,"#FFFFFF",3);text("snap",MX+54,MT+150,18,"#FFFFFF","left",800);});
+    fade(eseg(t,16.8,17.6)*(1-eseg(t,20.2,20.6)),()=>{label(MX+34,MT+120,1330,MT+60,"stigmatic chamber");text("(behind the wings)",1330,MT+86,16,"rgba(255,255,255,0.8)","left",700);label(MX+22,MB-60,1330,MB-20,"guide rail");});
+  });
+  // five chambers icon
+  fade(eseg(t,25.4,26.4),()=>{const cx=1480,cy=150;circ(cx,cy,56,"#EEF2E2","#7E936A",2);for(let k=0;k<5;k++){const a=-Math.PI/2+k*TAU/5;ctx.strokeStyle="#5A6B48";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(cx+Math.cos(a)*18,cy+Math.sin(a)*18);ctx.lineTo(cx+Math.cos(a)*54,cy+Math.sin(a)*54);ctx.stroke();ell(cx+Math.cos(a+0.63)*36,cy+Math.sin(a+0.63)*36,6,9,a,"rgba(90,40,50,0.5)");}
+    text("5 rails, 5 chambers",cx,cy+80,17,"#FFFFFF","center",800);});
+});
+
+/* ---------- a milkweed flower from above ---------- */
+const MK_A=k=>-Math.PI/2+k*TAU/5;
+function milkTop(cx,cy,s,o){o=o||{};ctx.save();ctx.translate(cx,cy);ctx.scale(s,s);const tint=o.tint||0;
+  for(let k=0;k<5;k++){ctx.save();ctx.rotate(MK_A(k)+Math.PI/5);ell(0,-50,17,24,0,hsl(335+tint,45,62),"rgba(90,30,60,0.35)",0.6/s*4);ctx.restore();}
+  for(let k=0;k<5;k++){ctx.save();ctx.rotate(MK_A(k));ell(0,-30,10,13,0,hsl(330+tint,40,86),"rgba(120,60,90,0.5)",0.8/s*4);ell(0,-28,5.5,8,0,"rgba(250,215,120,0.8)");
+    ctx.strokeStyle=hsl(330+tint,35,78);ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(0,-24);ctx.quadraticCurveTo(-1,-16,3,-13);ctx.stroke();ctx.restore();}
+  ctx.beginPath();for(let k=0;k<5;k++){const a=MK_A(k)+Math.PI/5;const px=Math.cos(a)*19,py=Math.sin(a)*19;if(k===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.closePath();ctx.fillStyle="#F3EEDC";ctx.fill();ctx.strokeStyle="#A69C7A";ctx.lineWidth=0.8/s*4;ctx.stroke();
+  for(let k=0;k<5;k++){const a=MK_A(k)+Math.PI/5;ctx.strokeStyle="#5E4B2E";ctx.lineWidth=1.6/s*4;ctx.beginPath();ctx.moveTo(Math.cos(a)*14,Math.sin(a)*14);ctx.lineTo(Math.cos(a)*27,Math.sin(a)*27);ctx.stroke();
+    if(!(o.taken&&o.taken.includes(k)))circ(Math.cos(a)*13,Math.sin(a)*13,2.1,"#2E2012");
+    if(o.glow&&o.glow[k]>0){ctx.globalAlpha*=o.glow[k];ell(Math.cos(a)*21,Math.sin(a)*21,4,7,a+Math.PI/2,MW_POL,"#9A7520",0.6/s*4);ctx.globalAlpha/=o.glow[k];}}
+  ctx.restore();}
+const slitPt=(cx,cy,s,k,r)=>{const a=MK_A(k)+Math.PI/5;return[cx+Math.cos(a)*r*s,cy+Math.sin(a)*r*s];};
+const MFX=800,MFY=430,MFS=5.4,BS=9;
+/* bee top view: rear right leg tip in local units */
+const LEGTIP=[-7,12];
+const beeLeg=(P,ang)=>[P[0]+(LEGTIP[0]*Math.cos(ang)-LEGTIP[1]*Math.sin(ang))*BS,P[1]+(LEGTIP[0]*Math.sin(ang)+LEGTIP[1]*Math.cos(ang))*BS];
+function hangPoll(P,t,one){ctx.save();ctx.translate(P[0],P[1]);ctx.rotate(Math.sin(t*3)*0.2);milkPoll(0,0,2.2,one?{only:one}:{});ctx.restore();}
+chapter("Walking across a milkweed flower",26,[
+  [0,"Milkweed flowers grow in dense umbels. Insects walk across them, feeding on nectar held in the hoods."],
+  [4,"From above, each flower shows five nectar hoods and, between them, five guide rails. A corpusculum sits at the top of each rail."],
+  [8.2,"As the bee walks, a leg slips into a rail. The corpusculum clips onto it, and the bee pulls out a whole pollinarium."],
+  [13.4,"At another flower, the dangling pollinium slides into a rail and is drawn into the stigmatic chamber. The translator arm breaks."],
+  [19.6,"Each flower offers five rails, so five chances to take or leave a pollinarium. Small insects sometimes get stuck, or lose a leg."]],
+function(t){
+  closeupBg();
+  const Z=eseg(t,2.2,4);
+  if(t<4.4){ctx.save();ctx.translate(MFX,MFY);ctx.scale(lerp(1,MFS/0.9,Z),lerp(1,MFS/0.9,Z));ctx.translate(-MFX,-MFY);
+    const R=mk(21);const pts=[[0,0]];for(let r=1;r<=2;r++)for(let k=0;k<r*6;k++){const a=k/(r*6)*TAU+r;pts.push([Math.cos(a)*r*62,Math.sin(a)*r*62]);}
+    pts.forEach(([dx,dy],i)=>fade(eseg(t,0.2+i*0.05,0.8+i*0.05),()=>milkTop(MFX+dx,MFY+dy,0.9,{tint:(R()-.5)*14})));ctx.restore();
+    fade(eseg(t,0.6,1.4)*(1-Z),()=>text("an umbel of milkweed flowers",MFX,MFY+230,22,"#FFFFFF","center",800));}
+  const second=t>=13;
+  if(t>=4){fade(seg(t,4,4.4),()=>{
+    const f2=eseg(t,13,13.6);
+    if(!second)milkTop(MFX,MFY,MFS,{taken:t>=9.6?[1]:[]});
+    else{fade(f2,()=>milkTop(MFX,MFY,MFS,{tint:12,glow:[0,0,0,eseg(t,16.2,17),0]}));}
+    fade(eseg(t,4.6,5.4)*(1-eseg(t,7.8,8.2)),()=>{const s1=slitPt(MFX,MFY,MFS,0,22),c1=slitPt(MFX,MFY,MFS,0,13);label(s1[0],s1[1],1180,420,"guide rail");label(c1[0],c1[1],1180,340,"corpusculum");
+      const h=[MFX+Math.cos(MK_A(0))*30*MFS,MFY+Math.sin(MK_A(0))*30*MFS];label(h[0],h[1],1180,180,"nectar hood");});});}
+  // first visit: leg tip crosses rail 1 at t = 9.4
+  if(t>=6&&t<13){const tc=9.4,ang=0.12,S1=slitPt(MFX,MFY,MFS,1,20);const Pc=[S1[0]-(LEGTIP[0]*Math.cos(ang)-LEGTIP[1]*Math.sin(ang))*BS,S1[1]-(LEGTIP[0]*Math.sin(ang)+LEGTIP[1]*Math.cos(ang))*BS];
+    const v=[150,18];const dt=t<tc?-eseg(tc-t,0,3.4)*3.4:(t-tc);const slow=t>=tc-0.2&&t<tc+0.6;
+    const P=[Pc[0]+v[0]*dt,Pc[1]+v[1]*dt];bee(P[0],P[1],BS,ang,t,{still:slow});
+    if(t>=tc){hangPoll(beeLeg(P,ang),t);}
+    if(t>tc-0.3&&t<tc+0.7)fade(1-Math.abs(t-tc)/0.6,()=>circ(S1[0],S1[1],30,null,"#FFFFFF",3));}
+  // second visit: dangling pollinium enters rail 3 at t = 16.4
+  if(t>=13.4&&t<19.4){const tc=16.4,ang=-0.1,S3=slitPt(MFX,MFY,MFS,3,21);const lg=[S3[0]-6,S3[1]-40];const Pc=[lg[0]-(LEGTIP[0]*Math.cos(ang)-LEGTIP[1]*Math.sin(ang))*BS,lg[1]-(LEGTIP[0]*Math.sin(ang)+LEGTIP[1]*Math.cos(ang))*BS];
+    const v=[160,-14];const dt=t<tc?-(tc-t):(t-tc);const P=[Pc[0]+v[0]*dt,Pc[1]+v[1]*dt];bee(P[0],P[1],BS,ang,t,{still:t>tc-0.3&&t<tc+0.5});
+    hangPoll(beeLeg(P,ang),t,t>=tc?-1:null);
+    if(t>tc-0.3&&t<tc+0.8)fade(1-Math.abs(t-tc)/0.6,()=>{circ(S3[0],S3[1],30,null,"#FFFFFF",3);text("snap",S3[0]-40,S3[1]+40,18,"#FFFFFF","right",800);});}
+  fade(eseg(t,19.6,20.4),()=>{card(1130,120,420,150,16);text("per flower",1340,152,18,"#5E6B63","center",700);text("5 rails, 5 chambers",1340,190,26,C.ink,"center",800);text("5 pollinaria, 10 pollinia",1340,228,22,C.ink,"center",700);});
+});
+
+/* seeds inside a capsule */
+const SEEDS_A=(function(){const R=mk(55);const out=[];for(let r=0;r<9;r++)for(let c=0;c<7;c++){const x=-150+c*50+(r%2?25:0),y=-270+r*58;const dx=x/165,dy=y/300;if(dx*dx+dy*dy<0.95)out.push({x,y,a:10+(R()<.5?1:0),b:4+(R()<.5?1:0),f:2,d:R()});}return out;})();
+const SEEDS_B=(function(){const R=mk(77);return SEEDS_A.map(s=>{const f=R()<0.2?7:2;return{...s,f,b:f*2+(R()<.5?1:0),d:R()};});})();
+function capsuleCut(cx,cy,sc,seeds,prog,ring,alpha){fade(alpha===undefined?1:alpha,()=>{ell(cx,cy,180*sc,320*sc,0,"rgba(110,158,78,0.35)",C.fruitDark,4);ell(cx,cy,165*sc,300*sc,0,"#F4F0DF",C.fruitDark,2);
+  seeds.forEach(s=>{const k=eseg(prog,s.d*0.6,s.d*0.6+0.4);if(k>0)seedShape(cx+s.x*sc,cy+s.y*sc,1.35*sc*k,s.a,s.b,k,ring?sireCol(s.f):null);});});}
+function shareStrip(x,y,w,h,parts,prog){let acc=0;const tot=parts.reduce((a,b)=>a+b.n,0);parts.forEach(p=>{const ww=p.n/tot*w*(prog===undefined?1:prog);rrect(x+acc+1,y,Math.max(0,ww-2),h,6);ctx.fillStyle=sireCol(p.f);ctx.fill();if(ww>60)text(`${Math.round(p.n/tot*100)}%`,x+acc+ww/2,y+h/2+1,18,"#FFFFFF","center",800);acc+=ww;});}
+const countSires=seeds=>{const m=new Map();seeds.forEach(s=>m.set(s.f,(m.get(s.f)||0)+1));return [...m.entries()].map(([f,n])=>({f,n})).sort((a,b)=>b.n-a.n);};
+
+/* 6 */
+chapter("Seeds inside the capsule",19,[
+  [0,"Inside the capsule, each fertilised ovule becomes a seed."],
+  [3,"Every seed receives one maternal allele and one paternal allele, each chosen at random."],
+  [8.6,"Because the whole pollen load arrived at once from one donor, this capsule's seeds share a single sire."],
+  [12.4,"That is common, but not a rule. If a second pollinarium from another donor reaches the same stigma, it sires a share of the seeds; in the model's low-sire regime the first donor is favoured."],
+  [16.2,"So pollinaria concentrate paternity: most of a capsule's seeds tend to come from one dominant sire."]],
+function(t){
+  closeupBg();
+  const moveA=eseg(t,11.6,12.6);const ax=lerp(560,440,moveA);
+  capsuleCut(ax,400,0.82,SEEDS_A,seg(t,1.2,4.6),t>8.6);
+  fade(eseg(t,3,4)*(1-eseg(t,11,11.8)),()=>{
+    text("seed parent",1110,150,24,"#FFFFFF","center");flower(1110,240,2.2,{pollinarium:false});beads(1110,340,10,11,14,1);
+    text("pollen donor (sire)",1400,150,24,"#FFFFFF","center");flower(1400,240,2.2,{pollinarium:false});beads(1400,340,4,5,14,1);
+    const s=SEEDS_A[Math.floor(SEEDS_A.length/2)];const ex=eseg(t,4.6,5.6);
+    fade(ex,()=>{seedShape(1255,520,3.4,s.a,s.b,1);ctx.strokeStyle="#FFFFFF";ctx.lineWidth=2.5;ctx.setLineDash([6,6]);ctx.beginPath();ctx.moveTo(1110,372);ctx.lineTo(1240,492);ctx.moveTo(1400,372);ctx.lineTo(1270,492);ctx.stroke();ctx.setLineDash([]);
+      text("maternal allele",1175,590,19,"#FFFFFF","right",700);text("paternal allele",1335,590,19,"#FFFFFF","left",700);text("one seed, enlarged",1255,625,19,"rgba(255,255,255,0.8)","center",700);});});
+  fade(eseg(t,8.8,9.6),()=>{text("sires of the seeds",ax,672,20,"#FFFFFF","center");shareStrip(ax-190,690,380,36,countSires(SEEDS_A),1);});
+  const b=eseg(t,12.4,13.4);
+  fade(b,()=>{capsuleCut(1160,400,0.82,SEEDS_B,seg(t,12.6,15),true);text("another capsule: two pollinaria, two donors",1160,62,22,"#FFFFFF","center",800);
+    fade(eseg(t,14.6,15.4),()=>{text("sires of the seeds",1160,672,20,"#FFFFFF","center");shareStrip(970,690,380,36,countSires(SEEDS_B),seg(t,14.6,15.6));});});
+  fade(b,()=>text("one pollinarium, one donor",ax,62,22,"#FFFFFF","center",800));
+});
+
+/* 7: loose pollen */
+const LOOSE_F=[0,3,4,7,1];
+const LOOSE_SEEDS=(function(){const R=mk(66);const sh=[0.34,0.26,0.18,0.14,0.08];return SEEDS_A.map(s=>{const f=pickW(R,LOOSE_F,sh);return{...s,a:12+(R()<.5?1:0),b:f*2+(R()<.5?1:0),f,d:R()};});})();
+chapter("Loose pollen: many sires",15,[
+  [0,"Many plants shed loose, powdery pollen, one grain at a time."],
+  [3.2,"A pollinator arriving from several flowers deposits grains from several different donors on one stigma."],
+  [7.2,"Their seeds are shared among many sires."],
+  [10.8,"Compared side by side: pollinaria concentrate paternity within a fruit; loose pollen spreads it."]],
+function(t){
+  closeupBg();ctx.fillStyle="rgba(0,0,0,0.18)";ctx.fillRect(799,0,2,H);
+  text("orchid pollinaria",400,62,30,"#FFFFFF","center",800);text("loose pollen",1200,62,30,"#FFFFFF","center",800);
+  capsuleCut(400,370,0.78,SEEDS_B,1,true);
+  const fl=1-eseg(t,6.6,7.6);
+  fade(fl,()=>{for(let k=0;k<6;k++){ctx.save();ctx.translate(1200,380);ctx.rotate(k*TAU/6);ell(0,-110,52,92,0,"#F6F1D2","rgba(0,0,0,0.15)",1);ctx.restore();}circ(1200,380,56,"#E8C75A");circ(1200,380,22,"#9DBF6A","#6C8F44",2);
+    const R=mk(61);for(let i=0;i<46;i++){const f=LOOSE_F[i%5];const a0=R()*TAU;const sx=1200+Math.cos(a0)*700,sy=380+Math.sin(a0)*500;const t0=1.8+R()*3.8;const u=eseg(t,t0,t0+1.2);if(u<=0)continue;const ex=1200+(R()-.5)*36,ey=380+(R()-.5)*36;circ(lerp(sx,ex,u),lerp(sy,ey,u),5,alleleCol(f*2+(i%2)),"rgba(0,0,0,0.3)",1);}});
+  const cp=eseg(t,6.8,8.2);if(cp>0)capsuleCut(1200,370,0.78,LOOSE_SEEDS,seg(t,7,9.5),true,cp);
+  fade(eseg(t,10.6,11.6),()=>{text("sires of the seeds",400,652,21,"#FFFFFF","center");shareStrip(170,672,460,38,countSires(SEEDS_B));
+    text("sires of the seeds",1200,652,21,"#FFFFFF","center");shareStrip(970,672,460,38,countSires(LOOSE_SEEDS));});
+});
+
+/* 8: seeds per fruit */
+const SEEDROWS=[
+  {name:"Asclepias syriaca, milkweed follicle",v:200,lab:"about 200",col:"#E8A64A"},
+  {name:"Mimulus ringens, loose-pollen capsule",v:2483,lab:"about 2,500",col:"#9CC8F0"},
+  {name:"Phalaenopsis, orchid capsule",v:100000,lab:"more than 100,000",col:"#E08AB6"},
+  {name:"Orchid capsules in general",lo:1500,hi:3000000,lab:"1,500 to 3,000,000",col:"#C9A0DC"},
+  {name:"Model: every regime, nominal S",v:1000000,lab:"1,000,000",col:"#FFFFFF",model:true}];
+chapter("How many seeds per fruit?",16,[
+  [0,"Fruits differ enormously in how many seeds they hold. The scale here grows tenfold at each step."],
+  [4,"A milkweed follicle holds around 200 seeds. A monkeyflower capsule, our loose-pollen reference, about 2,500."],
+  [8.2,"An orchid capsule holds thousands to millions of dust-like seeds, all fertilised by pollen delivered in very few deposits."],
+  [12,"In the model, every paternity regime gets the same nominal seed number, so that only paternity differs between them."]],
+function(t){
+  closeupBg();
+  const x0=560,x1=1330,lo=1,hi=7,X=v=>lerp(x0,x1,(Math.log10(v)-lo)/(hi-lo));
+  fade(eseg(t,0.2,1),()=>{for(let e=lo;e<=hi;e++){const x=X(Math.pow(10,e));ctx.strokeStyle="rgba(255,255,255,0.18)";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,110);ctx.lineTo(x,690);ctx.stroke();text(Math.pow(10,e).toLocaleString("en-GB"),x,715,17,"rgba(255,255,255,0.85)","center",700);}
+    text("seeds per fruit (log scale)",(x0+x1)/2,750,19,"#FFFFFF","center",800);});
+  const starts=[4,5.4,8.2,9.6,12];
+  SEEDROWS.forEach((r,i)=>{const a=eseg(t,starts[i],starts[i]+0.8);if(a<=0)return;const y=160+i*112;
+    fade(a,()=>{para(r.name,60,y-12,460,22,"#FFFFFF",26,"left",800);
+      if(r.lo){const xa=X(r.lo),xb=lerp(xa,X(r.hi),a);rrect(xa,y-16,xb-xa,32,16);ctx.fillStyle=r.col;ctx.globalAlpha*=0.8;ctx.fill();ctx.globalAlpha/=0.8;}
+      else{const xb=lerp(x0,X(r.v),a);rrect(x0,y-16,xb-x0,32,16);ctx.fillStyle=r.col;ctx.fill();if(r.model){ctx.strokeStyle="#FFFFFF";ctx.setLineDash([6,5]);ctx.lineWidth=2;ctx.stroke();ctx.setLineDash([]);ctx.fillStyle="#27493A";}}
+      text(r.lab,(r.lo?X(r.hi):X(r.v))+14,y,21,"#FFFFFF","left",800);});});
+});
+
+/* 9: anchors to real taxa */
+const TAXA=[
+ {name:"Phalaenopsis pulcherrima",grp:"Orchidaceae, Epidendroideae",pollen:"pollinarium, two cohesive pollinia",sires:"1 donor per capsule",sv:1,sub:"every capsule genotyped",seeds:"> 100,000 per capsule (genus)",model:"strict single sire",src:"Zhang et al. 2019",icon:"phal"},
+ {name:"Chiloglottis",grp:"C. valida and C. aff. jeanesii; Orchidoideae",pollen:"pollinarium; sexually deceptive, wasp pollinated",sires:"1.35 donors per capsule",sv:1.35,sub:"mean; some capsules multiply sired",seeds:"not reported in the sources checked",model:"low sire",src:"Whitehead, Linde & Peakall 2015",icon:"chilo"},
+ {name:"Asclepias syriaca",grp:"Apocynaceae, Asclepiadoideae",pollen:"pollinarium: pollinia on translator arms and corpusculum",sires:"mostly 1 sire per follicle",sv:1.08,sub:"multiple paternity occurs",seeds:"up to about 200 per follicle",model:"milkweed reference",src:"Broyles & Wyatt 1990; Shore 1993",icon:"ascl"},
+ {name:"Mimulus ringens",grp:"Phrymaceae, loose-pollen reference",pollen:"loose, granular pollen",sires:"about 4 effective mates",sv:3.97,sub:"3.97 effective mates per flower",seeds:"about 2,500 per capsule",model:"granular reference",src:"Mitchell et al.; Am. J. Bot. 2019",icon:"mim"}];
+function taxonIcon(kind,x,y){
+  if(kind==="phal"){for(const [a,rx,ry,d] of [[0,20,28,30],[2.3,16,26,28],[-2.3,16,26,28]]){ctx.save();ctx.translate(x,y);ctx.rotate(a);ell(0,-d,rx,ry,0,"#F7F2F6","rgba(0,0,0,0.15)",1);ctx.restore();}
+    for(const a of [1.2,-1.2]){ctx.save();ctx.translate(x,y);ctx.rotate(a);ell(0,-36,32,34,0,"#FBF6FA","rgba(0,0,0,0.12)",1);ctx.restore();}ell(x,y+30,16,18,0,"#C04C8C");circ(x,y,7,"#F7E27A");}
+  else if(kind==="chilo"){ctx.strokeStyle="#6C8F44";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y-34);ctx.quadraticCurveTo(x-4,y-50,x,y-62);ctx.stroke();ell(x,y-66,6,14,0,"#7D8C4A");
+    for(const a of [0.9,-0.9]){ctx.save();ctx.translate(x,y);ctx.rotate(a);ell(0,-36,5,30,0,"#6F7D42");ctx.restore();}ell(x,y+16,22,32,0,"#5C6B36");const R=mk(8);for(let i=0;i<9;i++)circ(x+(R()-.5)*22,y+4+R()*30,3+R()*3,"#2B1A14");}
+  else if(kind==="ascl"){for(let k=0;k<7;k++){const a=-Math.PI/2+(k-3)*0.38;const fx=x+Math.cos(a)*60,fy=y+30+Math.sin(a)*60;ctx.strokeStyle="#7B9C5A";ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,y+40);ctx.lineTo(fx,fy);ctx.stroke();
+    for(let j=0;j<5;j++){const b=j*TAU/5;ell(fx+Math.cos(b)*7,fy+Math.sin(b)*7,4,6,b,"#D98BB0");}circ(fx,fy,5,"#F4D6E4");}}
+  else{ctx.save();ctx.translate(x,y);ell(0,10,16,40,0,"#7E62B8");for(const [dx,dy] of [[-26,-30],[26,-30],[-30,0],[30,0],[0,-38]])ell(dx,dy,20,16,0,"#9C84D6","rgba(0,0,0,0.15)",1);ell(0,-8,12,10,0,"#F2D95C");ctx.restore();}
+}
+chapter("Anchoring to real plants",27,[
+  [0,"How concentrated is paternity in real plants? Here are four reference points from paternity studies."],
+  [3.4,"In Phalaenopsis pulcherrima, every capsule genotyped had a single pollen donor, yet pollen travelled far, about 270 metres on average."],
+  [8.4,"In sexually deceptive Chiloglottis orchids, most capsules had one donor, but some had more: 1.35 donors per capsule on average."],
+  [13.4,"In the milkweed Asclepias syriaca, which evolved pollinaria independently, follicles are mostly single-sired, with some multiple paternity."],
+  [18.2,"Loose-pollen plants such as the monkeyflower Mimulus ringens reach about four effective mates per flower."],
+  [22.4,"Our model's regimes span this range: from strict single sire to a granular reference with about three effective sires per fruit."]],
+function(t){
+  closeupBg();
+  const cw=362,gap=16,x0=(W-(cw*4+gap*3))/2,starts=[3.4,8.4,13.4,18.2];
+  TAXA.forEach((d,i)=>{const a=eseg(t,starts[i],starts[i]+0.9);const x=x0+i*(cw+gap),y=40;
+    fade(a,()=>{card(x,y,cw,540,18);taxonIcon(d.icon,x+cw/2,y+105);
+      text(d.name,x+cw/2,y+196,22,C.ink,"center",800,true);text(d.grp,x+cw/2,y+224,15,"#6B6B6B","center",700);
+      para(d.pollen,x+cw/2,y+258,cw-40,16,"#3A4640",20,"center",700);
+      text(d.sires,x+cw/2,y+318,25,sireCol(i===3?5:2),"center",800);text(d.sub,x+cw/2,y+346,15,"#555","center",700);
+      ctx.fillStyle="rgba(0,0,0,0.08)";ctx.fillRect(x+24,y+370,cw-48,1);
+      text("seeds per fruit",x+cw/2,y+394,15,"#6B6B6B","center",700);para(d.seeds,x+cw/2,y+418,cw-40,18,C.ink,22,"center",800);
+      text("model counterpart",x+cw/2,y+464,15,"#6B6B6B","center",700);text(d.model,x+cw/2,y+488,19,C.ink,"center",800);
+      text(d.src,x+cw/2,y+520,14,"#7A7A7A","center",700);});});
+  const ax=eseg(t,22.4,23.4);
+  fade(ax,()=>{const y=660,xa=240,xb=1360,X=v=>lerp(xa,xb,(v-1)/3.2);
+    ctx.strokeStyle="rgba(255,255,255,0.8)";ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(xa,y);ctx.lineTo(xb,y);ctx.stroke();
+    [1,2,3,4].forEach(v=>{ctx.beginPath();ctx.moveTo(X(v),y-6);ctx.lineTo(X(v),y+6);ctx.stroke();text(String(v),X(v),y-18,15,"rgba(255,255,255,0.7)","center",700);});
+    text("sires per fruit",xb+20,y,19,"#FFFFFF","left",800);
+    const marks=[["Phalaenopsis",1,26],["Asclepias",1.08,50],["Chiloglottis",1.35,26],["Mimulus",3.97,26]];
+    marks.forEach(([n,v,s],k)=>{const p=eseg(t,22.8+k*0.2,23.4+k*0.2);fade(p,()=>{circ(X(v),y,9,"#FFFFFF");text(n,X(v)+(k===2?30:0),y+s,16,"#FFFFFF","center",800);});});
+    const mm=[["model strict 1.0",1],["model granular 3.15",3.148]];
+    mm.forEach(([n,v],k)=>fade(eseg(t,24+k*0.4,24.6+k*0.4),()=>{ctx.fillStyle=C.gold;ctx.beginPath();ctx.moveTo(X(v),y-12);ctx.lineTo(X(v)-8,y-26);ctx.lineTo(X(v)+8,y-26);ctx.closePath();ctx.fill();text(n,X(v),y-44,15,C.gold,"center",800);}));
+    text("donor counts and effective mate numbers, as each study reports them",800,y+80,15,"rgba(255,255,255,0.75)","center",700);});
+});
+
+/* ---------- Chiloglottis and its thynnine wasp ---------- */
+/* Side view of a Chiloglottis flower. Origin at the column foot. Column tip (viscidium) near (30,-78); stigma near (24,-64). */
+function chiloSide(x,y,s,t,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.scale(s,s);
+  ctx.strokeStyle="#5C6B36";ctx.lineCap="round";ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(0,4);ctx.lineTo(-4,120);ctx.lineTo(-8,260);ctx.stroke();
+  ell(-2,26,6,22,0,"#6F7D42");
+  ctx.save();ctx.rotate(-0.12);ell(-10,-52,8,48,0,"#7D8C4A","rgba(40,50,20,0.5)",0.6);ctx.restore();
+  ctx.strokeStyle="#6F7D42";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(2,8);ctx.quadraticCurveTo(20,40,26,86);ctx.moveTo(-2,8);ctx.quadraticCurveTo(-14,44,-10,90);ctx.stroke();
+  ctx.save();ctx.rotate(-0.9);ell(0,-30,4.5,26,0,"#76844A");ctx.restore();ctx.save();ctx.rotate(0.35);ell(-24,-8,4,22,1.2,"#6A7840");ctx.restore();
+  ctx.strokeStyle="#8C9A56";ctx.lineWidth=9;ctx.beginPath();ctx.moveTo(0,0);ctx.bezierCurveTo(4,-40,10,-66,28,-80);ctx.stroke();
+  ctx.lineWidth=2;ctx.strokeStyle="#B8C58A";ctx.beginPath();ctx.moveTo(6,-4);ctx.bezierCurveTo(10,-40,16,-62,30,-74);ctx.stroke();
+  if(o.poll!==false){ell(30,-86,5,4,0.4,C.pollen,C.pollenDark,0.5);}circ(32,-78,2.2,C.visc);
+  ell(25,-64,3.5,4.5,0,"rgba(120,70,90,0.7)");if(o.dep)ell(27,-64,4.5,3.5,0.3,C.pollen,C.pollenDark,0.5);
+  ctx.save();ctx.rotate(0.04);ell(52,8,48,12,0,"#5E6D37","rgba(30,40,15,0.6)",0.6);ctx.restore();
+  const R=mk(12);for(let i=0;i<16;i++){const cx=16+R()*56,cy=-2-R()*6;circ(cx,cy,2+R()*3.4,"#2B1A14");circ(cx-0.8,cy-0.9,0.8,"rgba(255,255,255,0.35)");}
+  ell(44,-8,12,6,0,"#241510");circ(33,-9,4.6,"#241510");
+  if(o.scent){ctx.strokeStyle="rgba(235,225,170,0.55)";ctx.lineWidth=1.2;for(let k=0;k<4;k++){ctx.beginPath();for(let j=0;j<=20;j++){const u=j/20;const px=30+k*14+Math.sin(u*9+t*3+k)*6,py=-20-u*110;if(j===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);}ctx.globalAlpha*=o.scent;ctx.stroke();ctx.globalAlpha/=o.scent;}}
+  ctx.restore();}
+/* Male thynnine wasp, side view. dir=-1 faces left. Dorsal thorax at local (4,-9). */
+function waspSide(x,y,s,dir,t,o){o=o||{};ctx.save();ctx.translate(x,y);ctx.scale(s*dir,s);ctx.rotate(o.tilt||0);
+  const flap=o.still?0:Math.sin(t*60)*0.35;
+  ell(-16,-12+flap*4,32,6,-0.12+flap*0.3,"rgba(210,215,230,0.5)","rgba(60,70,90,0.5)",0.25);ell(-12,-9+flap*3,24,5,-0.02+flap*0.2,"rgba(210,215,230,0.4)");
+  ctx.strokeStyle="#151313";ctx.lineCap="round";ctx.lineWidth=1.2;
+  [[8,6,12,14,16,20],[2,7,2,15,-2,21],[-4,6,-10,14,-14,20]].forEach(([a,b,c,d,e,f])=>{ctx.beginPath();ctx.moveTo(a,b);ctx.lineTo(c,d);ctx.lineTo(e,f);ctx.stroke();});
+  ctx.save();ctx.translate(-8,1);ctx.rotate(-(o.curl||0));ell(-20,0,20,5.6,0.04,"#1B1818");ctx.fillStyle="rgba(200,150,60,0.55)";for(const bx of [-30,-22,-14])ell(bx,-1.5,1.8,3.4,0,"rgba(210,160,60,0.5)");ctx.restore();
+  ell(-6,1,4,3.4,0,"#1B1818");
+  ell(4,-1,10,7.5,0,"#201D1D");ell(2,-5,5,2,0,"rgba(255,255,255,0.12)");
+  circ(17,-1,5.5,"#1A1717");ell(18.5,-2.5,2.2,3.2,0.2,"#4A4A55");
+  ctx.lineWidth=0.9;ctx.beginPath();ctx.moveTo(20,-5);ctx.quadraticCurveTo(30,-18,40,-16);ctx.moveTo(19,-5);ctx.quadraticCurveTo(28,-22,36,-24);ctx.stroke();
+  if(o.poll){ctx.save();ctx.translate(4,-8.5);ctx.rotate(-1.9);circ(0,0,1.2,C.visc);ctx.strokeStyle=C.pollenDark;ctx.lineWidth=0.7;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(5,0);ctx.stroke();if(o.poll!=="empty"){ell(7,-1.4,2.2,1.5,0,C.pollen,C.pollenDark,0.3);ell(7,1.4,2.2,1.5,0,C.pollen,C.pollenDark,0.3);}ctx.restore();}
+  ctx.restore();}
+const CF=[540,650],CFS=4.1,WS=4.3;
+const VISC=[CF[0]+32*CFS,CF[1]-78*CFS],STIG=[CF[0]+25*CFS,CF[1]-64*CFS];
+/* wasp pose that puts its dorsal thorax at point P, facing left */
+const thoraxAt=(P,dy)=>[P[0]+4*WS,P[1]+9*WS+(dy||0)];
+chapter("A closer look: Chiloglottis",26,[
+  [0,"A closer look at Chiloglottis. Its flower emits chiloglottones, scent compounds identical to the sex pheromone of a female thynnine wasp."],
+  [4.4,"A male Neozeleboria wasp arrives, searching for a mate. The dark calli on the labellum resemble the wingless female."],
+  [8,"He grips the calli and probes the labellum edge with his abdomen. In the struggle his back meets the column, and the pollinarium is glued to his thorax."],
+  [12,"Deceived, he leaves to search elsewhere."],
+  [14.4,"At the next flower, the same movements press his pollen load onto the stigma."],
+  [19.2,"Paternity analysis in two Chiloglottis species found near-complete outcrossing, a median pollen flow of 14.5 metres, and 1.35 pollen donors per capsule."]],
+function(t){
+  closeupBg();
+  const second=t>=13.2;
+  const sw=seg(t,13,13.6);
+  fade(1-sw*(t<14?1:0)+(t>=13.6?1:0)*0,()=>{});
+  const flowerA=t<13.4, flowerB=t>=13.4;
+  if(flowerA)fade(1-seg(t,13,13.4),()=>chiloSide(CF[0],CF[1],CFS,t,{scent:eseg(t,0.8,2)*(1-eseg(t,11,12)),poll:t<10.2}));
+  if(flowerB)fade(seg(t,13.4,13.8)*(1-eseg(t,18.6,19.2)*0.75),()=>{chiloSide(CF[0],CF[1],CFS,t,{scent:0.6*(1-eseg(t,16,17)),poll:true,dep:t>=16.6});text("another flower",CF[0]+150,110,22,"#FFFFFF","center",800);});
+  const REST=[CF[0]+44*CFS+6,CF[1]-8*CFS-16*WS];
+  const C1=thoraxAt(VISC),C2=thoraxAt(STIG,-4);
+  let P=null,o={},still=false;
+  if(t>=4&&t<13){
+    if(t<7.6){const u=eseg(t,4,7.6);P=[lerp(1650,REST[0],u)+Math.sin(u*14)*40*(1-u),lerp(160,REST[1],u)+Math.cos(u*11)*30*(1-u)];}
+    else if(t<10.6){still=true;const probe=Math.sin((t-7.6)*9)*0.25;o.curl=0.45+probe;
+      const thrust=Math.max(0,1-Math.abs(t-10)/0.45);P=[lerp(REST[0],C1[0],thrust),lerp(REST[1],C1[1],thrust)];o.tilt=-0.15*thrust;}
+    else{const u=eseg(t,10.6,13);P=[lerp(REST[0],-300,u),lerp(REST[1],120,u)-Math.sin(u*Math.PI)*120];}
+    o.poll=t>=10.1;}
+  if(t>=13.6&&t<18.6){
+    if(t<15.4){const u=eseg(t,13.6,15.4);P=[lerp(1700,REST[0],u),lerp(200,REST[1],u)+Math.sin(u*10)*30*(1-u)];o.poll=true;}
+    else if(t<17.4){still=true;o.curl=0.45+Math.sin((t-15.4)*9)*0.25;const thrust=Math.max(0,1-Math.abs(t-16.6)/0.45);P=[lerp(REST[0],C2[0],thrust),lerp(REST[1],C2[1],thrust)];o.poll=t<16.6?true:"empty";}
+    else{const u=eseg(t,17.4,18.6);P=[lerp(REST[0],1800,u),lerp(REST[1],150,u)];o.poll="empty";}}
+  if(P)waspSide(P[0],P[1],WS,-1,t,Object.assign(o,{still}));
+  if(t>9.8&&t<10.8)fade(1-Math.abs(t-10.1)/0.6,()=>circ(VISC[0],VISC[1],28,null,"#FFFFFF",3));
+  if(t>16.3&&t<17.2)fade(1-Math.abs(t-16.6)/0.6,()=>circ(STIG[0],STIG[1],28,null,"#FFFFFF",3));
+  fade(eseg(t,5.2,6)*(1-eseg(t,12.6,13)),()=>{label(CF[0]+44*CFS,CF[1]-10*CFS,1060,560,"calli, mimicking a female");label(VISC[0]+6,VISC[1],1060,250,"column with pollinarium");});
+  fade(eseg(t,19.2,20.2),()=>{card(960,190,560,380,18);text("Chiloglottis valida, C. aff. jeanesii",1240,236,22,C.ink,"center",800);
+    [["outcrossing rate","0.92 to 1.00"],["median pollen flow","14.5 m (0 to 69 m)"],["pollen donors per capsule","1.35 on average"]].forEach(([k,v],i)=>{text(k,1000,300+i*80,21,"#5E6B63","left",700);text(v,1000,330+i*80,27,C.ink,"left",800);});
+    text("Whitehead, Linde & Peakall 2015, J. Evol. Biol.",1240,545,15,"#7A7A7A","center",700);});
+});
+
+/* meadow after fruiting */
+function meadowFruit(i,tc,o){
+  const st=founderState(i,{noParcel:2});if(!st.flowering)return st;
+  st.flowers=[0,1].map(slot=>{const fr=STORY.fruits.find(f=>f.m===i&&f.slot===slot);
+    if(fr){const arr=fr.story?-10:fr.t0+2.2;const u=seg(tc,arr,arr+0.9);if(u<=0)return{open:1};return{fruit:u,tag:fr.f,tag2:fr.f2,tagA:u,split:o&&o.split?o.split:0,pass:fr.pass,mark:o&&o.mark?o.mark:0,grey:o&&o.grey&&!fr.pass};}
+    const w=eseg(tc,12,13.6);return{open:1,wilt:w,alpha:1-w};});
+  return st;}
+
+/* 10 */
+chapter("Pollinators across the population",15,[
+  [0,"Across the population, pollinators carry pollinaria from plant to plant."],
+  [5.6,"Some plants export many pollinaria, others very few."],
+  [9.8,"The large dot on each capsule marks its main sire. A small second dot marks a second, minor donor."],
+  [12.4,"Some flowers are never visited and set no capsule."]],
+function(t){
+  background(t);for(let i=0;i<8;i++)plant(PX(i),1,meadowFruit(i,t));
+  STORY.fruits.forEach(fr=>{if(fr.story)return;const u=seg(t,fr.t0,fr.t0+2.2);if(u<=0||u>=1)return;const a=flowerPos(PX(fr.f),0),b=flowerPos(PX(fr.m),fr.slot);
+    const x=lerp(a[0],b[0],ease(u)),y=lerp(a[1],b[1],ease(u))-Math.sin(u*Math.PI)*140;fade(Math.min(1,u*6,(1-u)*6),()=>bee(x,y-12,1.7,b[0]>a[0]?0:Math.PI,t+fr.t0,{parcel:{}}));});
+  vignette();
+});
+
+/* 11 */
+function dustPos(fr,d,tt){const p=flowerPos(PX(fr.m),fr.slot);const x=p[0]+d.vx*tt+Math.sin(tt*2+d.sway)*14+tt*tt*22;const y=Math.min(GY-2,p[1]+12+d.vy*tt+60*tt*tt);return[x,y];}
+chapter("Dust seeds and fungi",15,[
+  [0,"The capsules split and release seeds as fine as dust, carried by the wind."],
+  [4.6,"An orchid seed has almost no food reserve. It can only germinate with a compatible mycorrhizal fungus in the soil."],
+  [8,"In the model, recruitment is gated per capsule: often all the seeds of one capsule fail together, while other capsules succeed."],
+  [11,"Where it works, seedlings establish. Each carries one maternal and one paternal allele."]],
+function(t){
+  background(t);const sp=eseg(t,0.2,1.2),mk8=eseg(t,7.6,8.4);
+  for(let i=0;i<8;i++)plant(PX(i),1,meadowFruit(i,99,{split:sp,mark:mk8,grey:t>7.6}));
+  STORY.fruits.forEach(fr=>{fr.dust.forEach(d=>{const tt=t-0.6;if(tt<0)return;const [x,y]=dustPos(fr,d,tt*0.7);let a=clamp(1-tt/d.life,0,1);if(!fr.pass&&t>7.6)a*=1-seg(t,7.6,8.6);if(a<=0)return;ctx.globalAlpha=a;circ(x,y,3.2,!fr.pass&&t>7.6?"#9A988E":"#8E7A55");ctx.globalAlpha=1;});});
+  const hy=eseg(t,5,6.5);
+  fade(hy*0.9,()=>{ctx.strokeStyle="#F4EFE2";ctx.lineWidth=1.4;STORY.seedlings.forEach((s,i)=>{const R=mk(300+i);for(let k=0;k<4;k++){ctx.beginPath();let x=s.x,y=GY+14;ctx.moveTo(x,y);for(let j=0;j<5;j++){x+=(R()-.5)*26;y+=6+R()*10;ctx.lineTo(x,y);}ctx.stroke();}});
+    text("fungal threads",1480,GY+120,17,"#F4EFE2","right",700);});
+  STORY.seedlings.forEach((s,i)=>{const g=eseg(t,10.6+(i%9)*0.12,12.2+(i%9)*0.12);seedling(s.x,g,0,1,1.8);beads(s.x,GY+32,s.a,s.b,8,eseg(t,12.6,13.4));});
+  vignette();
+});
+
+/* 12 */
+chapter("Only so much room",15,[
+  [0,"Far more seedlings establish than the site can hold."],
+  [3,"The population is capped at its previous size: eight plants here, 500 in the model."],
+  [7.8,"A random draw, without replacement, decides which seedlings keep a place."],
+  [11,"The rest die."]],
+function(t){
+  background(t);for(let i=0;i<8;i++)plant(PX(i),1,meadowFruit(i,99,{split:1,grey:true}));
+  const n=STORY.seedlings.length;
+  const pick=(t>=2.8&&t<7.6)?STORY.flick[Math.floor((t-2.8)*11)%STORY.flick.length]:-1;
+  STORY.seedlings.forEach((s,i)=>{const won=s.win&&t>=7.8+s.wrank*0.35;const lose=!s.win?eseg(t,11,13.2):0;
+    seedling(s.x,1,lose,1-lose*0.85,1.8);beads(s.x,GY+32,s.a,s.b,8,1-lose*0.8);
+    if(i===pick)circ(s.x,GY-32,34,null,"#FFFFFF",4);
+    if(won)fade(eseg(t,7.8+s.wrank*0.35,8.2+s.wrank*0.35),()=>circ(s.x,GY-32,34,null,C.gold,6));});
+  fade(eseg(t,3,3.8),()=>{card(520,40,560,88,16);text("room for 8 plants",800,68,26,C.ink,"center",800);
+    const filled=STORY.seedlings.filter(s=>s.win&&t>=7.8+s.wrank*0.35).length;for(let k=0;k<8;k++)circ(632+k*48,106,12,k<filled?C.gold:"rgba(0,0,0,0.08)","rgba(0,0,0,0.3)",1.5);});
+  fade(eseg(t,0.6,1.4)*(1-eseg(t,3,3.4)),()=>text(`${n} seedlings`,800,80,34,C.ink,"center",800));
+  vignette();
+});
+
+/* 13 */
+chapter("The parental generation dies",16,[
+  [0,"Now the entire parental generation dies."],
+  [4.6,"In the model, generations do not overlap: no adult survives into the next one. Real orchids can live for many years; this is a deliberate simplification."],
+  [10.4,"The surviving seedlings grow up and flower. They are the next generation, each carrying one maternal and one paternal allele."]],
+function(t){
+  background(t);const fd=eseg(t,0.4,3.8);
+  for(let i=0;i<8;i++){const st=meadowFruit(i,99,{split:1,grey:true});st.wilt=fd;st.fade=eseg(t,2,4.2);st.badge[2]=1-fd;plant(PX(i),1,st);
+}
+  STORY.seedlings.forEach(s=>{if(!s.win){seedling(s.x,1,1,(1-eseg(t,0,1.2))*0.15,1.8);return;}
+    const g=eseg(t,5,10.6);if(g<0.15){seedling(s.x,1,0,1,1.8);beads(s.x,GY+32,s.a,s.b,8,1);return;}
+    plant(s.x,0.82,{grow:g,flowering:true,badge:[s.a,s.b,1],flowers:[{open:eseg(t,9.8,11)},{open:eseg(t,10.1,11.3)}]});});
+  fade(eseg(t,4.6,5.4)*(1-eseg(t,9.8,10.4)),()=>{card(420,60,760,100,16);text("generation 1 dead, generation 2 growing",800,95,26,C.ink,"center",800);text("no overlap between generations",800,130,19,"#5E6B63","center",700);});
+  vignette();
+});
+
+/* 14 */
+function newGen(t){background(t,0.55);STORY.seedlings.forEach(s=>{if(s.win)plant(s.x,0.82,{grow:1,flowering:true,badge:[s.a,s.b,1],flowers:[{open:1},{open:1}]});});}
+chapter("Who sired the next generation?",15,[
+  [0,"Let's count how many of the new plants each plant of the old generation sired."],
+  [4.6,"A few plants sired several new plants. Many sired none at all."],
+  [9.6,"This inequality among sires is male reproductive skew, the quantity the model measures. Concentrated paternity within capsules raises it."]],
+function(t){
+  newGen(t);fade(eseg(t,0.4,1.4),()=>{
+    rrect(140,90,1320,560,20);ctx.fillStyle="#F7F7F5";ctx.fill();
+    text("new plants sired by each plant of the previous generation",800,140,28,C.ink,"center",800);
+    const base=560;
+    for(let i=0;i<8;i++){const x=260+i*155;beads(x,base+36,i*2,i*2+1,11,1);
+      if(!FLOWERING.includes(i)){text("did not flower",x,base-30,18,"#8A8A8A","center",700);continue;}
+      const n=STORY.tally[i];for(let k=0;k<n;k++){const a=eseg(t,1.6+i*0.25+k*0.3,2.2+i*0.25+k*0.3);fade(a,()=>{
+        const y=base-24-k*82;ctx.strokeStyle=C.stem;ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(x,y+26);ctx.lineTo(x,y-6);ctx.stroke();flower(x,y-20,0.95,{});});}
+      fade(eseg(t,4.2,5),()=>text(n===0?"none":String(n),x,base+84,26,n===0?"#8A8A8A":C.ink,"center",800));}});
+});
+
+/* 15 */
+const GEN_T=3.2,W12_START=5;
+function worldPanel(x0,title,sub,gens,t,side){
+  text(title,x0+370,56,28,"#FFFFFF","center",800);text(sub,x0+370,88,17,"rgba(255,255,255,0.8)","center",700);
+  const gf=(t-W12_START)/GEN_T;const g=clamp(Math.floor(gf),0,GW);const within=clamp(gf-g,0,1);
+  const cur=gens[Math.min(g,gens.length-1)],prev=gens[Math.max(0,Math.min(g-1,gens.length-1))];
+  const fadeIn=g===0?1:eseg(within,0,0.35);
+  text(`generation ${g}`,x0+370,120,21,"#FFFFFF","center",800);
+  for(let i=0;i<NW;i++){const c=i%6,r=Math.floor(i/6);const x=x0+80+c*118,y=180+r*82;
+    if(fadeIn<1)fade(1-fadeIn,()=>{flower(x,y,0.78,{pollinarium:false});beads(x,y+36,prev.pop[i][0],prev.pop[i][1],7,1);});
+    fade(fadeIn,()=>{flower(x,y,0.78,{pollinarium:false});beads(x,y+36,cur.pop[i][0],cur.pop[i][1],7,1);});}
+  const tal=g>0?gens[g-1].tally:null;const bx=x0+60,by=690,bw=620;
+  text("new plants per sire, most to fewest",x0+370,592,19,"rgba(255,255,255,0.85)","center",700);
+  ctx.fillStyle="rgba(255,255,255,0.25)";ctx.fillRect(bx,by,bw,2);
+  if(tal){const s=tal.slice().sort((a,b)=>b-a);const mx=Math.max(8,s[0]);const gw=bw/NW;const u=eseg(within,0.1,0.6);
+    s.forEach((v,k)=>{const h=v/mx*76*u;rrect(bx+k*gw+2,by-h,gw-4,h,3);ctx.fillStyle=side?"#9CC8F0":"#F2A9CC";ctx.fill();});}
+  text(`allele colours still present: ${cur.colours} of 16`,x0+370,722,20,"#FFFFFF","center",700);
+}
+chapter("Many generations, two populations",W12_START+GEN_T*(GW+1)+4,[
+  [0,"Let's speed up and compare two small populations over many generations."],
+  [W12_START,"Left: pollinaria, with paternity concentrated in each capsule. Right: loose pollen, with several sires per fruit. Everything else is identical."],
+  [W12_START+GEN_T*2.2,"Watch the bars. With pollinaria, fewer sires produce most of the new plants in each generation."],
+  [W12_START+GEN_T*5.4,"Both populations lose allele colours by chance at a similar pace. Paternity differs far more than the allele mix."]],
+function(t){
+  closeupBg();ctx.fillStyle="rgba(0,0,0,0.2)";ctx.fillRect(799,24,2,H-48);
+  worldPanel(30,"pollinaria","low-sire regime",WORLD.A,t,0);worldPanel(830,"loose pollen","granular reference",WORLD.B,t,1);
+  const end=W12_START+GEN_T*(GW+1);
+  fade(eseg(t,end-0.6,end+0.4),()=>{card(230,270,1140,280,18);
+    text("Averaged over 200 simulated populations",800,318,26,C.ink,"center",800);
+    text(`new plants from the top 3 sires: pollinaria ${Math.round(WSTAT.pollinaria*100)}%, loose pollen ${Math.round(WSTAT.loose*100)}%`,800,378,24,C.ink,"center",700);
+    text(`allele colours left after ${GW} generations: pollinaria ${WSTAT.colP.toFixed(1)}, loose pollen ${WSTAT.colL.toFixed(1)} (of 16)`,800,428,24,C.ink,"center",700);
+    text("30 plants each, v3.3 regime settings; far smaller than the model's 500, for illustration",800,488,18,"#6B6B6B","center",700);});
+});
+
+/* ---------- input from outside ---------- */
+const OUTF=(function(){const w=STORY.seedlings.filter(s=>s.win).sort((a,b)=>b.x-a.x);return w[1];})();
+const OUT_SEEDS=[{x:1015,d:0},{x:1265,d:0.5},{x:1450,d:1}].map(s=>({...s,a:16,b:17}));
+function farPlants(t){for(let i=0;i<9;i++){const x=1250+i*40,y=GY-150+Math.sin(i)*6;ctx.strokeStyle="#4E7A48";ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(x,y+30);ctx.lineTo(x,y);ctx.stroke();flower(x,y,0.45,{pollinarium:false});}}
+chapter("Pollen and plants from outside",23,[
+  [0,"Real populations are rarely closed. Pollinators can arrive carrying pollinaria from another population."],
+  [5.6,"Seeds, and so new plants, can drift in from outside too, carrying alleles the population did not have."],
+  [11,"The model includes both: x, the share of sires from outside, and m, the rate of immigration."],
+  [16,"With more outside input, the allele mix differs less between pollinaria and loose pollen. The inequality among sires remains."]],
+function(t){
+  background(t);
+  fade(eseg(t,0.3,1.2),()=>{card(1250,150,320,54,14);text("from a neighbouring population",1410,177,18,C.ink,"center",800);arrow(1500,215,1585,215,"#1F2A24",3);});
+  const F=flowerPos(OUTF.x,0,0.82);const arr=eseg(t,1.2,4.4);const done=t>=4.4;
+  STORY.seedlings.forEach(s=>{if(!s.win)return;const isT=s===OUTF;const fr=isT?seg(t,4.4,5.4):0;
+    plant(s.x,0.82,{grow:1,flowering:true,badge:[s.a,s.b,1],flowers:[isT&&fr>0?{fruit:fr,tag:"out",tagA:0}:{open:1},{open:1}]});});
+  if(t>=4.4)fade(seg(t,4.4,5.4),()=>{circ(F[0]+22*0.82,F[1]+14*0.82-6*0.82,8,"#F4F4F4","#222",2.5);text("outside sire",F[0]+40,F[1]-30,17,"#1F2A24","left",800);});
+  if(t>=1.2&&t<4.6){const x=lerp(1700,F[0]+20,arr),y=lerp(F[1]-160,F[1]-10,arr)-Math.sin(arr*Math.PI)*60;bee(x,y,1.7,Math.PI,t,{parcel:{}});}
+  OUT_SEEDS.forEach((s,i)=>{const u=seg(t,5.8+s.d,8.4+s.d);if(u>0&&u<1){const R=mk(90+i);for(let k=0;k<10;k++){const off=(R()-.5)*120;circ(lerp(1700,s.x+off*(1-u),u),lerp(260+R()*120,GY-2,u*u),3.2,"#8E7A55");}}
+    const g=eseg(t,8.4+s.d,9.6+s.d);if(g>0){seedling(s.x,g,0,1,1.8);beads(s.x,GY+32,s.a,s.b,8,g);}});
+  fade(eseg(t,8.8,9.6),()=>text("immigrant seedlings: new alleles",1240,GY+76,18,"#FFFFFF","center",800));
+  fade(eseg(t,11,11.8),()=>{card(300,70,1000,250,18);
+    text("model settings compared",800,106,20,"#5E6B63","center",800);
+    [["lower input","x = 0.01, m = 0","1 sire in 100 from outside, no immigrants"],["higher input","x = 0.25, m = 0.03","1 sire in 4 from outside, about 15 immigrants per 500"]].forEach(([a,b,c],i)=>{const y=160+i*72;text(a,340,y,24,C.ink,"left",800);text(b,560,y,24,C.ink,"left",800);text(c,800,y+26,17,"#5E6B63","left",700);});
+    fade(eseg(t,16,16.8),()=>{ctx.fillStyle="rgba(0,0,0,0.07)";ctx.fillRect(330,300,940,1);});});
+  fade(eseg(t,16,16.8),()=>{card(300,338,1000,110,18);text("more input: smaller allele-diversity difference between regimes",800,372,22,C.ink,"center",800);text("sire inequality still higher with concentrated paternity",800,410,22,C.ink,"center",800);});
+});
+
+/* 16 */
+chapter("What to remember",16,[[0,""]],function(t){
+  newGen(t);ctx.fillStyle="rgba(15,25,20,0.45)";ctx.fillRect(0,0,W,H);
+  const L=["Pollinaria deliver pollen in cohesive pollinia, so a capsule's seeds are usually sired mostly by one donor.",
+           "After seedlings compete for limited space, a few sires leave many offspring and many leave none.",
+           "The overall allele mix changes much less. How much depends on population size and incoming pollen."];
+  L.forEach((s,i)=>{const a=eseg(t,0.6+i*3.2,1.6+i*3.2);fade(a,()=>{card(240,90+i*205,1120,175,18);
+    circ(310,177+i*205,26,[sireCol(2),C.gold,sireCol(5)][i]);text(String(i+1),310,178+i*205,26,"#FFFFFF","center",800);
+    const L2=lines(s,940,31,800);L2.forEach((l,j)=>text(l,370,177+i*205-(L2.length-1)*21+j*42,31,C.ink,"left",800));});});
+});
+
+let acc=0;CH.forEach(c=>{c.start=acc;acc+=c.dur;});const TOTAL=acc;
+
+/* ---------- captions and chapter label ---------- */
+let showCaps=true;
+function drawOverlay(ci,lt){
+  const c=CH[ci];
+  fade(0.92*(1-eseg(lt,4,5)),()=>{ctx.font=`800 22px ${FONT}`;const lab=`${ci+1}  ${c.name}`;const w=ctx.measureText(lab).width+36;rrect(28,24,w,44,22);ctx.fillStyle="rgba(255,255,255,0.92)";ctx.fill();text(lab,46,47,22,C.ink,"left",800);});
+  if(!showCaps)return;
+  let cap=null,cs=0;for(const [ts,s] of c.caps){if(lt>=ts){cap=s;cs=ts;}}
+  if(!cap)return;
+  fade(eseg(lt,cs,cs+0.4),()=>{const L=lines(cap,1180,29,700);const h=L.length*40+28;rrect(800-640,H-h-26,1280,h,16);ctx.fillStyle=C.capBg;ctx.fill();
+    L.forEach((l,i)=>text(l,800,H-h-26+34+i*40,29,"#FFFFFF","center",700));});
+}
+
+/* ---------- render and player ---------- */
+let T=0,playing=false,speed=1,stops=false,lastNow=null,scale=1;
+function chapterAt(t){for(let i=CH.length-1;i>=0;i--)if(t>=CH[i].start)return i;return 0;}
+function render(){
+  const dpr=window.devicePixelRatio||1;ctx.setTransform(scale*dpr,0,0,scale*dpr,0,0);ctx.clearRect(0,0,W,H);
+  const ci=chapterAt(T),lt=T-CH[ci].start;
+  ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);ctx.clip();CH[ci].draw(lt);ctx.restore();
+  if(ci>0&&lt<0.5){ctx.save();ctx.globalAlpha=1-lt/0.5;ctx.beginPath();ctx.rect(0,0,W,H);ctx.clip();CH[ci-1].draw(CH[ci-1].dur-0.001);ctx.restore();}
+  drawOverlay(ci,lt);ui(ci);
+}
+const $=id=>document.getElementById(id);
+const fmtT=s=>`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,"0")}`;
+function ui(ci){$("time").textContent=`${fmtT(T)} / ${fmtT(TOTAL)}`;$("scrub").value=Math.round(T/TOTAL*1000);$("chap").textContent=`${ci+1}. ${CH[ci].name}`;$("play").textContent=playing?"Pause":"Play";}
+function tick(now){
+  if(playing){if(lastNow!==null){const dt=Math.min(0.1,(now-lastNow)/1000)*speed;const ci=chapterAt(T);const end=CH[ci].start+CH[ci].dur;let nt=T+dt;
+      if(stops&&T<end-0.02&&nt>=end-0.02){nt=end-0.02;playing=false;}
+      T=Math.min(TOTAL,nt);if(T>=TOTAL)playing=false;}
+    lastNow=now;}else lastNow=null;
+  render();requestAnimationFrame(tick);
+}
+function fit(){const wrap=$("stagewrap");const aw=wrap.clientWidth-8,ah=wrap.clientHeight-8;scale=Math.max(0.1,Math.min(aw/W,ah/H));const dpr=window.devicePixelRatio||1;
+  cv.style.width=Math.round(W*scale)+"px";cv.style.height=Math.round(H*scale)+"px";cv.width=Math.round(W*scale*dpr);cv.height=Math.round(H*scale*dpr);}
+window.addEventListener("resize",fit);
+const marks=$("marks");CH.forEach(c=>{const s=document.createElement("span");s.style.left=(c.start/TOTAL*100)+"%";marks.appendChild(s);});
+function toggle(){if(T>=TOTAL-0.01)T=0;playing=!playing;}
+function goCh(d){const ci=chapterAt(T);const lt=T-CH[ci].start;let n=ci+d;if(d<0&&lt>1.5)n=ci;T=CH[clamp(n,0,CH.length-1)].start;}
+$("play").onclick=toggle;$("prevc").onclick=()=>goCh(-1);$("nextc").onclick=()=>goCh(1);
+$("scrub").oninput=e=>{T=e.target.value/1000*TOTAL;};
+$("speed").onchange=e=>{speed=+e.target.value;};
+$("stops").onclick=e=>{stops=!stops;e.target.setAttribute("aria-pressed",String(stops));};
+$("caps").onclick=e=>{showCaps=!showCaps;e.target.setAttribute("aria-pressed",String(showCaps));};
+document.addEventListener("keydown",e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;const k=e.key;
+  if(k===" "){e.preventDefault();toggle();}
+  else if(k==="ArrowRight"){e.preventDefault();goCh(1);}
+  else if(k==="ArrowLeft"){e.preventDefault();goCh(-1);}
+  else if(k==="."){T=Math.min(TOTAL,T+1/30);}
+  else if(k===","){T=Math.max(0,T-1/30);}
+  else if(k==="c"||k==="C")$("caps").click();
+  else if(k==="p"||k==="P")$("stops").click();
+  else if(k==="h"||k==="H"){document.body.classList.toggle("rec");setTimeout(fit,30);}
+  else if(k==="f"||k==="F"){if(document.fullscreenElement)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});}
+});
+window.__story={seek:s=>{T=s;},chapters:()=>CH.map(c=>[c.name,c.start,c.dur]),story:STORY,wstat:WSTAT,world:!!WORLD};
+fit();
+const start=()=>requestAnimationFrame(tick);
+if(document.fonts&&document.fonts.load){Promise.race([document.fonts.load(`800 20px Nunito`),new Promise(r=>setTimeout(r,1500))]).then(start);}else start();
+})();
+</script>
+</body>
+</html>
