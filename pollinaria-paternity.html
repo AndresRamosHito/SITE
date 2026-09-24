@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pollinaria &amp; Male Reproductive Skew — Orchidarc Research</title>
-<meta name="description" content="Orchidarc research treating the orchid and milkweed pollinarium as the zero-carryover endpoint of the pollen-transfer continuum, and a conditional driver of single-sire capsules and male reproductive skew.">
-<meta property="og:title" content="Pollinaria &amp; Male Reproductive Skew — Orchidarc Research">
-<meta property="og:description" content="Packaged pollen transfer, single-sire capsules, effective sire number and male reproductive-success variance in orchids and milkweeds.">
+<title>Orchid Paternity &amp; Male Reproductive Skew — Orchidarc Research</title>
+<meta name="description" content="Orchidarc research on fruit-level paternity, resident male reproductive skew, recruitment and conditional neutral-diversity effects in orchids and comparative flowering-plant systems.">
+<meta property="og:title" content="Orchid Paternity &amp; Male Reproductive Skew — Orchidarc Research">
+<meta property="og:description" content="From paternal shares within fruits to recruitment, resident male contribution and conditional diversity loss.">
 <meta property="og:image" content="/images/ophrys-pollinarium.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,64 +16,76 @@
 </style>
 </head>
 <body>
-<div class="ticker"><div><span>UK Charity no. 1208062</span><span>Evolutionary modelling · Orchidaceae &amp; Asclepiadoideae</span><span>Pollinaria · Single-sire capsules</span><span>Male reproductive-success variance</span></div></div>
+<div class="ticker"><div><span>UK Charity no. 1208062</span><span>Evolutionary modelling · Orchidaceae &amp; comparative systems</span><span>Fruit paternity · Recruitment</span><span>Resident male reproductive skew</span></div></div>
 <nav class="nav"><div class="wrap nav-inner"><a class="brand" href="/"><img src="/images/logo-mark.png" alt="Orchidarc"><span><span class="brand-title">Orchidarc</span><span class="brand-sub">Est. 2024 · Sheffield, UK</span></span></a><div class="links"><a href="/films.html">Films</a><a href="/herbarium.html">Species</a><a href="/gallery.html">Gallery</a><a class="active" href="/research.html">Research</a><a href="/about.html">About</a><a href="/stories.html">Stories</a></div></div></nav>
-<header class="hero wrap"><span class="eyebrow">Research programme · Pollination evolution</span><h1>Pollinaria &amp; <em>male reproductive skew</em></h1><p class="lede">Treating the orchid and milkweed pollinarium as the zero-carryover endpoint of the pollen-transfer continuum, and asking what packaged pollen does to single-sire capsules, gene flow and the variance of male reproductive success.</p><div class="byline">Andrés E. Ramos R. · Orchidarc</div></header>
+<header class="hero wrap"><span class="eyebrow">Research programme · Pollination evolution</span><h1>Orchid paternity &amp; <em>male reproductive skew</em></h1><p class="lede">Asking how strongly concentrated paternity within orchid fruits propagates through recruitment into inequality among resident male contributors — and when that signal is large enough to affect simulated neutral diversity.</p><div class="byline">Andrés E. Ramos R. · Orchidarc</div></header>
 <section class="hero-img"><figure><img src="/images/ophrys-pollinarium.jpg" alt="A pollinarium attached during orchid pollination"><figcaption>A pollinarium: pollen aggregated into pollinia and coupled mechanically to the pollinator, so an entire male gamete payload moves as a single positionally controlled unit.</figcaption></figure></section>
 <main class="article">
-<div class="status-grid"><div><strong>Systems</strong><span>Orchids &amp; milkweeds</span></div><div><strong>Approach</strong><span>Individual-based simulation</span></div><div><strong>Question</strong><span>Single-sire paternity</span></div><div><strong>Status</strong><span>Manuscript in preparation</span></div></div>
-<p class="lead">Orchids and milkweeds export pollen not as independent grains but as coherent packages — pollinia bound into pollinaria. This convergent device makes the individual fruit a plausible, and often observed, unit of low effective sire number.</p>
-<p>A tempting inference is that packaged transfer therefore guarantees single paternity, and that single paternity erodes genetic diversity. This work argues the opposite: single-sire capsules sit inside polygamous, well-mixed plants, and the systems usually invoked to support a diversity-loss story in fact refute it. We replace loaded shorthand with three precise quantities: <em>capsule-level single paternity</em>, <em>effective sire number per capsule</em>, and <em>male reproductive-success variance</em>.</p>
+<div class="status-grid"><div><strong>Systems</strong><span>Orchids &amp; comparative flowering plants</span></div><div><strong>Approach</strong><span>Primary-study synthesis + forward-time model</span></div><div><strong>Question</strong><span>Fruit paternity → retained male contribution</span></div><div><strong>Status</strong><span>Manuscript in preparation</span></div></div>
 
-<h2>The biological problem</h2>
-<p>A pollinarium is one of the most elaborate pollen-dispersal devices in flowering plants. In Orchidaceae and in the milkweeds (Asclepiadoideae, within Apocynaceae), pollen is aggregated into pollinia and coupled mechanically to the pollinator, so that an entire male gamete payload moves as a single positionally controlled unit.</p>
-<p>The two systems are a textbook case of convergence rather than homology: orchid pollinaria use a rostellum / viscidium / stipe-or-caudicle system, whereas asclepiad pollinaria use corpuscula, translator arms, guide rails and stigmatic chambers. The shared functional outcome — accurate, package-based transport — is built from different tissues and different developmental programmes.</p>
+<p class="lead">Pollinaria can concentrate many pollen grains into one transfer event, but a concentrated pollen load is not the same thing as a single father, and a single-sired fruit is not the same thing as a genetically monogamous plant. The current study separates those levels explicitly.</p>
+<p>We follow three linked quantities: paternal shares within a fruit, summarised by effective sire number <em>A</em><sub>e</sub>; inequality in the contribution of resident males to retained recruits, measured by <em>CV</em><sup>2</sup><sub>m</sub> and the effective number of resident male contributors <em>M</em><sub>e</sub>; and neutral-marker gene diversity <em>H</em> after recruitment and density regulation.</p>
 
-<h2>Pollinaria as the zero-carryover endpoint</h2>
-<p>Rather than treating packaged transfer as a phenomenon of a different kind, we place it on the existing pollen-carryover / sire-profile continuum. As carryover increases from zero, the probability of a single-sired capsule falls smoothly from near 1.00 toward 0.05 and effective sire number climbs. The pollinarium simply occupies the limit of that axis.</p>
-<div class="note-box"><p><strong>Key reframing.</strong> Packaged transfer is quantitatively continuous with loose-pollen systems, not categorically separate. Its distinctiveness is that it pushes one knob — pollen carryover — to its limit, making the capsule the natural unit of single paternity.</p></div>
-<figure class="article-figure"><img class="contain" src="/images/Figure1_continuum.png" alt="The pollen-carryover continuum, with the pollinarium at the zero-carryover endpoint"><figcaption>Figure 1 — The pollen-carryover continuum (model output; endpoints parameterised from literature-anchored regimes, intermediate values interpolated). The probability of a single-sired capsule and male reproductive-success variance plotted against male effective size, with the pollinarium at the zero-carryover endpoint.</figcaption></figure>
+<div class="note-box"><p><strong>Core distinction.</strong> Pollinarium architecture can influence fruit-level paternity directly. Population-level consequences depend on what happens afterwards: how many independently sired fruits are produced, how many siblings establish together, how adults turn over, and how much genetic input arrives through external siring or immigration.</p></div>
 
-<h2>The model</h2>
-<p>We formalise the per-capsule expectation as an emergent property of a deposition process and test it with an individual-based, forward-time simulation run on identical demography. Every pollinarium regime is compared against a matched granular multi-sire null, so that no diversity effect can be attributed to packaging when it is really an effect of demography.</p>
-<div class="matrix"><div><strong>Regimes</strong><p>Seven, from strict pollinarium and fragmented multi-pollinaria through milkweed paired transfer with late-acting self-incompatibility to a high-mixing reference.</p></div><div><strong>Priors</strong><p>Parameter ranges are literature-anchored, with deposition sets for named taxa tuned to observed samples and screened by global sensitivity analysis.</p></div><div><strong>Read-out</strong><p>A variance effective size computed from the realised offspring-count distribution for each sex channel, plus founder-lineage retention.</p></div></div>
-<h3>How pollinaria concentrate paternity</h3>
-<p>An animated walk through the orchid paternity model, from pollinarium
-removal to the next generation of adults. About seven minutes, with
-captions. Use the controls to pause, step between chapters or hide the
-interface.</p>
-<div style="position:relative;width:100%;max-width:1200px;aspect-ratio:16/9;margin:1.5rem auto">
-  <iframe src="/research/paternity/pollinaria-paternity-visual-story.html"
-          title="Pollinaria and paternity: an animated story"
-          style="position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:8px"
-          allowfullscreen loading="lazy"></iframe>
+<h2>From paternity to recruitment</h2>
+<p>The model begins after pollination has generated paternal shares. It does not simulate flower mechanics as if they deterministically set paternity. Resident adults flower and form fruits, candidate fathers receive paternal shares, offspring pass through a shared fruit-level establishment filter and neutral inheritance, and density regulation retains at most the adult carrying capacity <em>K</em>. External siring and adult immigration enter at different stages.</p>
+<figure class="article-figure"><img class="contain" src="/images/paternity-figure1-model-scope.png" alt="Model scope showing paternal shares within fruits, recruitment, external siring, immigration and population-level outcomes"><figcaption>Figure 1 — Model scope and the distinction between paternity and recruitment. The same number of sires can produce very different <em>A</em><sub>e</sub> when paternal shares are unequal; population outcomes are measured only after establishment and density regulation.</figcaption></figure>
+
+<h2>What the empirical literature permits us to say</h2>
+<p>Published orchid paternity studies do not support a single family-wide rule. Strong within-fruit concentration is documented in systems including <em>Phalaenopsis pulcherrima</em> and <em>Laelia rubescens</em>, whereas <em>Chiloglottis</em> shows that cohesive pollinia can still produce multiply sired fruits. Loose- or granular-pollen reference systems provide the broader-paternity comparison. The pollinarium is therefore biological context for the model, not a guarantee that <em>A</em><sub>e</sub> = 1.</p>
+<p>Multiple mating also occurs at more than one hierarchical level. A fruit may be single sired while different flowers on the same maternal plant are fertilised by different donors. The study therefore avoids treating fruit-level single paternity as plant-level monogamy.</p>
+
+<h2>Four matched paternity regimes</h2>
+<p>The main experiment compares four paternity architectures under the same demography in a closed population with <em>K</em> = 500: strict single sire, low sire, a granular reference and high mixing. Each regime was run for 50 generations across 100 replicate populations. A milkweed reference with <em>A</em><sub>e</sub> = 1 is retained separately because its demographic parameters differ; it is context, not a matched fifth regime.</p>
+<figure class="article-figure"><img class="contain" src="/images/paternity-figure2-within-fruit-paternity.png" alt="Cumulative distributions of effective sire number and single-sire fruit frequency for four matched paternity regimes"><figcaption>Figure 2 — Assigned within-fruit paternity in the four matched closed <em>K</em> = 500 regimes. Strict single paternity is fixed at <em>A</em><sub>e</sub> = 1; low-sire fruits retain a strong mass near one; granular-reference and high-mixing fruits progressively distribute paternity among more effective sires.</figcaption></figure>
+
+<div class="matrix">
+  <div><strong>Strict single sire</strong><p><em>A</em><sub>e</sub> = 1.000<br>Single-sire fruits = 100%</p></div>
+  <div><strong>Low sire</strong><p>Mean <em>A</em><sub>e</sub> = 1.206<br>Single-sire fruits = 63.6%</p></div>
+  <div><strong>Granular reference</strong><p>Mean <em>A</em><sub>e</sub> = 3.148<br>Single-sire fruits = 3.10%</p></div>
+  <div><strong>High mixing</strong><p>Mean <em>A</em><sub>e</sub> = 6.402<br>Single-sire fruits ≈ 0.10%</p></div>
 </div>
-<p><a href="/research/paternity/pollinaria-paternity-visual-story.html">Open full screen</a></p>
 
-<figure class="article-figure"><img class="contain" src="/images/Figure2_stage_filter.png" alt="Reproductive-stage filter showing efficient packaged removal followed by heavy transit loss"><figcaption>Figure 2 — Reproductive-stage filter (schematic): efficient packaged removal followed by heavy transit loss (more than 95% in <em>Disa cooperi</em>) and low fruit set — the stages at which male reproductive-success variance is generated.</figcaption></figure>
-<figure class="article-figure"><img class="contain" src="/images/Figure7_regimes.png" alt="Male effective size across all seven simulated regimes with closed-population validation"><figcaption>Figure 7 — Male effective size across all seven regimes, with the closed-population validation: strict-pollinarium and granular-null 95% intervals are separated and lie in the predicted direction.</figcaption></figure>
+<h2>The matched population-level result</h2>
+<p>Holding demography constant reveals the direct signal of paternity concentration. At generation 50, strict single paternity raises resident-male contribution variance from <em>CV</em><sup>2</sup><sub>m</sub> = 4.539 in the granular reference to 5.599, while the effective number of resident male contributors falls from <em>M</em><sub>e</sub> = 90.88 to 76.64. These are two summaries of the same contribution distribution, not independent measures.</p>
+<p>The corresponding neutral-marker diversity values are <em>H</em> = 0.875 for the granular reference and 0.856 for strict paternity, a difference of 0.0191. The effect on resident male contribution is therefore clearer than the diversity effect.</p>
+<figure class="article-figure"><img class="contain" src="/images/paternity-figure3-generation50-outcomes.png" alt="Generation-50 male skew, effective resident male contributors and neutral-marker diversity for four matched paternity regimes"><figcaption>Figure 3 — Generation-50 outcomes under matched demographic parameters. Points are replicate means and bars are 95% bootstrap intervals. The milkweed comparison is excluded because it uses different demographic parameters.</figcaption></figure>
 
-<h2>A two-layer result</h2>
-<p>Within the parameter envelope explored, packaged transfer leaves a clean two-layer signature.</p>
-<ul><li><strong>Male reproductive-success variance is intrinsic and broad.</strong> In the single-sire regime, packaging depresses male effective size relative to the granular null by roughly a tenth to a third — and, counter-intuitively, the contrast is clearest under <em>broad</em> pollen flow.</li><li><strong>The diversity footprint is demographically gated.</strong> Any population-genetic effect on diversity is confined to small, fragmented, short-pollen-flow populations, and collapses by one to two orders of magnitude once gene flow or census size relax.</li></ul>
-<figure class="article-figure"><img class="contain" src="/images/Figure3_Ae_anchors.png" alt="Modelled male effective size at named-taxon empirical anchors"><figcaption>Figure 3 — Modelled male effective size at named-taxon anchors (<em>Phalaenopsis</em>, <em>A. exaltata</em>, <em>Chiloglottis</em>, <em>A. syriaca</em> and the granular null). The mode sits at a single effective sire, with a real right tail.</figcaption></figure>
-<figure class="article-figure"><img class="contain" src="/images/Figure4_boundary.png" alt="Boundary map separating the intrinsic male-RS skew signature from the demographically gated diversity footprint"><figcaption>Figure 4 — The boundary map. Layer 1, the male-RS skew signature, is intrinsic and broad; Layer 2, the diversity footprint, is demographically gated to the small-population, short-flow corner. Fold-reductions (ratios within matched comparisons) are more robust than absolute diversity values.</figcaption></figure>
-<p>Placed against reference systems, an orchid that sweeps a whole capsule with one pollinarium is as single-sire as <em>Asclepias</em>, yet — through sheer seed and fruit output — lifts founder-lineage retention off the milkweed floor toward, but not up to, a loose-pollen multi-sire reference.</p>
+<div class="note-box"><p><strong>Why the milkweed comparison matters.</strong> The separately parameterised milkweed reference also has <em>A</em><sub>e</sub> = 1, yet its modelled <em>CV</em><sup>2</sup><sub>m</sub> is 8.097 and <em>M</em><sub>e</sub> is 55.60. That difference is not evidence that milkweeds intrinsically have greater skew; it demonstrates why paternity architecture cannot be interpreted apart from demography.</p></div>
 
-<h2>Where the consequence really lives</h2>
-<p>Pollinaria do create a distinctive paternity structure with measurable genetic consequences. But those consequences live in the <em>second moment</em> of the male fitness distribution — the variance of male reproductive success — and inside a namable demographic envelope, not in a general erosion of population diversity. The deterministic "packaging destroys diversity" story does not survive a properly matched null.</p>
-<figure class="article-figure"><img class="contain" src="/images/Figure5_orchid_milkweed.png" alt="Orchid versus milkweed: reaching single paternity by different routes"><figcaption>Figure 5 — Orchid against milkweed mechanism. A post-pollination filter (late-acting self-incompatibility / abscission) holds the paired-pollinia milkweed system at strict single paternity, while the orchid reaches it through deposition itself — single paternity is emergent rather than enforced.</figcaption></figure>
-<figure class="article-figure"><img class="contain" src="/images/Figure6_seed_sweep.png" alt="The orchid seed sweep in comparative context against Asclepias and a loose-pollen reference"><figcaption>Figure 6 — The orchid seed sweep against an <em>Asclepias</em> and a loose-pollen reference: (a) demographic replacement threshold near one recruit per adult; (b) founder-lineage retention versus seed number; (c) reference-mode lineage retention; (d) corrected (v2) male reproductive-success variance, flat across seed number, with both single-sire systems above the multi-sire reference.</figcaption></figure>
+<h2>Why diversity loss is conditional</h2>
+<p>The model next compares strict and granular paternity across adult carrying capacities and two compound external-input settings. Strict paternity reduces <em>M</em><sub>e</sub> in every setting shown, but the difference in neutral-marker diversity is much smaller under the higher-input setting. At <em>K</em> = 150 with lower input, the diversity interval crosses zero, so that contrast is unresolved.</p>
+<figure class="article-figure"><img class="contain" src="/images/paternity-figure4-demographic-contrasts.png" alt="Strict-versus-granular differences in effective resident male contributors and neutral-marker diversity across carrying capacities and external-input settings"><figcaption>Figure 4 — Matched paternity contrasts across compound demographic settings. Positive values indicate lower <em>M</em><sub>e</sub> or <em>H</em> under strict paternity. The lower- and higher-input settings differ in external siring, immigration and donor-weight evenness, so differences between settings cannot be attributed to gene flow alone.</figcaption></figure>
 
-<h2>A speciation hypothesis</h2>
-<p>Stated explicitly as hypothesis rather than result: a single-sire system could reward a rare male-function innovator with whole capsules rather than a diluted share. That would supply an economic precondition for budding speciation along the placement axis opened by the viscidium — a female-derived adhesive that shares a developmental backbone with the stigma, and the subject of Orchidarc's parallel biomaterials programme.</p>
-<div class="note-box"><p><strong>Evidential discipline.</strong> The manuscript carries an explicit source-verification table separating background, empirical anchors, model parameters and speculation, so that no claim silently migrates from background to evidence.</p></div>
+<p>This distinction changes the interpretation of the study. Concentrated fruit paternity can increase inequality in resident male reproductive contribution, especially when multiple siblings from independently sired fruits recruit together. Whether that produces appreciable neutral-diversity loss depends on recruitment, population size and external genetic input. The model does not contain geographic distance, so the external-input scenarios should not be read as literal short- versus long-distance pollen-flow estimates.</p>
+
+<h2>What the model does not claim</h2>
+<ol class="refs">
+  <li><em>M</em><sub>e</sub> is an effective number of resident male contributors derived from realised paternal contributions; it is not total effective population size.</li>
+  <li><em>H</em> is diversity at a simulated neutral marker used as a tracer. Absolute values are not estimates of empirical genomic diversity in orchids.</li>
+  <li>Pollinaria do not guarantee single paternity, and fruit-level single paternity does not imply that an adult plant has only one mate.</li>
+  <li>The milkweed row is a separately parameterised demographic illustration, not a matched test of an intrinsic orchid-versus-milkweed difference.</li>
+  <li>Self-incompatibility, pollinium subdivision, sequential visitation and post-deposition stigma behaviour remain mechanistic hypotheses to test directly; the simulations do not establish trait selection or speciation.</li>
+</ol>
+
+<h2>Interactive model walkthrough</h2>
+<p>The visual story follows the same hierarchy from pollinarium transfer to fruit paternity, inheritance, recruitment and the next adult generation. It is intended as a conceptual guide to the model rather than an additional analysis.</p>
+<div style="position:relative;width:100%;max-width:1200px;aspect-ratio:16/9;margin:2rem auto 3rem;overflow:hidden;border:1px solid rgba(27,26,23,.18);background:#0f2418">
+  <iframe src="/research/paternity/pollinaria-paternity-visual-story.html" title="Animated orchid paternity model" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0" allowfullscreen></iframe>
+</div>
 
 <h2>Manuscript</h2>
-<p><strong>Single-sire capsules in polygamous flowering plants: pollinaria as the zero-carryover endpoint of the pollen-transfer continuum and a conditional driver of male reproductive skew.</strong> Andrés E. Ramos R. Manuscript in preparation.</p>
+<p><strong>Orchid paternity: pollinaria, single-sire fruits, male reproductive skew and conditional diversity loss.</strong> Andrés E. Ramos R. Manuscript in preparation.</p>
 
 <h2>Research themes</h2>
-<ol class="refs"><li>The pollen-carryover continuum and the pollinarium as its zero-carryover endpoint.</li><li>Capsule-level single paternity and effective sire number as emergent deposition properties.</li><li>Male reproductive-success variance under packaged versus granular pollen transfer.</li><li>Demographic gating of diversity effects in fragmented orchid and milkweed populations.</li><li>Placement, the viscidium and the economics of male-function innovation.</li></ol>
+<ol class="refs">
+  <li>Effective sire number and exact single paternity within orchid fruits.</li>
+  <li>Recruitment as the bridge between family structure and population-wide male reproductive skew.</li>
+  <li>Resident male contribution measured with <em>CV</em><sup>2</sup><sub>m</sub> and <em>M</em><sub>e</sub>.</li>
+  <li>Conditional neutral-diversity effects under density regulation and external genetic input.</li>
+  <li>Direct empirical tests of pollinium subdivision, sequential deposition, incompatibility and stigma-mediated exclusion.</li>
+</ol>
 </main>
 <footer class="footer"><div class="wrap"><div class="footer-grid"><div><h2>Orchidarc.</h2><p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p></div><div><h3>Research</h3><ul><li><a href="/research.html">Research overview</a></li><li><a href="/orchid-adhesives.html">Orchid adhesives</a></li><li><a href="/stigmatic-composite.html">Stigmatic composite</a></li><li><a href="/pollinaria-paternity.html">Pollinaria &amp; paternity</a></li><li><a href="/climate-replicator.html">Climate Replicator</a></li></ul></div><div><h3>Work</h3><ul><li><a href="/herbarium.html">Herbarium</a></li><li><a href="/films.html">Films</a></li><li><a href="/gallery.html">Gallery</a></li></ul></div><div><h3>Contact</h3><ul><li><a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a></li><li>Mexico · UK · Japan</li><li>Charity no. 1208062</li></ul></div></div><div class="copy">© Orchidarc 2024–2026 — All rights reserved</div></div></footer>
 </body>
