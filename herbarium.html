@@ -86,7 +86,7 @@
       <button type="button" id="reset">Reset</button>
     </form>
     <p class="count" id="count"></p><div id="grid" class="grid"></div><p class="empty" id="empty">No species match the selected filters.</p>
-    <p class="note">58 entries and growing. More are added as field work continues. Want to contribute a record? <a href="mailto:andresr@orchidarc.org">Get in touch</a>.<small>NOM-059: P = En peligro de extinción; A = Amenazada; Pr = Sujeta a protección especial. IUCN categories are shown only where a formal Red List assessment has been confirmed.</small></p>
+    <p class="note">59 entries and growing. More are added as field work continues. Want to contribute a record? <a href="mailto:andresr@orchidarc.org">Get in touch</a>.<small>NOM-059: P = En peligro de extinción; A = Amenazada; Pr = Sujeta a protección especial. IUCN categories are shown only where a formal Red List assessment has been confirmed.</small></p>
   </div></section></main>
   <footer><div class="wrap"><div class="footer-grid"><div><h2>Orchidarc.</h2><p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p></div><div><h3>Work</h3><ul><li><a href="/films.html">Films</a></li><li><a href="/herbarium.html">Herbarium</a></li><li><a href="/gallery.html">Gallery</a></li><li><a href="/research.html">Research</a></li><li><a href="/cypripedium.html">Cypripedium</a></li></ul></div><div><h3>Get involved</h3><ul><li><a href="/take-action.html">Donate</a></li><li><a href="/mexico-tours.html">Mexico tours</a></li><li><a href="/store.html">Store</a></li><li><a href="/socials.html">Socials</a></li></ul></div><div><h3>Contact</h3><ul><li><a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a></li><li>Mexico · UK · Brasil</li><li>Charity no. 1208062</li></ul></div></div><div class="copy">© Orchidarc 2024—2026 — All rights reserved</div></div></footer>
   <script>
@@ -96,6 +96,7 @@
       {n:'Laelia furfuracea',a:'Lindl.',s:'NOM-059: Pr',r:'Endemic · Oaxaca',h:'/laelia-furfuracea.html',i:'/images/furfuracea-situ-b.jpg',habit:'epiphyte',region:'Oaxaca',status:'nom endemic'},
       {n:'Laelia speciosa',a:'(Kunth) Schltr.',s:'NOM-059: Pr',r:'Endemic · Central MX',h:'/laelia-speciosa.html',i:'/images/laelia-speciosa.jpg',habit:'epiphyte lithophyte',region:'Mexico',status:'nom endemic'},
       {n:'Laelia albida',a:'Bateman ex Lindl.',s:'Cultural use',r:'Mexico',h:'#',i:'/images/Albida2.5.3.jpg',habit:'epiphyte lithophyte',region:'Mexico',status:'cultural'},
+      {n:'Laelia eyermaniana',a:'Rchb.f.',s:'Field record · alba form',r:'W. Mexico · Jalisco',h:'/laelia-eyermaniana.html',i:'/images/laelia-eyermaniana-plate.jpg',habit:'epiphyte',region:'Mexico',status:'endemic monitoring',fit:'contain'},
       {n:'Laelia superbiens',a:'Lindl.',s:'NOM-059: A',r:'Mesoamerica',h:'#',i:'/images/Laelia-superbiens-plate.jpg',habit:'epiphyte',region:'Mesoamerica',status:'nom'},
       {n:'Arpophyllum giganteum',a:'Hartw. ex Lindl.',s:'Monitoring record',r:'Mexico → NW Venezuela · Jamaica',h:'#',i:'/images/arpophyllum-giganteum-plate.jpg',habit:'epiphyte',region:'Central America',status:'monitoring'},
       {n:'Acineta barkeri',a:'(Bateman) Lindl.',s:'NOM-059: A',r:'Endemic · Veracruz',h:'/acineta-barkeri.html',i:'/images/acineta-barkeri-plate.jpg',habit:'epiphyte canopy',region:'Veracruz',status:'nom endemic'},
@@ -175,7 +176,7 @@
 
     function render(){
       const shown = species.filter(matches);
-      grid.innerHTML = shown.map(sp => `<article class="card"><a href="${sp.h}"><div class="thumb"><img src="${sp.i}" alt="${sp.n}" loading="lazy" onerror="this.closest('.thumb').classList.add('missing');this.remove()"></div><div class="meta"><span>${sp.s}</span><span>${sp.r}</span></div><h2><em>${sp.n}</em></h2><p>${sp.a}</p><div class="tags"><span class="tag">${sp.habit.split(' ')[0]}</span><span class="tag">${sp.region}</span>${sp.h !== '#' ? '<span class="tag">Profile</span>' : ''}</div></a></article>`).join('');
+      grid.innerHTML = shown.map(sp => `<article class="card"><a href="${sp.h}"><div class="thumb"><img src="${sp.i}" alt="${sp.n}" loading="lazy" style="${sp.fit === 'contain' ? 'object-fit:contain;background:#000' : ''}" onerror="this.closest('.thumb').classList.add('missing');this.remove()"></div><div class="meta"><span>${sp.s}</span><span>${sp.r}</span></div><h2><em>${sp.n}</em></h2><p>${sp.a}</p><div class="tags"><span class="tag">${sp.habit.split(' ')[0]}</span><span class="tag">${sp.region}</span>${sp.h !== '#' ? '<span class="tag">Profile</span>' : ''}</div></a></article>`).join('');
       count.textContent = `${shown.length} of ${species.length} entries shown`;
       empty.style.display = shown.length ? 'none' : 'block';
     }
