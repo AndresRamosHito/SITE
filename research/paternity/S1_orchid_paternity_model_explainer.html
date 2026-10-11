@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Orchid paternity — the model atlas | Orchidarc</title>
+<style>
+/* ============================================================
+   Tokens. Light first; dark via prefers-color-scheme, and both
+   overridable with data-theme on <html> (T key).
+   Orchid/sky pair validated for CVD separation in both themes.
+   ============================================================ */
+:root{
+  --bg:#F5F4F7; --panel:#FFFFFF; --text:#1B1C2A; --muted:#595768; --faint:#8A8898;
+  --rule:#DDDBE4; --rule2:#C3C1CE;
+  --orchid:#B23A6E; --sky:#2A6FB4; --leaf:#2A7F55; --pollen:#9E7A0C; --grey:#B6B4C2; --tail:#7D88A6;
+  --on-orchid:#FFFFFF; --on-sky:#FFFFFF; --on-tail:#15172A;
+  --tint:#F3E3EB; --tint-pollen:#F5EDD5; --tint-sky:#E4EDF7;
+  --al-a:#2366B0; --al-b:#C0661A; --al-c:#3F9A5B; --al-d:#9B4F9A; --on-al:#FFFFFF;
+  --shadow:0 18px 50px rgba(24,20,48,.16), 0 3px 10px rgba(24,20,48,.08);
+  --sans:"Instrument Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --math:"STIX Two Text", "STIX Two Math", "Cambria Math", "Cambria", "Latin Modern Math", "Times New Roman", serif;
+  --mono:ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --eo:cubic-bezier(.2,.75,.25,1);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#191C28; --panel:#232738; --text:#ECEAF3; --muted:#A8A5BA; --faint:#7D7B92;
+    --rule:#31364A; --rule2:#474D65;
+    --orchid:#D4649A; --sky:#4A97DC; --leaf:#56B283; --pollen:#D4AA3A; --grey:#4A4F64; --tail:#7C89A8;
+    --on-orchid:#171A26; --on-sky:#171A26; --on-tail:#12151F;
+    --tint:#35243A; --tint-pollen:#302C22; --tint-sky:#1E2E45;
+    --al-a:#4E95DA; --al-b:#DB8C3E; --al-c:#46A876; --al-d:#BB70AE; --on-al:#171A26;
+    --shadow:0 18px 50px rgba(0,0,0,.45), 0 3px 10px rgba(0,0,0,.3);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#191C28; --panel:#232738; --text:#ECEAF3; --muted:#A8A5BA; --faint:#7D7B92;
+  --rule:#31364A; --rule2:#474D65;
+  --orchid:#D4649A; --sky:#4A97DC; --leaf:#56B283; --pollen:#D4AA3A; --grey:#4A4F64; --tail:#7C89A8;
+  --on-orchid:#171A26; --on-sky:#171A26; --on-tail:#12151F;
+  --tint:#35243A; --tint-pollen:#302C22; --tint-sky:#1E2E45;
+    --al-a:#4E95DA; --al-b:#DB8C3E; --al-c:#46A876; --al-d:#BB70AE; --on-al:#171A26;
+  --shadow:0 18px 50px rgba(0,0,0,.45), 0 3px 10px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);overflow:hidden}
+body{font-family:var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;font-kerning:normal}
+#viewport{position:relative;width:100%;height:100%}
+#stage{position:absolute;width:1600px;height:900px;transform-origin:0 0;background:var(--bg)}
+body.rec{cursor:none}
+body.rec #rail{opacity:0;pointer-events:none}
+body.rec #help{display:none}
+/* one-frame switch used when a step is reached instantly (stepping back): no transitions */
+.instant *,.instant *::before,.instant *::after{transition:none!important;animation:none!important}
+
+/* ---------- header ---------- */
+header#hd{position:absolute;top:46px;left:72px;right:72px;display:flex;align-items:baseline;gap:18px}
+#hd .no{font:500 16px/1 var(--sans);color:var(--muted);min-width:64px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+#hd h1{margin:0;font:600 38px/1.15 var(--sans);letter-spacing:-.018em;text-wrap:balance}
+#hd h1 .m{font-weight:600}
+body.first #hd{visibility:hidden}
+
+/* ---------- scene frame ---------- */
+.scene{position:absolute;top:132px;left:72px;right:72px;bottom:100px;display:none}
+.scene.active{display:grid}
+.two{grid-template-columns:860px 1fr;gap:64px;align-items:start}
+.one{grid-template-columns:1fr}
+svg.vis{width:860px;height:640px;overflow:visible;display:block}
+
+/* ---------- build steps ---------- */
+.b{opacity:0;visibility:hidden;transform:translateY(10px);
+   transition:opacity .42s var(--eo),transform .62s var(--eo),visibility 0s linear .62s}
+.b.on{opacity:1;visibility:visible;transform:none;
+   transition:opacity .42s var(--eo),transform .62s var(--eo),visibility 0s}
+tr.b{transform:none}
+/* blocks whose lines cascade in, equation first, then its gloss */
+.b.stag{transform:none;transition:visibility 0s linear .62s}
+.b.stag.on{transition:visibility 0s}
+.b.stag>*{opacity:0;transform:translateY(8px);transition:opacity .42s var(--eo),transform .62s var(--eo);transition-delay:calc(var(--i,0) * 110ms)}
+.b.stag.on>*{opacity:1;transform:none}
+/* "you are here": a rule beside whatever the current step revealed */
+.eq>.b:not(table){position:relative}
+.eq>.b:not(table)::before{content:"";position:absolute;left:-26px;top:.35em;bottom:.35em;width:3px;border-radius:2px;background:var(--orchid);
+   transform:scaleY(0);transform-origin:50% 0;opacity:0;transition:transform .5s var(--eo),opacity .25s}
+.eq>.b.now:not(table)::before{transform:none;opacity:1;transition-delay:.12s,.12s}
+@media (prefers-reduced-motion: reduce){
+  .b,.b.on,.b.stag>*{transition:none!important;transform:none!important}
+}
+
+/* ---------- type ---------- */
+p{margin:0}
+.m{font-family:var(--math)}
+i.m{font-style:italic}
+.eq{font-family:var(--math);font-size:28px;line-height:1.5;font-variant-numeric:lining-nums}
+.eq .line{margin:0 0 6px}
+.eq .gloss{font:400 18.5px/1.52 var(--sans);color:var(--muted);margin:4px 0 28px;max-width:42ch;text-wrap:pretty}
+.eq i,.m i{font-style:italic}
+.gloss .m,.lede .m,.small .m,.cell .m,.aside .m,.clean .m,.fnlist .m,#notetext .m,.tip .m{font-size:1.08em;line-height:1}
+i.m+sub{font-family:var(--math)}
+.big{font-size:36px}
+.hl{color:var(--orchid)}
+.leaf{color:var(--leaf)} .sky{color:var(--sky)} .pol{color:var(--pollen)}
+.sym{font-family:var(--math)}
+.nw{white-space:nowrap}
+.lede{font:400 22px/1.52 var(--sans);max-width:38ch;margin-top:24px;text-wrap:pretty}
+.small{font:400 16px/1.5 var(--sans);color:var(--muted)}
+.display{font:600 54px/1.06 var(--sans);letter-spacing:-.026em;margin:0;max-width:15ch;text-wrap:balance}
+code{font-family:var(--mono)}
+
+/* mathematics: scripts that do not disturb the line box, stacked scripts, fractions on the math axis */
+sub,sup{font-size:.7em;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.44em} sub{top:.26em}
+.ss{display:inline-flex;flex-direction:column;align-items:flex-start;font-size:.7em;line-height:.96;vertical-align:.63em;margin-left:.05em}
+.ss>*{display:block}
+.frac{display:inline-flex;flex-direction:column;align-items:stretch;text-align:center;vertical-align:.69em;margin:0 .12em}
+.frac>span{display:block;line-height:1.12;padding:0 .14em}
+.frac>span:first-child{border-bottom:.055em solid currentColor;padding-bottom:.1em}
+.frac>span:last-child{padding-top:.08em}
+.sf{font-feature-settings:"frac" 1}
+/* equations aligned on their first relation */
+.align{display:grid;grid-template-columns:auto 1fr;column-gap:.28em;row-gap:6px;margin-bottom:6px;align-items:baseline}
+.align>.l{text-align:right;white-space:nowrap}
+.align>.r{white-space:nowrap}
+
+/* ---------- title ---------- */
+#s-title{top:92px;bottom:110px;grid-template-columns:780px 1fr;gap:80px;align-items:center}
+#s-title .rule{width:44px;height:4px;border-radius:2px;background:var(--orchid);margin-bottom:28px}
+#s-title .meta{margin-top:40px;font:400 15px/1.6 var(--sans);color:var(--muted)}
+#s-title .meta code{font-size:14px;color:var(--text)}
+#v-title{width:532px;height:470px}
+
+/* ---------- parameter table ---------- */
+#s-params{grid-template-columns:1000px 1fr}
+table.pt{border-collapse:collapse;width:100%}
+table.pt th{font:500 15px/1 var(--sans);color:var(--muted);text-align:left;padding:0 20px 14px 0;border-bottom:1.5px solid var(--rule2);letter-spacing:.01em}
+table.pt td{padding:17px 20px 15px 0;border-bottom:1px solid var(--rule);vertical-align:baseline;font:400 22px/1.3 var(--sans);transition:background-color .5s var(--eo)}
+table.pt th:first-child,table.pt td:first-child{padding-left:16px}
+table.pt th:last-child,table.pt td:last-child{padding-right:16px}
+table.pt td.m{font-family:var(--math);font-size:28px;white-space:nowrap;width:170px}
+table.pt td.v{font-family:var(--math);font-size:28px;text-align:right;white-space:nowrap}
+table.pt .sep{color:var(--faint);margin-right:.08em}
+table.pt tr.now td{background:var(--tint)}
+#s-params[data-step="7"] tr.kf td{background:var(--tint-pollen)}
+#s-params[data-step="7"] tr.kf td.m{box-shadow:inset 4px 0 0 var(--pollen)}
+.calc{margin-top:34px;padding:22px 30px;border-left:4px solid var(--pollen);background:var(--panel);font-family:var(--math);font-size:32px;border-radius:0 8px 8px 0;box-shadow:0 1px 0 var(--rule)}
+.calc .hl{font-weight:600}
+#s-params .eq{padding-top:52px}
+
+/* ---------- order of events ---------- */
+.flow{display:grid;grid-template-columns:28px 196px 560px 118px 1fr;column-gap:26px;grid-auto-rows:53px;align-items:center}
+.flow .row{display:contents}
+.flow .row.b{opacity:1;visibility:visible;transform:none}
+.flow .row>*{transition:opacity .45s var(--eo),color .35s}
+.flow .row.todo>*{opacity:.3}
+.flowhd{font:500 15px var(--sans);color:var(--muted);align-self:end;padding-bottom:12px;letter-spacing:.01em}
+.flow .node{position:relative;width:14px;height:14px;border-radius:50%;border:2px solid var(--rule2);background:var(--bg);justify-self:center;z-index:1;transition:background-color .35s,border-color .35s,box-shadow .35s}
+.flow .node::before{content:"";position:absolute;left:50%;margin-left:-1px;width:2px;bottom:calc(100% + 2px);height:39px;background:var(--rule2);transition:background-color .35s}
+.flow .row[data-b="1"] .node::before{display:none}
+.flow .row.done .node{background:var(--muted);border-color:var(--muted)}
+.flow .row.done .node::before,.flow .row.cur .node::before{background:var(--muted)}
+.flow .row.cur .node{background:var(--orchid);border-color:var(--orchid);box-shadow:0 0 0 6px var(--tint)}
+.flow .nm{font:500 23px var(--sans)}
+.flow .row.cur .nm{color:var(--orchid);font-weight:600}
+.flow .ds{font-family:var(--math);font-size:24px;white-space:nowrap}
+.flow .ct{font-family:var(--math);font-size:26px;text-align:right;font-variant-numeric:tabular-nums}
+.flow .ct:not([data-v]){font-size:20px;color:var(--muted)}
+.flow .bar{height:12px;display:block;align-self:center}
+.flow .bar i{display:block;height:100%;width:100%;border-radius:0 3px 3px 0;background:var(--rule2);transform-origin:0 50%;transform:scaleX(var(--w,0));transition:background-color .35s}
+.flow .row.done .bar i{background:var(--faint)}
+.flow .row.cur .bar i{background:var(--orchid)}
+.aside{margin-top:24px;padding-top:20px;border-top:1px solid var(--rule);display:grid;grid-template-columns:1fr 1fr;gap:56px;margin-left:54px}
+.aside p{font:400 18.5px/1.52 var(--sans);color:var(--muted);text-wrap:pretty}
+
+/* ---------- paternity ---------- */
+#s-pat .eq{font-size:24px}
+#s-pat .eq .gloss{font-size:16px;margin-bottom:18px}
+#s-pat .align{row-gap:2px}
+table.rt{margin-top:4px}
+table.rt th{font-size:14px;padding:0 12px 10px 0;text-align:right}
+table.rt th:first-child{text-align:left}
+table.rt th .m{font-size:18px;color:var(--text)}
+table.rt td{padding:6px 12px 5px 0;font:400 16px/1.3 var(--sans)}
+table.rt td.v{font-size:19px}
+table.rt th:first-child,table.rt td:first-child{padding-left:10px}
+table.rt th:last-child,table.rt td:last-child{padding-right:10px}
+table.rt tr.cur td{background:var(--tint)}
+table.rt tr.cur td:first-child{box-shadow:inset 3px 0 0 var(--orchid);font-weight:600}
+#v-pat.live{cursor:pointer}
+
+/* ---------- Ae ---------- */
+#s-ae .ex{margin-top:14px}
+
+/* ---------- boundaries: 2x2 matrix ---------- */
+#s-bound{grid-template-columns:860px 1fr}
+.bmx{display:grid;grid-template-columns:220px 1fr 1fr;grid-template-rows:auto 150px 150px;gap:16px}
+.bh{font:500 15px var(--sans);color:var(--muted)}
+.bh.col{align-self:end;justify-self:center;padding:0 0 2px;font:600 22px var(--sans);color:var(--text)}
+.bh.col .m{font-weight:600}
+.bh.row{align-self:center;display:flex;flex-direction:column;gap:8px;padding-right:8px}
+.bh.row .rl{font:600 20px var(--sans);color:var(--text)}
+.bh.row .tp{font:400 17px/1.4 var(--sans);color:var(--muted);transition:color .4s,box-shadow .4s;align-self:flex-start;padding-bottom:2px}
+#s-bound[data-step="3"] .bh.row .tp{color:var(--text);box-shadow:inset 0 -2px 0 var(--pollen)}
+.cell{background:var(--panel);border:1px solid var(--rule);border-radius:10px;display:flex;align-items:center;justify-content:center;gap:14px;position:relative;
+      transition:outline-color .4s,box-shadow .4s,opacity .42s var(--eo),transform .62s var(--eo);outline:2px dashed transparent;outline-offset:5px}
+.cell p.tick{font-family:var(--math);font-size:25px;color:var(--orchid)}
+.cell svg.ic{width:30px;height:30px;flex:none}
+#s-bound[data-step="2"] .cell.hx,#s-bound[data-step="3"] .cell.hx{outline-color:var(--pollen)}
+.bmx>.b.on{transition-delay:calc(var(--i,0) * 70ms)}
+.vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- implementation ---------- */
+#s-impl{grid-template-columns:900px 1fr}
+.fnlist{display:grid;grid-template-columns:auto 1fr;column-gap:0;font-size:19px;margin-bottom:30px}
+.fnlist code{padding-right:32px}
+.fnlist>*{padding:11px 0;border-bottom:1px solid var(--rule)}
+.fnlist>:nth-child(-n+2){border-top:1px solid var(--rule2)}
+.fnlist code{font:500 17.5px/1.5 var(--mono);color:var(--sky)}
+.fnlist span{color:var(--muted);line-height:1.5}
+pre.code{font:400 17px/1.65 var(--mono);background:var(--panel);border:1px solid var(--rule);padding:20px 26px;border-radius:10px;margin:0;overflow-x:auto;white-space:pre;color:var(--text)}
+pre.code .fl{color:var(--sky)} pre.code .cn{color:var(--faint)}
+
+/* ---------- scope ---------- */
+#s-scope{grid-template-columns:720px 1fr;gap:88px}
+#s-scope .rule{width:44px;height:4px;border-radius:2px;background:var(--orchid);margin:10px 0 26px}
+.state{font:600 34px/1.3 var(--sans);letter-spacing:-.014em;max-width:27ch;text-wrap:balance}
+ul.clean{list-style:none;margin:0;padding:0;font:400 20.5px/1.52 var(--sans)}
+ul.clean li{position:relative;padding:0 0 16px 28px;margin-bottom:16px;border-bottom:1px solid var(--rule);text-wrap:pretty}
+ul.clean li:last-child{border-bottom:0}
+ul.clean li::before{content:"";position:absolute;left:2px;top:.62em;width:8px;height:8px;border-radius:2px;background:var(--rule2)}
+ul.clean b{font-weight:600}
+
+/* ---------- svg classes ---------- */
+.t-text{fill:var(--text)} .t-muted{fill:var(--muted)} .t-faint{fill:var(--faint)} .t-orchid{fill:var(--orchid)} .t-sky{fill:var(--sky)} .t-leaf{fill:var(--leaf)} .t-pollen{fill:var(--pollen)}
+.t-onorchid{fill:var(--on-orchid)} .t-onsky{fill:var(--on-sky)} .t-ontail{fill:var(--on-tail)}
+.s-text{stroke:var(--text)} .s-muted{stroke:var(--muted)} .s-faint{stroke:var(--faint)} .s-rule{stroke:var(--rule)} .s-rule2{stroke:var(--rule2)} .s-bg{stroke:var(--bg)} .s-orchid{stroke:var(--orchid)} .s-sky{stroke:var(--sky)}
+.f-grey{fill:var(--grey)} .f-leaf{fill:var(--leaf)} .f-pollen{fill:var(--pollen)} .f-orchid{fill:var(--orchid)} .f-sky{fill:var(--sky)} .f-panel{fill:var(--panel)} .f-tail{fill:var(--tail)} .f-bg{fill:var(--bg)} .f-rule{fill:var(--rule)} .f-none{fill:none}
+svg text{font-family:var(--sans);font-variant-numeric:lining-nums}
+svg .mt{font-family:var(--math)}
+
+/* ---------- final-manuscript scenes ---------- */
+.eyebrow{font:500 15px/1.45 var(--sans);color:var(--muted);margin:0 0 20px;max-width:56ch}
+.eyebrow cite{font-style:italic;color:var(--text)}
+#s-title .lede{max-width:46ch;font-size:21px}
+#s-title .display{font-size:50px}
+.sref{color:var(--sky);cursor:pointer;text-decoration:underline dotted 1.5px;text-underline-offset:3px;white-space:nowrap}
+.sref:hover{text-decoration-style:solid}
+table.rt td.na{color:var(--faint)}
+table.rt th:last-child{font-size:13px}
+.tnote{font-size:15px!important;margin:10px 0 0!important;max-width:none!important}
+/* evidence */
+.ev{display:flex;flex-direction:column}
+.evrow{display:grid;grid-template-columns:210px 250px 1fr;column-gap:34px;padding:12px 0 11px;border-bottom:1px solid var(--rule);align-items:start}
+.evrow.evhd{padding:0 0 10px;border-bottom:1.5px solid var(--rule2);font:500 15px var(--sans);color:var(--muted)}
+.evrow .pu{font:400 19px/1.35 var(--sans)}
+.evrow .pu b{font-weight:600}
+.evrow .rg{display:flex;flex-direction:column;gap:7px}
+.evrow .rgn{font:600 17px/1.3 var(--sans)}
+.evrow .ssb{display:block;height:8px;width:190px;background:var(--rule);border-radius:4px;overflow:hidden}
+.evrow .ssb i{display:block;height:100%;width:calc(var(--s) * 100%);min-width:2px;background:var(--orchid)}
+.evrow .ssl{font:400 14.5px/1.3 var(--sans);color:var(--muted)}
+.evrow ul{margin:0;padding:0 0 0 18px;font:400 16.5px/1.45 var(--sans)}
+.evrow li{margin-bottom:5px;text-wrap:pretty}
+.evrow li::marker{color:var(--faint)}
+.evnote{margin-top:14px!important;max-width:none!important;font-size:16.5px!important}
+/* per-scene type size for denser right columns */
+#s-ae .eq,#s-skew .eq,#s-div .eq{font-size:25px}
+#s-ae .eq .gloss,#s-skew .eq .gloss,#s-div .eq .gloss,#s-rec .eq .gloss{font-size:17px;margin-bottom:18px}
+#s-decomp .eq,#s-fruit .eq,#s-estc .eq{font-size:24px}
+#s-decomp .eq .gloss,#s-fruit .eq .gloss,#s-estc .eq .gloss,#s-bound .eq .gloss,#s-res .eq .gloss,#s-pred .eq .gloss{font-size:17px;margin-bottom:18px}
+#s-decomp .eq .line.big{font-size:32px}
+/* open settings: 2 x 2 factorial */
+.fmx{display:grid;grid-template-columns:168px 1fr 1fr;grid-template-rows:auto 1fr 1fr auto;gap:14px;height:560px}
+.fh{display:flex;flex-direction:column;gap:4px;font:400 15px/1.35 var(--sans);color:var(--muted)}
+.fh b{font:600 18px/1.25 var(--sans);color:var(--text)}
+.fh.col{align-self:end;padding:0 4px 2px}
+.fh.row{align-self:center}
+.fh.row em{font-style:normal;color:var(--orchid);font-weight:600;font-size:14.5px;margin-top:6px;opacity:0;transition:opacity .4s}
+#s-bound[data-step="2"] .fh.row em,#s-bound[data-step="3"] .fh.row em,#s-bound[data-step="4"] .fh.row em{opacity:1}
+.fcell{background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:12px 16px 14px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;column-gap:16px;position:relative;transition:background-color .45s,border-color .45s,opacity .42s var(--eo),transform .62s var(--eo)}
+.fcell .fname{grid-column:1 / -1;font:600 12px var(--sans);letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.fcell .kk{display:flex;flex-direction:column;gap:3px;align-self:center;padding:6px 8px;margin:-6px -8px;border-radius:8px;outline:2px dashed transparent;outline-offset:2px;transition:outline-color .4s}
+.fcell .kl{font:500 13.5px var(--sans);color:var(--muted)}
+.fcell .me{font-family:var(--math);font-size:22px;white-space:nowrap}
+.fcell .red{font:600 19px var(--sans);color:var(--orchid)}
+.fcell .hh{font-family:var(--math);font-size:16.5px;color:var(--muted);opacity:0;transition:opacity .45s}
+.fcell .hh::before{content:"H ";font-style:italic}
+#s-bound[data-step="3"] .fcell .hh,#s-bound[data-step="4"] .fcell .hh{opacity:1}
+#s-bound[data-step="2"] .fcell.even,#s-bound[data-step="3"] .fcell.even,#s-bound[data-step="4"] .fcell.even{background:var(--tint);border-color:color-mix(in srgb,var(--orchid) 35%,var(--rule))}
+#s-bound[data-step="3"] .fcell.inp,#s-bound[data-step="4"] .fcell.inp{box-shadow:inset 0 0 0 2px var(--sky)}
+#s-bound[data-step="4"] .fcell.k150lo .kk:first-of-type{outline-color:var(--pollen)}
+.fkey{grid-column:2 / -1;font:400 14.5px var(--sans);color:var(--muted);margin:0}
+.fkey .me{font-family:var(--math);color:var(--text)}
+.fkey .hh{font-family:var(--math);font-style:italic}
+.fmx>.b.on{transition-delay:calc(var(--i,0) * 60ms)}
+/* implementation, second list */
+.fnlist.fn2{margin:26px 0 0}
+.fnlist.fn2 code{color:var(--orchid)}
+/* predictions */
+ol.preds{list-style:none;margin:0;padding:0;counter-reset:pr}
+ol.preds li{counter-increment:pr;position:relative;background:var(--panel);border:1px solid var(--rule);border-radius:14px;padding:20px 26px 20px 74px;margin-bottom:16px;font:400 19.5px/1.5 var(--sans);text-wrap:pretty}
+ol.preds li::before{content:counter(pr);position:absolute;left:22px;top:20px;width:34px;height:34px;border-radius:50%;background:var(--tint);color:var(--orchid);font:600 17px/34px var(--sans);text-align:center}
+ol.preds li b{font-weight:600}
+#s-scope .clean{font-size:19px}
+
+/* dense right columns: glosses use the full column width */
+#s-pat .eq .gloss,#s-ae .eq .gloss,#s-div .eq .gloss,#s-fruit .eq .gloss,#s-decomp .eq .gloss,#s-estc .eq .gloss,#s-res .eq .gloss{max-width:none}
+#s-pat .eq .gloss{margin-bottom:12px;line-height:1.45}
+#s-pat table.rt td{padding-top:4px;padding-bottom:3px}
+#s-div .eq .gloss,#s-fruit .eq .gloss{margin-bottom:14px;line-height:1.48}
+#s-div .eq .line{margin-bottom:2px}
+#s-div .eq .gloss,#s-estc .eq .gloss{font-size:16px;line-height:1.45;margin-bottom:11px}
+#s-estc .eq .line{margin-bottom:2px}
+#s-impl .fnlist{margin-bottom:18px}
+#s-impl .fnlist span{line-height:1.42}
+#s-impl .fnlist code{line-height:1.42}
+.fnlist.fn2{margin-top:16px}
+#s-impl .fn2 code{font-size:15.5px;padding-right:24px}
+#s-impl .fn2 span{font-size:16.5px}
+#s-pat .eq .line{margin-bottom:2px}
+#s-pat .eq .gloss{margin-bottom:9px;font-size:15.5px}
+#s-pat table.rt th{padding-bottom:6px}
+#s-pat table.rt td{padding-top:3px;padding-bottom:2px}
+#s-pat .tnote{margin-top:6px!important;font-size:14.5px!important}
+.dist .drow{padding:5px 0}
+/* ---------- primer (appendix) ---------- */
+.f-al0{fill:var(--al-a)} .f-al1{fill:var(--al-b)} .f-al2{fill:var(--al-c)} .f-al3{fill:var(--al-d)} .t-onal{fill:var(--on-al)}
+svg text.sf,svg tspan.sf{font-feature-settings:"frac" 1}
+#ptag{display:none;font:600 11.5px/1 var(--sans);letter-spacing:.09em;text-transform:uppercase;color:var(--orchid);background:var(--tint);border-radius:999px;padding:6px 10px;align-self:center;margin-right:-4px}
+body.inprimer #ptag{display:inline-block}
+body.inprimer #hd .no{color:var(--orchid)}
+#plinks{margin-left:auto;display:flex;align-items:center;gap:8px;font:500 13px var(--sans);color:var(--muted);align-self:center;white-space:nowrap;padding-left:24px}
+#plinks button{font:500 13px var(--sans);color:var(--text);background:var(--panel);border:1px solid var(--rule);border-radius:999px;padding:5px 12px;cursor:pointer;transition:border-color .2s}
+#plinks button b{color:var(--orchid);font-weight:600;margin-right:6px}
+#plinks button:hover{border-color:var(--rule2)}
+#plinks button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+body.rec #plinks{display:none}
+.primer .eq{font-size:25px}
+.primer .eq .gloss{font-size:16.5px;margin-bottom:18px}
+.align.words>.l{text-align:left}
+#p-gd .eq{font-size:24px}
+#p-gd .eq .line.big{font-size:30px}
+#p-gd .eq .gloss{margin-bottom:14px}
+.primer .eq .line.big{font-size:32px}
+.dist{display:flex;flex-direction:column}
+.drow{display:grid;grid-template-columns:190px 290px 1fr 430px;column-gap:30px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rule)}
+.drow.dhd{padding:0 0 10px;border-bottom:1.5px solid var(--rule2);font:500 15px var(--sans);color:var(--muted);align-items:end;letter-spacing:.01em}
+.drow .nm{font-family:var(--math);font-size:24px;white-space:nowrap}
+.drow .nm.sm{font:500 18px/1.3 var(--sans);white-space:normal}
+.drow .what{font:400 19px/1.45 var(--sans);text-wrap:pretty}
+.drow .where{font:400 16.5px/1.45 var(--sans);color:var(--muted);text-wrap:pretty}
+svg.gly{width:190px;height:76px;display:block;overflow:visible}
+#p-dist .seed{margin-top:18px;max-width:none;font-size:18px}
+#ticks .gap{flex:0 0 16px}
+#ticks button.pr::after{background:repeating-linear-gradient(90deg,var(--rule) 0 5px,transparent 5px 8px)}
+#ticks button.pr.done::after{background:repeating-linear-gradient(90deg,var(--faint) 0 5px,transparent 5px 8px)}
+#ticks button.pr.now::after{background:var(--orchid)}
+
+/* ---------- rail ---------- */
+#rail{position:absolute;left:72px;right:72px;bottom:26px;height:44px;display:flex;align-items:center;gap:24px;transition:opacity .3s}
+#ticks{display:flex;gap:5px;flex:1;align-self:stretch;align-items:center}
+#ticks button{flex:1;height:30px;border:0;background:none;cursor:pointer;padding:0;position:relative;color:var(--text)}
+#ticks button::after{content:"";position:absolute;left:0;right:0;top:50%;height:3px;margin-top:-1.5px;border-radius:2px;background:var(--rule);transition:background-color .3s,height .2s,margin .2s}
+#ticks button.done::after{background:var(--faint)}
+#ticks button.now::after{background:var(--orchid);height:5px;margin-top:-2.5px}
+#ticks button:hover::after{background:var(--muted)}
+#ticks button.now:hover::after{background:var(--orchid)}
+#ticks .tip{position:absolute;bottom:34px;left:50%;transform:translate(-50%,4px);white-space:nowrap;font:500 13px var(--sans);color:var(--text);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:5px 9px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .15s,transform .15s}
+#ticks .tip b{color:var(--muted);font-weight:500;margin-right:6px;font-variant-numeric:tabular-nums}
+#ticks button:hover .tip,#ticks button:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
+#ticks button:focus-visible{outline:2px solid var(--sky);outline-offset:2px;border-radius:3px}
+#stepinfo{display:flex;align-items:center;gap:12px;font:500 14px var(--sans);color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+#stepinfo .pips{display:flex;gap:4px}
+#stepinfo .pips i{width:6px;height:6px;border-radius:50%;background:var(--rule2)}
+#stepinfo .pips i.on{background:var(--muted)}
+#stepinfo .pips i.at{background:var(--orchid)}
+.ctl{display:flex;gap:8px}
+.ctl button{font:500 15px var(--sans);color:var(--text);background:var(--panel);border:1px solid var(--rule);border-radius:8px;height:38px;padding:0 15px;cursor:pointer;transition:border-color .2s,background-color .2s,color .2s}
+.ctl button:hover{border-color:var(--rule2)}
+.ctl button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.ctl button.pri{background:var(--text);color:var(--bg);border-color:var(--text)}
+.ctl button[aria-pressed="true"]{border-color:var(--orchid);color:var(--orchid);background:var(--tint)}
+#dwell{font-variant-numeric:tabular-nums;margin-left:6px;color:inherit;opacity:.8}
+#dwell:empty{display:none}
+
+/* ---------- speaker notes and key help ---------- */
+#notes{position:absolute;left:72px;right:72px;bottom:94px;background:var(--panel);border:1px solid var(--rule);border-radius:12px;padding:20px 28px 22px;font:400 20px/1.58 var(--sans);box-shadow:var(--shadow);display:none;z-index:5;max-height:290px;overflow:auto}
+body.rec #notes{bottom:26px}
+#notes.show{display:block}
+#notes h4{margin:0 0 8px;font:600 13px var(--sans);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:flex;justify-content:space-between;gap:20px}
+#notes h4 span{text-transform:none;letter-spacing:0;font-weight:500}
+#notetext{max-width:78ch}
+#help{position:absolute;top:14px;right:72px;font:400 13px var(--sans);color:var(--muted);z-index:4;display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:flex-end}
+#help span{white-space:nowrap}
+#help kbd{font:500 11.5px/1 var(--sans);color:var(--text);background:var(--panel);border:1px solid var(--rule2);border-bottom-width:2px;border-radius:4px;padding:2px 5px;margin-right:4px}
+
+/* Orchidarc presentation edition; all fonts have offline system fallbacks. */
+:root {--bg:#efe9dd;--panel:#fffaf0;--text:#1b1a17;--muted:#5c6b4a;--faint:#85846e;--rule:#d7cfbf;--rule2:#bcb7a8;--sans:"Segoe UI",system-ui,sans-serif;--math:"Cambria Math",Cambria,"Times New Roman",serif;--shadow:0 18px 50px #14281c20;}
+:root[data-theme="dark"] {--bg:#0b2017;--panel:#152f21;--text:#f3ebdb;--muted:#b3bea7;--rule:#37523c;--rule2:#597152;}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b2017;--panel:#152f21;--text:#f3ebdb;--muted:#b3bea7;--rule:#37523c;--rule2:#597152;}}
+.display{font:400 66px/1.05 Georgia,serif;max-width:17ch;letter-spacing:-.025em;color:var(--text)}
+#s-title .eyebrow{max-width:62ch;line-height:1.6}#s-title .lede{max-width:62ch;font-size:23px;line-height:1.5}#s-title .meta{max-width:100ch;}
+#atlas-nav{position:absolute;left:72px;top:30px;font:500 13px var(--sans);color:var(--muted);display:flex;align-items:center;gap:12px;z-index:5}
+#atlas-nav select{font:500 13px var(--sans);max-width:240px;background:var(--panel);color:var(--text);border:1px solid var(--rule2);border-radius:4px;padding:6px;}
+body:not(.first) #atlas-nav{top:91px;}body.rec #atlas-nav{visibility:hidden}button:focus-visible,select:focus-visible{outline:3px solid var(--pollen);outline-offset:3px;}
+
+#p-stats .eq .gloss{font-size:17.5px;line-height:1.42;margin-bottom:22px;max-width:none}#s-rec .eq .line{font-size:24px}#s-rec .eq .align{font-size:26px}
+
+#p-stats .eq .gloss,#s-bound .eq .gloss,#p-gd .eq .gloss{font-size:17.5px;line-height:1.42;margin-bottom:22px;max-width:none}#s-rec .eq .line{font-size:24px}#s-rec .eq .align{font-size:26px}
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage"><div id="atlas-nav"><span>ORCHIDARC / MODEL ATLAS</span><select id="scene-picker" aria-label="Choose a model scene"></select></div>
+<header id="hd"><span class="no" id="sno"></span><span id="ptag">Primer</span><h1 id="stitle"></h1><nav id="plinks" aria-label="Primer pages"></nav></header>
+<div id="help" aria-hidden="true"><span><kbd>→</kbd>next</span><span><kbd>←</kbd>back</span><span><kbd>R</kbd>replay</span><span><kbd>A</kbd>autoplay</span><span><kbd>+</kbd><kbd>−</kbd>dwell</span><span><kbd>N</kbd>script</span><span><kbd>P</kbd>primer</span><span><kbd>H</kbd>hide controls</span><span><kbd>F</kbd>full screen</span><span><kbd>T</kbd>theme</span></div>
+
+<!-- Scene text follows the final manuscript and Supporting Information
+     (Orchid paternity: pollinaria, single-sire fruits and pollination-dependent genetic funnels). -->
+
+<!-- TITLE -->
+<section class="scene two" id="s-title" data-title="" data-short="Model">
+  <div>
+    <div class="rule" aria-hidden="true"></div>
+    <p class="eyebrow">Companion to <cite>Orchid paternity: pollinaria, single-sire fruits and pollination-dependent genetic funnels</cite></p>
+    <h2 class="display">The orchid paternity model</h2>
+    <p class="lede b" data-b="1">A stochastic, individual-based simulation of diploid adults through 50 discrete, non-overlapping generations, without clonal growth, dormancy or a seed bank. Every scenario is neutral and cross-only: the mother is excluded from her own donor pool, so the model describes outcrossing, as in self-incompatible orchids.</p>
+    <p class="lede b" data-b="2">Paternity regimes are specified distributions, not fitted species or evolving traits: single-sire fractions are set by the regime rather than emerging from it, and pollen transport is not simulated.</p>
+    <p class="small meta">Engine <code>pollinaria_model_v3_3.py</code>, release v3.3.0 (<code>params_v3_3_final.json</code>), with the 2026 pollination-opportunity, factorial and establishment-correlation runs.</p>
+  </div>
+  <svg class="vis" id="v-title" viewBox="0 0 532 470" role="img" aria-label="K = 500 adults, one dot each"></svg>
+</section>
+
+<!-- PARAMETERS -->
+<section class="scene two" id="s-params" data-title="The closed reference setting" data-short="Inputs">
+  <div>
+    <table class="pt">
+      <tr><th>Symbol</th><th>Meaning</th><th style="text-align:right">Value</th></tr>
+      <tr class="b kf" data-b="1"><td class="m"><i>K</i></td><td>Initial adults and adult carrying capacity in every later generation</td><td class="v">500</td></tr>
+      <tr class="b" data-b="2"><td class="m"><i>T</i>; <i>n</i><sub>rep</sub></td><td>Generations; replicate populations per regime</td><td class="v">50; 100</td></tr>
+      <tr class="b kf" data-b="3"><td class="m"><i>φ</i>; <i>L</i>; <i>f</i></td><td>Flowering probability; mean flowers; fruit set</td><td class="v">0.7; 6; 0.25</td></tr>
+      <tr class="b" data-b="4"><td class="m"><i>S</i>; <i>ε</i>; <i>q</i></td><td>Seed number; establishment probability; fruit-level establishment gate</td><td class="v">10<sup>6</sup>; 10<sup>−5</sup>; 0.5</td></tr>
+      <tr class="b" data-b="5"><td class="m"><i>a</i></td><td>Gamma shape for resident donor weights</td><td class="v">0.6</td></tr>
+      <tr class="b" data-b="6"><td class="m"><i>x</i>; <i>m</i></td><td>External paternity probability; adult immigration rate</td><td class="v">0; 0</td></tr>
+    </table>
+    <div class="calc b" data-b="7">E[fruits] = <i>K</i> <i>φ</i> <i>L</i> <i>f</i> = 500 × 0.7 × 6 × 0.25 = <span class="hl">525</span></div>
+  </div>
+  <div class="eq">
+    <p class="gloss b" data-b="6">“Closed” means both external inputs are switched off: no external pollen (<i class="m">x</i> = 0) and no adult immigration (<i class="m">m</i> = 0).</p>
+    <p class="gloss b" data-b="7">These are model inputs, not estimates for Orchidaceae. The 525 fruits are expected before any recruitment filter. Later scenes vary fruit set, donor evenness, external input and the correlation of establishment within fruits.</p>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section class="scene one" id="s-events" data-title="One generation, in order" data-short="Events">
+  <div>
+    <div class="flow">
+      <span></span><span class="flowhd">Stage</span><span class="flowhd">Distribution</span><span class="flowhd" style="text-align:right;white-space:nowrap;margin-left:-120px">Expected, closed reference</span><span></span>
+      <div class="row b" data-b="1"><span class="node"></span><span class="nm">Adults</span><span class="ds"><i>N</i><sub><i>t</i></sub> ≤ <i>K</i></span><span class="ct" data-v="500">500</span></div>
+      <div class="row b" data-b="2"><span class="node"></span><span class="nm">Flowering</span><span class="ds"><i>F</i><sub><i>i</i></sub> ~ Bernoulli(<i>φ</i>)</span><span class="ct" data-v="350">350</span></div>
+      <div class="row b" data-b="3"><span class="node"></span><span class="nm">Flowers</span><span class="ds"><i>n</i><sub><i>i</i></sub> ~ Poisson(<i>L</i>)</span><span class="ct" data-v="2100">2,100</span></div>
+      <div class="row b" data-b="4"><span class="node"></span><span class="nm">Fruits</span><span class="ds">fruits<sub><i>i</i></sub> ~ Binomial(<i>n</i><sub><i>i</i></sub>, <i>f</i>)</span><span class="ct" data-v="525">525</span></div>
+      <div class="row b" data-b="5"><span class="node"></span><span class="nm">Paternity</span><span class="ds">shares (<i>p</i><sub>1</sub>, …, <i>p</i><sub><i>k</i></sub>) within each fruit</span><span class="ct">per fruit</span></div>
+      <div class="row b" data-b="6"><span class="node"></span><span class="nm">Recruitment</span><span class="ds"><i>R</i><sub><i>f</i></sub> ~ Poisson(<i>B</i><sub><i>f</i></sub> <i>S</i> <i>ε</i>), <i>B</i><sub><i>f</i></sub> ~ Bernoulli(<i>q</i>)</span><span class="ct" data-v="2625">2,625</span></div>
+      <div class="row b" data-b="7"><span class="node"></span><span class="nm">Inheritance</span><span class="ds">one allele from each parent, probability ½</span><span class="ct">per recruit</span></div>
+      <div class="row b" data-b="8"><span class="node"></span><span class="nm">Immigration</span><span class="ds"><i>I</i> ~ Poisson(<i>m</i><i>K</i>)</span><span class="ct" data-v="0">0</span></div>
+      <div class="row b" data-b="9"><span class="node"></span><span class="nm">Regulation</span><span class="ds">uniform sample of <i>K</i>, without replacement</span><span class="ct" data-v="500">500</span></div>
+    </div>
+    <div class="aside b" data-b="10">
+      <p>Previous adults do not survive: generations are discrete and non-overlapping. Generation length is abstract, not a calendar year.</p>
+      <p>Extinction is absorbing. If fewer than two adults flower the run stops, before immigration, so there is no demographic rescue.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PATERNITY -->
+<section class="scene two" id="s-pat" data-title="Assigning paternity within a fruit" data-short="Paternity">
+  <svg class="vis" id="v-pat" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <div class="align">
+        <span class="l"><i>k</i></span><span class="r">= min(1 + <i>D</i>′, <i>k</i><sub>max</sub>)</span>
+        <span class="l"><i>D</i>′</span><span class="r">~ Poisson(<i>λ</i>(1 − <i>e</i>))</span>
+      </div>
+      <p class="gloss">One guaranteed candidate. Extra arrivals <i class="m">D</i> ~ Poisson(<i class="m">λ</i>) each survive exclusion with probability 1 − <i class="m">e</i>. Candidates are not necessarily distinct fathers.</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line">external with probability <i>x</i>, otherwise</p>
+      <p class="line"><i>d</i><sub><i>j</i></sub> = <span class="frac"><span><i>G</i><sub><i>j</i></sub></span><span>Σ <i>G</i></span></span>, <i>G</i><sub><i>j</i></sub> ~ Gamma(<i>a</i>, 1), <i>j</i> ≠ mother</p>
+      <p class="gloss">Flowering residents are drawn with replacement, in proportion to donor weights redrawn each generation; the weights represent unequal access to siring opportunities.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line">(<i>p</i><sub>1</sub>, …, <i>p</i><sub><i>k</i></sub>) ~ Dirichlet(<i>bα</i>, <i>α</i>, …, <i>α</i>)</p>
+      <p class="gloss">Larger <i class="m">α</i> gives more even shares; <i class="m">b</i> boosts the first candidate. If <i class="m">k</i> = 1 its share is 1. Recruits are later assigned fathers by multinomial sampling from these shares.</p>
+    </div>
+    <div class="b" data-b="4">
+      <table class="pt rt">
+        <tr><th>Regime</th><th><i class="m">λ</i></th><th><i class="m">e</i></th><th><i class="m">α</i></th><th><i class="m">b</i></th><th><i class="m">k</i><sub>max</sub></th><th>1 sire</th></tr>
+        <tr><td>Strict single paternity</td><td class="v">0</td><td class="v na">–</td><td class="v na">–</td><td class="v na">–</td><td class="v">1</td><td class="v">100%</td></tr>
+        <tr><td>Low sire</td><td class="v">1.2</td><td class="v">0.62</td><td class="v">0.7</td><td class="v">3</td><td class="v">4</td><td class="v">63.6%</td></tr>
+        <tr><td>Granular reference</td><td class="v">3.5</td><td class="v">0</td><td class="v">1.5</td><td class="v">1</td><td class="v">8</td><td class="v">3.1%</td></tr>
+        <tr><td>High mixing</td><td class="v">7</td><td class="v">0</td><td class="v">4</td><td class="v">1</td><td class="v">16</td><td class="v">0.10%</td></tr>
+      </table>
+      <p class="gloss tnote">Fruits with a single candidate occur with probability exp[−<i class="m">λ</i>(1 − <i class="m">e</i>)], so single-sire fractions (last column, as run) are specified by the regime rather than emerging from it. Pollen transport is not simulated.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVIDENCE -->
+<section class="scene one" id="s-evid" data-title="What the regimes stand for" data-short="Evidence">
+  <div class="ev">
+    <div class="evrow evhd"><span>Pollen unit</span><span>Model regime</span><span>Primary progeny evidence</span></div>
+    <div class="evrow b" data-b="1">
+      <div class="pu"><b>Hard pollinia</b>, deposited whole</div>
+      <div class="rg"><span class="rgn">Strict single paternity</span><span class="ssb" style="--s:1"><i></i></span><span class="ssl">100% single-sire fruits</span></div>
+      <ul>
+        <li><i>Phalaenopsis pulcherrima</i>, the strongest evidence: correlated paternity 0.999 across eight capsules at 15 microsatellite loci, an effective donor number of 1.00; fathers 114–346 m from their mothers (Zhang et al. 2019).</li>
+        <li><i>Rhynchostylis gigantea</i>, dense markers but few seedlings per capsule: each of ten capsules a single full-sib family at 2005 SNP loci; four were selfed (Li et al. 2026).</li>
+        <li><i>Laelia rubescens</i>, many capsules but allozymes: no third paternal allele, which would have contradicted the full-sib assumption, among 459 progeny arrays; 34% of capsules sired from outside the host-tree population (Trapnell and Hamrick 2005, 2006).</li>
+      </ul>
+    </div>
+    <div class="evrow b" data-b="2">
+      <div class="pu"><b>Soft or sectile</b> pollinia</div>
+      <div class="rg"><span class="rgn">Low sire</span><span class="ssb" style="--s:.636"><i></i></span><span class="ssl">63.6% single-sire fruits</span></div>
+      <ul>
+        <li>Soft pollinia, direct progeny evidence: in <i>Chiloglottis valida</i> and <i>C.</i> aff. <i>jeanesii</i>, 27% and 41% of capsules multiply sired, a mean minimum of 1.35 sires and a maximum of three (Whitehead, Linde and Peakall 2015).</li>
+        <li>Sectile pollinia, deposition from several donors, which permits multiple paternity: stigmas of single <i>Platanthera</i> plants received pollen from two or three donors (Brzosko et al. 2022).</li>
+      </ul>
+    </div>
+    <div class="evrow b" data-b="3">
+      <div class="pu"><b>Monad</b> (granular) pollen</div>
+      <div class="rg"><span class="rgn">Granular reference, high mixing</span><span class="ssb" style="--s:.031"><i></i></span><span class="ssl">3.1% and 0.10% single-sire fruits</span></div>
+      <ul>
+        <li><i>Mimulus ringens</i>: more than 95% of fruits had two or more outcross sires; 1/<i class="m">r</i><sub>p</sub> = 3.97 after single pollinator probes (Mitchell et al. 2005, 2013).</li>
+        <li><i>Ipomopsis aggregata</i>: at least 68% of multiseeded fruits multiply sired (Campbell 1998).</li>
+      </ul>
+    </div>
+    <div class="evrow b" data-b="4">
+      <div class="pu"><b>Milkweed</b> pollinaria</div>
+      <div class="rg"><span class="rgn">Milkweed comparison</span><span class="ssb" style="--s:1"><i></i></span><span class="ssl">single sire, different demography</span></div>
+      <ul>
+        <li><i>Asclepias exaltata</i>: multiple paternity within fruits infrequent (Broyles and Wyatt 1990); 29–50% of seeds sired from outside each population (Broyles, Schnabel and Wyatt 1994).</li>
+        <li><i>A. syriaca</i>: no significant within-fruit multiple paternity (Gold and Shore 1995).</li>
+      </ul>
+    </div>
+    <p class="gloss evnote b" data-b="5">The hard-pollinium evidence comes from three species and 477 capsule progeny arrays, only 18 genotyped with microsatellites or SNPs. With ten seedlings per capsule, a sire contributing 10% of the seeds is missed in about one capsule in three (0.9<sup>10</sup> ≈ 0.35): the data exclude frequent multiple paternity with a substantial second sire, but not rare multiply sired capsules or a second sire with a small share.</p>
+  </div>
+</section>
+
+<!-- Ae and paternal identity -->
+<section class="scene two" id="s-ae" data-title="Effective sires per fruit, Aₑ, and paternal identity, π̄" data-short="Aₑ, π̄">
+  <svg class="vis" id="v-ae" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line big"><i>A</i><sub>e</sub> = <span class="frac"><span>1</span><span>Σ<sub><i>i</i></sub> <i>p</i><span class="ss"><span>2</span><span><i>i</i></span></span></span></span></p>
+      <p class="gloss"><i class="m">p</i><sub>i</sub> is the share of distinct father <i class="m">i</i>. Shares of a repeated resident are merged first; each external candidate is its own father.</p>
+      <div class="align ex">
+        <span class="l">(⅓, ⅓, ⅓)</span><span class="r">→ <i>A</i><sub>e</sub> = 3.00</span>
+        <span class="l">(0.8, 0.1, 0.1)</span><span class="r">→ <i>A</i><sub>e</sub> = 1.52</span>
+      </div>
+      <p class="gloss">Three fathers each, yet very different concentration.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line"><i>π</i> = Σ<sub><i>i</i></sub> <i>p</i><span class="ss"><span>2</span><span><i>i</i></span></span> = 1/<i>A</i><sub>e</sub></p>
+      <p class="gloss">Within-fruit paternal identity: the probability that two seeds of the fruit share a father. Averaged across fruits, <i class="m">π̄</i> is the model analogue of the correlated paternity <i class="m">r</i><sub>p</sub> estimated from progeny arrays, and 1/<i class="m">π̄</i> corresponds to the effective number of pollen donors (Smouse and Robledo-Arnuncio 2005).</p>
+    </div>
+    <p class="gloss b" data-b="4">Aₑ is assigned before recruitment, so a small paternal share may leave no retained offspring at all. Aₑ and single-sire fractions average generations 1–50 within replicates; <i class="m">π̄</i> uses fruits sampled every fifth generation (up to 400 per replicate).</p>
+  </div>
+</section>
+
+<!-- RECRUITMENT -->
+<section class="scene two" id="s-rec" data-title="Recruitment through a shared gate per fruit" data-short="Recruits">
+  <svg class="vis" id="v-rec" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line"><i>B</i><sub><i>f</i></sub> ~ Bernoulli(<i>q</i>)</p>
+      <p class="gloss">One gate per fruit couples all its siblings: a fruit either can recruit or it cannot. The gate represents the shared fate of a capsule’s seeds, which are released together, disperse mostly within a few metres of the mother and depend on patchily distributed mycorrhizal fungi and microsites.</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line"><i>R</i><sub><i>f</i></sub> | <i>B</i><sub><i>f</i></sub> ~ Poisson(<i>B</i><sub><i>f</i></sub> <i>μ</i>), <i>μ</i> = <i>S</i><i>ε</i> = 10</p>
+      <p class="gloss"><i class="m">S</i> is a nominal seed count; the code never creates <i class="m">S</i> individual seeds.</p>
+    </div>
+    <div class="b" data-b="3">
+      <div class="align">
+        <span class="l">E[<i>R</i><sub><i>f</i></sub>]</span><span class="r">= <i>qμ</i> = 5</span>
+        <span class="l">Var(<i>R</i><sub><i>f</i></sub>)</span><span class="r">= <i>qμ</i> + <i>q</i>(1 − <i>q</i>)<i>μ</i><sup>2</sup> = 30</span>
+        <span class="l">P(<i>R</i><sub><i>f</i></sub> = 0)</span><span class="r">= 1 − <i>q</i> + <i>q</i>e<sup>−<i>μ</i></sup> ≈ 0.50002</span>
+      </div>
+      <p class="gloss">Analytical consequences of the implemented distribution, before density regulation: <i class="m">φLfqSε</i> = 5.25 potential recruits per adult. In the code the gate variable is named compatible; it is a recruitment gate, not mating compatibility. The gate is the limiting case of complete within-fruit correlation in establishment; <span class="sref" data-ref="s-estc"></span> relaxes it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- INHERITANCE -->
+<section class="scene two" id="s-inh" data-title="Inheritance of neutral markers" data-short="Alleles">
+  <svg class="vis" id="v-inh" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line">P(father = <i>j</i>) = <i>p</i><sub><i>j</i></sub></p>
+      <p class="gloss">Each recruit draws its father from its fruit’s shares (multinomial sampling).</p>
+      <p class="line">allele from each parent: <i>fa</i> or <i>fb</i>, each ½</p>
+      <p class="gloss">Resident alleles are stored in the arrays fa and fb.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line">founder <i>i</i> carries alleles 2<i>i</i> and 2<i>i</i> + 1</p>
+      <p class="line">identity = allele_id // 2</p>
+      <p class="gloss">Each generation-zero adult is one founder carrying a unique pair of marker alleles, so a population at <i class="m">K</i> = 500 starts with 500 founders and 1,000 alleles. Each external donor and each immigrant brings two new alleles.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REGULATION -->
+<section class="scene two" id="s-reg" data-title="Immigration and density regulation" data-short="Cap K">
+  <svg class="vis" id="v-reg" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line"><i>I</i> ~ Poisson(<i>m</i><i>K</i>)</p>
+      <p class="gloss">Immigrant adults join the pool of potential recruits before regulation. In the closed reference <i class="m">m</i> = 0.</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line">if <i>n</i><sub>pool</sub> &gt; <i>K</i>: keep a uniform sample of <i>K</i></p>
+      <p class="gloss">Sampling is without replacement. Otherwise every candidate remains.</p>
+    </div>
+    <p class="gloss b" data-b="3">Previous adults do not survive. With about 2,625 potential recruits for 500 places, most assigned offspring never become adults. From here on, a recruit is an offspring retained through establishment and density regulation into the next adult generation.</p>
+  </div>
+</section>
+
+<!-- SKEW -->
+<section class="scene two" id="s-skew" data-title="Male reproductive skew: CV²ₘ and Mₑ" data-short="CV²ₘ">
+  <svg class="vis" id="v-skew" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <div class="align">
+        <span class="l"><i>w</i><sub><i>i</i></sub></span><span class="r">= retained recruits sired by resident <i>i</i></span>
+        <span class="l">CV<span class="ss"><span>2</span><span>m</span></span></span><span class="r">= <span class="frac"><span>Var(<i>w</i>)</span><span><i>w̄</i><sup>2</sup></span></span>, over all <i>N</i> residents</span>
+        <span class="l"><i>M</i><sub>e</sub></span><span class="r">= <span class="frac"><span><i>N</i></span><span>1 + CV<span class="ss"><span>2</span><span>m</span></span></span></span> = <span class="frac"><span>1</span><span>Σ<sub><i>i</i></sub> <i>c</i><span class="ss"><span>2</span><span><i>i</i></span></span></span></span></span>
+      </div>
+      <p class="gloss"><i class="m">c</i><sub>i</sub> = <i class="m">w</i><sub>i</sub>/Σ<i class="m">w</i>, resident <i class="m">i</i>’s share of resident-sired recruits. <i class="m">N</i> counts all resident adults at the start of the generation, including those that did not flower or sire (ddof = 0). External fathers and immigrants are excluded.</p>
+    </div>
+    <p class="gloss b" data-b="4">CV²ₘ is the opportunity for selection through male genetic contribution (Arnold and Wade 1984); because <i class="m">w</i> is counted after establishment and density regulation, it includes the filtering of whole sibships as well as siring success. Mₑ, the effective number of resident male contributors, is the male component of drift, not population Nₑ, which also includes maternal variance and the male–female covariance (Crow and Denniston 1988; Caballero 1994). The two express the same distribution, so they are not independent evidence. The effective number of mothers, Fₑ, is defined in the same way from each resident mother’s retained recruits.</p>
+  </div>
+</section>
+
+<!-- DECOMPOSITION -->
+<section class="scene two" id="s-decomp" data-title="Donor access plus sibling packaging" data-short="Packaging">
+  <svg class="vis" id="v-decomp" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line big">CV<span class="ss"><span>2</span><span>m</span></span> ≈ <span class="frac"><span>1 + 1/<i>a</i></span><span><i>φ</i></span></span> + <i>r̄</i> <i>π̄</i></p>
+      <p class="gloss">Partitioning each father’s recruits among fruits, in a closed population at carrying capacity (Supporting Methods).</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line">donor access = (1 + 1/<i>a</i>)/<i>φ</i> = 3.81</p>
+      <p class="gloss">Inequality generated by flowering and by gamma donor weights (<i class="m">a</i> = 0.6, <i class="m">φ</i> = 0.7). Mating among fruits, a donor siring capsules on several plants, is captured here and is present in every regime.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line">sibling packaging = <i>r̄</i> <i>π̄</i>, <i>r̄</i> ≈ 1/(<i>φLfq</i>) = 1.91</p>
+      <p class="gloss"><i class="m">r̄</i> is the mean number of retained recruits per establishing fruit. Packaging was 1.91 under strict paternity and 0.73 under granular pollen: the regimes differ only in this term.</p>
+    </div>
+    <div class="b" data-b="4">
+      <p class="line">ΔCV<span class="ss"><span>2</span><span>m</span></span> ≈ (<i>π̄</i><sub>1</sub> − <i>π̄</i><sub>2</sub>)/(<i>φLfq</i>)</p>
+      <p class="gloss">Flowering, flower number, fruit set and the gate act only through their product <i class="m">φLfq</i>, that is, through sibship size, while recruitment is limited by density rather than seed supply. The prediction matched the all-generation mean CV²ₘ within 1.1% in every regime. The milkweed comparison, with fewer and larger sibships (<i class="m">r̄</i> = 4.37), had the highest skew.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DIVERSITY AND DRIFT -->
+<section class="scene two" id="s-div" data-title="Neutral-marker diversity, drift and founder retention" data-short="Drift">
+  <svg class="vis" id="v-div" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line big"><i>H</i> = 1 − Σ<sub><i>j</i></sub> <i>q</i><span class="ss"><span>2</span><span><i>j</i></span></span></p>
+      <p class="gloss"><i class="m">q</i><sub>j</sub> is the frequency of marker allele <i class="m">j</i> among retained adults. <i class="m">H</i> is founder-allele diversity, the gene diversity of the simulated neutral marker, not observed heterozygosity.</p>
+      <p class="line"><i>H</i><sub>0</sub> = 1 − <span class="frac"><span>1</span><span>2<i>K</i></span></span> = 0.999</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line"><i>N</i><sub>eH</sub> ≈ −1/(2<i>β</i>)</p>
+      <p class="gloss">In closed populations without mutation <i class="m">H</i> decays by a factor of <span class="nw">1 − 1/(2Nₑ)</span> per generation, so <i class="m">β</i>, the slope of ln <i class="m">H̄</i> on generation over generations 10–50, gives the inbreeding effective population size, by the large-Nₑ approximation (within 0.5 of the exact inversion at the reported values). External input raises <i class="m">H</i> towards 1 and compresses absolute differences, so homozygosity, 1 − <i class="m">H</i>, is also reported as the relative measure of drift.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line">retention = #{ identities &lt; <i>K</i> still present }</p>
+      <p class="gloss">Founder retention counts generation-zero founders whose marker ancestry persists; identity richness also counts identities introduced later and can stay high while original founders disappear.</p>
+    </div>
+    <p class="gloss b" data-b="4">Summary convention: Aₑ and single-sire fractions average generations 1–50 within replicates; <i class="m">π̄</i> uses fruits sampled every fifth generation; <i class="m">N</i><sub>eH</sub> uses generations 10–50; everything else describes generation 50. Intervals are 95% percentile bootstrap intervals of replicate means (1,000 resamples); contrasts between regimes resample each regime’s replicates independently.</p>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="scene two" id="s-res" data-title="Closed reference at generation 50" data-short="Results">
+  <svg class="vis" id="v-res" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <p class="gloss b" data-b="1">Demography and recruitment are held constant; only the paternity regime differs. <i class="m">K</i> = 500, no external pollen or immigration, 100 populations per regime.</p>
+    <p class="gloss b" data-b="2">Concentrating paternity concentrates siblings among fathers, and their contributions vary more after recruitment.</p>
+    <p class="gloss b" data-b="3">Strict paternity raised CV²ₘ from 4.54 to 5.60 and lowered Mₑ from 90.9 to 76.6, a reduction of 15.7% [13.6, 17.9]. The four regimes form a series that is monotonic in <i class="m">π̄</i>.</p>
+    <p class="gloss b" data-b="4"><i class="m">H</i> was 0.856 under strict paternity and 0.875 under granular pollen: a difference of 0.0191 [0.0093, 0.0294], or 15.2% [7.3, 24.3] more homozygosity.</p>
+    <p class="gloss b" data-b="5"><i class="m">N</i><sub>eH</sub> fell from 187 to 160, a 14.7% [5.5, 22.8] reduction that matches the 15.7% reduction in Mₑ. Strict paternity also retained fewer original founders: 13.08 against 14.96.</p>
+    <p class="gloss b" data-b="6">Mean Mₑ is computed per replicate and then averaged, so it need not equal 500 / (1 + mean CV²ₘ). Bootstrap intervals describe simulation uncertainty under chosen parameters, not uncertainty across orchid taxa.</p>
+  </div>
+</section>
+
+<!-- POLLINATION OPPORTUNITY -->
+<section class="scene two" id="s-fruit" data-title="Fruit set sets the funnel through sibship size" data-short="Fruit set">
+  <svg class="vis" id="v-fruit" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line"><i>ε</i> = 2.5 × 10<sup>−6</sup>/<i>f</i>, so <i>φLfqSε</i> = 5.25</p>
+      <p class="gloss">Strict, low-sire and granular paternity crossed with fruit set from 0.025 to 0.50 (<i class="m">K</i> = 500, closed). Potential recruits per adult stay constant: the gradient changes how a fixed pool is divided among fruits, not total recruitment.</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line"><i>r̄</i>: 0.95 → 19.4 recruits per establishing fruit</p>
+      <p class="gloss">Mₑ fell in every regime, most steeply under single paternity: from 87.5 to 21.1 under strict paternity, but only from 96.5 to 42.0 under granular pollen. Dashed lines: Mₑ = <i class="m">K</i>/[1 + (1 + 1/<i class="m">a</i>)/<i class="m">φ</i> + <i class="m">π̄</i>/(<i class="m">φLfq</i>)].</p>
+    </div>
+    <p class="gloss b" data-b="3">The strict-paternity reduction in Mₑ rose from 9.3% [6.9, 11.6] to 49.8% [47.2, 52.4], following the analytical expectation (all-generation CV²ₘ within 1.2% in all 15 cells). Drift followed, less steeply and with wider intervals: the <i class="m">N</i><sub>eH</sub> reduction was 9.4% at <i class="m">f</i> = 0.50 and 27.6% at <i class="m">f</i> = 0.025, and its interval included zero at <i class="m">f</i> = 0.10.</p>
+    <p class="gloss b" data-b="4">The effective number of mothers, which does not depend on paternity, fell from 147–150 to 23. At <i class="m">f</i> = 0.025 the effective number of fathers under strict paternity (21.1) had converged on it, because each fruit then contributes one mother and one father.</p>
+    <p class="gloss b" data-b="5">The <i class="m">f</i> = 0.25 cells repeat the closed-reference conditions with independent seeds: their 18.5% reduction differs from 15.7% by 2.9 percentage points [−0.3, 5.8], within replicate-set variation.</p>
+  </div>
+</section>
+
+<!-- ESTABLISHMENT CORRELATION -->
+<section class="scene two" id="s-estc" data-title="Shared versus independent establishment" data-short="ρ">
+  <svg class="vis" id="v-estc" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line"><i>u</i> ~ Beta, mean <i>q</i>, variance <i>ρq</i>(1 − <i>q</i>)</p>
+      <p class="gloss">The gate is replaced by a fruit-level establishment multiplier. <i class="m">ρ</i> = 1 recovers the gate exactly, <i class="m">ρ</i> = 0 gives every fruit the mean multiplier <i class="m">q</i>, so that establishment is independent among seeds, and 0.25 and 0.5 give partial correlation (<i class="m">K</i> = 500, closed).</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line">packaging = <i>π̄</i>[<i>q</i> + <i>ρ</i>(1 − <i>q</i>)]/(<i>φLfq</i>)</p>
+      <p class="gloss">Relaxing the gate shrinks sibling packaging by the predicted factor; the generalised decomposition predicted all-generation CV²ₘ within 2.2% in all 16 cells.</p>
+    </div>
+    <p class="gloss b" data-b="3">At <i class="m">f</i> = 0.25 the Mₑ reduction fell from 18.5% with the gate to 9.0% [6.7, 11.4] with independent establishment, and the reductions in <i class="m">N</i><sub>eH</sub> (3.4%) and homozygosity (3.9%) were no longer distinguishable from zero.</p>
+    <p class="gloss b" data-b="4">At <i class="m">f</i> = 0.025 the Mₑ reduction stayed at 44–50% and the <i class="m">N</i><sub>eH</sub> reduction at 22–28% at every level of correlation, all intervals excluding zero. Shared establishment sets the size of the diversity effect at high fruit set, but not the existence of the funnel at low fruit set.</p>
+    <div class="b" data-b="5">
+      <p class="line">ΔCV<span class="ss"><span>2</span><span>m</span></span> ≈ Δ<i>π̄</i> · <i>r̄</i><sub>eff</sub>, <i>r̄</i><sub>eff</sub> = <i>r̄</i>[<i>q</i> + <i>ρ</i>(1 − <i>q</i>)]</p>
+      <p class="gloss">Across the five fruit sets, the closed reference and the six correlation cells, the strict-minus-granular difference in all-generation CV²ₘ followed this line (slope 1.006; R² 0.9998; largest deviation 2.2%; Figure S2): fruit set, establishment and its correlation act on the paternity effect only through sibship size.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OPEN SETTINGS AND FACTORIAL -->
+<section class="scene two" id="s-bound" data-title="Open settings: external input versus donor evenness" data-short="Open">
+  <div class="fmx">
+    <span class="fc"></span>
+    <div class="fh col b" data-b="1"><b>lower external input</b><span><i class="m">x</i> = 0.01, <i class="m">m</i> = 0</span></div>
+    <div class="fh col b" data-b="1"><b>higher external input</b><span><i class="m">x</i> = 0.25, <i class="m">m</i> = 0.03</span></div>
+    <div class="fh row b" data-b="1"><b>uneven donors</b><span><i class="m">a</i> = 0.6</span></div>
+    <div class="fcell b k150lo" data-b="1"><span class="fname">lower input</span>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 150</span><span class="me">28.4 → 23.0</span><span class="red">−19.1%</span><span class="hh">0.714 → 0.688</span></div>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 500</span><span class="me">90.3 → 75.2</span><span class="red">−16.7%</span><span class="hh">0.899 → 0.888</span></div></div>
+    <div class="fcell b inp" data-b="1"><span class="fname">input only</span>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 150</span><span class="me">25.7 → 21.7</span><span class="red">−15.5%</span><span class="hh">0.970 → 0.967</span></div>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 500</span><span class="me">82.8 → 65.4</span><span class="red">−21.1%</span><span class="hh">0.990 → 0.990</span></div></div>
+    <div class="fh row b ev" data-b="1"><b>even donors</b><span><i class="m">a</i> = 3</span><em>Mₑ reduction 25.2–27.1% in all four cells</em></div>
+    <div class="fcell b even" data-b="1"><span class="fname">even donors only</span>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 150</span><span class="me">42.0 → 31.4</span><span class="hh">0.778 → 0.702</span></div>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 500</span><span class="me">139.1 → 102.8</span><span class="hh">0.918 → 0.910</span></div></div>
+    <div class="fcell b even inp" data-b="1"><span class="fname">higher input</span>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 150</span><span class="me">36.5 → 26.7</span><span class="hh">0.973 → 0.969</span></div>
+      <div class="kk"><span class="kl"><i class="m">K</i> = 500</span><span class="me">119.7 → 87.2</span><span class="hh">0.992 → 0.990</span></div></div>
+    <p class="fkey b" data-b="1"><span class="me">Mₑ</span> and <span class="hh">H</span>: granular → strict, generation-50 means (Table S3)</p>
+  </div>
+  <div class="eq">
+    <p class="gloss b" data-b="1">In all eight open settings strict paternity reduced Mₑ, by 15.5–27.1%, and every interval excluded zero (closed reference: 15.7%). The four settings form a factorial that separates external input from donor evenness.</p>
+    <p class="gloss b" data-b="2">Donor evenness drives the larger reductions: with even weights (<i class="m">a</i> = 3) they were 25.2–27.1%, with or without input, because even weights shrink the donor-access term and leave sibling packaging a larger share of male skew. Input alone changed the reduction by less than five percentage points.</p>
+    <p class="gloss b" data-b="3">Input compresses the diversity difference: Δ<i class="m">H</i> fell from 0.0259 and 0.0116 under lower input to 0.0033 and 0.0009 with input only (<i class="m">K</i> = 150 and 500), whereas even donors alone left it large (0.0759 and 0.0081). Input replaced original ancestry: fewer than 0.15 founders remained, and <i class="m">H</i> approached its ceiling.</p>
+    <p class="gloss b" data-b="4">Homozygosity stayed higher under strict paternity in every setting, by 9.0–34.2%; only at <i class="m">K</i> = 150 with lower input did the intervals for Δ<i class="m">H</i> and homozygosity include zero. External input compresses the diversity difference; every external contribution brings new alleles, so the external source is effectively unlimited, and absolute differences under high input should be read in that light.</p>
+  </div>
+</section>
+
+<!-- IMPLEMENTATION -->
+<section class="scene two" id="s-impl" data-title="Implementation and reproduction" data-short="Code">
+  <div>
+    <div class="fnlist b" data-b="1">
+      <code>generate_scenarios</code><span>Expands the JSON into the 21 executed settings</span>
+      <code>run_replicate</code><span>Initialises founders, advances generations, samples Aₑ</span>
+      <code>simulate_generation</code><span>Flowering, fruits, recruitment, inheritance and cap</span>
+      <code>draw_fruit_sires</code><span>Candidate identities, Dirichlet shares and fruit Aₑ</span>
+      <code>generation_metrics</code><span>Counts retained contributions and inherited alleles</span>
+      <code>summarise</code><span>Population-level means and bootstrap intervals</span>
+    </div>
+<pre class="code b" data-b="2">python -m pip install -r requirements.txt
+python pollinaria_model_v3_3.py <span class="cn">\</span>
+  <span class="fl">--params</span> params_v3_3_final.json <span class="cn">\</span>
+  <span class="fl">--outdir</span> outputs_reproduced</pre>
+    <div class="fnlist fn2 b" data-b="4">
+      <code>run_extension.py</code><span>Pollination-opportunity and factorial runs on the unmodified engine</span>
+      <code>pollinaria_model_v3_3_estcorr.py</code><span>Engine copy changing only the establishment draw (engine_diff.patch)</span>
+      <code>derived_metrics.py</code><span><i class="m">π̄</i>, <i class="m">r̄</i>, <i class="m">N</i><sub>eH</sub> and contrasts between regimes</span>
+    </div>
+  </div>
+  <div class="eq">
+    <div class="b" data-b="2">
+      <p class="line">seed<sub>rep</sub> = 20260725 + 100000 <i>s</i> + <i>r</i></p>
+      <p class="gloss">Zero-based scenario index <i class="m">s</i> and replicate index <i class="m">r</i>. Preserve scenario order and sample_ae: fruit subsampling consumes the random stream. Bootstrap seed 777.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line">release: 21 scenarios, 1,780 populations</p>
+      <p class="gloss">Five references × 100, eight boundaries × 100, eight seed settings × 60; 51 generations each, 90,780 history rows. All release files passed checksum verification, and archived replicates were reproduced exactly from their seeds. Python 3.12.13, NumPy 2.3.5, pandas 2.2.3, Matplotlib 3.10.8, Pillow 12.2.0.</p>
+    </div>
+    <div class="b" data-b="4">
+      <p class="line">2026 runs: 35 cells, 3,500 populations</p>
+      <p class="gloss">Pollination opportunity (15 cells) and factorial (8 cells) used the unmodified engine with base seed 20261001. Establishment correlation (12 cells) used the engine copy with base seed 20261004; it reproduces archived replicates exactly when <i class="m">ρ</i> = 1. 100 replicates per cell.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PREDICTIONS -->
+<section class="scene two" id="s-pred" data-title="Predictions, and how to test them" data-short="Tests">
+  <div>
+    <ol class="preds">
+      <li class="b" data-b="1"><b>Pollinator decline.</b> Pollinator decline or fragmentation that reduces fruit set should reduce effective size more strongly in hard-pollinium orchids than in species with mixed paternity, even when recruitment is maintained.</li>
+      <li class="b" data-b="2"><b>Deceptive versus rewarding.</b> Within clades and habitats, and after accounting for longevity, clonality and census structure, deceptive species with low fruit set should have lower effective size relative to census size than rewarding relatives with high fruit set.</li>
+      <li class="b" data-b="3"><b>Pleurothallids.</b> <i>Lepanthes</i> and <i>Dracula</i>, which combine pollinia transferred whole with near-universal self-incompatibility and very low fruit set, should have the deepest funnels. Demographic estimates of effective size in <i>Lepanthes</i> are already small (Tremblay and Ackerman 2001), and progeny arrays from pleurothallid capsules would test the prediction directly.</li>
+      <li class="b" data-b="4"><b>A direct test.</b> Genotyping natural recruitment cohorts around mapped mothers would show how often recruits are full siblings from one capsule, and so estimate sibship size, the parameter on which the funnel depends.</li>
+    </ol>
+  </div>
+  <div class="eq">
+    <p class="gloss b" data-b="5">These are tests of effective size, not of diversity in single populations. In the closed reference the expected difference in <i class="m">H</i> (0.019) was about half the standard deviation of <i class="m">H</i> among replicate populations (0.035–0.039), so the funnel is detected by estimating Nₑ or by comparing many populations, not by comparing <i class="m">H</i> between two sites.</p>
+    <p class="gloss b" data-b="6">Because <i class="m">π̄</i> is equivalent to correlated paternity, the depth of the funnel can be measured directly from progeny arrays across pollen-unit types (Dorken and Perry 2017).</p>
+    <p class="gloss b" data-b="7">Seed number sets persistence, not the funnel. Under strict paternity (<i class="m">K</i> = 500, <i class="m">f</i> = 0.12, lower input), no population persisted at 250,000 seeds or fewer and all persisted at 500,000 or more, bracketing the replacement threshold <i class="m">φLfqSε</i> = 1 at <i class="m">S</i> ≈ 397,000. Above it, CV²ₘ and founder retention did not change with seed number (Figure S1). If pollination failure pushes recruitment below replacement, populations decline, and the constraint is demographic before it is genetic.</p>
+  </div>
+</section>
+
+<!-- SCOPE -->
+<section class="scene two" id="s-scope" data-title="What the model supports, and what it leaves open" data-short="Scope">
+  <div>
+    <div class="rule b" data-b="1" aria-hidden="true"></div>
+    <p class="state b" data-b="1">Every sibling of a single-sire fruit shares one father, so the number of fruits that recruit a generation sets the scale of its effective paternal pool.</p>
+    <p class="lede b" data-b="2" style="max-width:42ch">Pollination opportunity controls, through sibship size, a genetic funnel whose depth is predicted by correlated paternity. The model does not estimate effective size in real orchid populations, and a link to orchid diversification through selection on pre-pollination placement is a hypothesis it does not test.</p>
+  </div>
+  <div>
+    <ul class="clean b" data-b="3">
+      <li><b>Outcrossing only.</b> Selfing deepens the funnel, so the results apply directly to self-incompatible orchids and are a lower bound for self-compatible ones.</li>
+      <li><b>One recruitment episode.</b> No adult survival, clonal growth, dormancy, or seed and protocorm banks. Across a lifetime the reductions are diluted if siring success varies randomly among episodes, and retained if it is repeatable.</li>
+      <li><b>Shared establishment.</b> The gate is the limiting case of shared seed fate, and co-recruitment of siblings from one fruit has not been measured directly. Without it the effect halves at <i class="m">f</i> = 0.25 but the funnel persists at low fruit set.</li>
+      <li><b>Not simulated.</b> Pollen transport, pollinium number, partial deposition, stigma receptivity and floral longevity. Legacy carryover and pollen_flow_distance fields do not drive transport; <i class="m">x</i>, <i class="m">m</i> and <i class="m">a</i> do.</li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ============ PRIMER (appendix) ============
+     Explanatory background for readers new to population genetics or to the statistics used. -->
+
+<!-- A1 HETEROZYGOSITY -->
+<section class="scene two primer" id="p-het" data-title="Alleles, genotypes and heterozygosity" data-short="Heterozygosity" data-code="A1">
+  <svg class="vis" id="v-het" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line">diploid: two gene copies per individual</p>
+      <p class="gloss">One copy comes from each parent. The variants of a gene are its alleles, and the pair an individual carries at one locus (one position in the genome) is its genotype.</p>
+    </div>
+    <div class="b" data-b="2">
+      <div class="align words">
+        <span class="l">homozygous:</span><span class="r">two copies of one allele, AA or BB</span>
+        <span class="l">heterozygous:</span><span class="r">two different alleles, AB or AC</span>
+      </div>
+      <p class="gloss">Heterozygosity is a basic measure of genetic variation: the more individuals carry two different alleles, the more variation the population holds.</p>
+    </div>
+    <div class="b" data-b="3">
+      <p class="line"><i>H</i><sub>o</sub> = <span class="frac"><span>heterozygous plants</span><span>plants genotyped</span></span> = <span class="sf">5⁄8</span> = 0.625</p>
+      <p class="gloss">Observed heterozygosity is counted directly from genotypes, one locus at a time, then averaged over loci.</p>
+    </div>
+    <p class="gloss b" data-b="4">In real populations it is measured by genotyping a sample of plants at neutral markers, such as microsatellites or single-nucleotide polymorphisms (SNPs), which are assumed not to affect fitness. The model does not report observed heterozygosity; its <i class="m">H</i> is the expected form on the next primer page.</p>
+  </div>
+</section>
+
+<!-- A2 GENE DIVERSITY -->
+<section class="scene two primer" id="p-gd" data-title="Expected heterozygosity, or gene diversity" data-short="Gene diversity" data-code="A2">
+  <svg class="vis" id="v-gd" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line"><i>p</i><sub>A</sub> = <span class="sf">6⁄16</span>, <i>p</i><sub>B</sub> = <span class="sf">5⁄16</span>, <i>p</i><sub>C</sub> = <span class="sf">4⁄16</span>, <i>p</i><sub>D</sub> = <span class="sf">1⁄16</span></p>
+      <p class="gloss">Pool the 16 gene copies and count each allele.</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line big"><i>H</i><sub>e</sub> = 1 − Σ<sub><i>i</i></sub> <i>p</i><span class="ss"><span>2</span><span><i>i</i></span></span></p>
+      <p class="gloss">Σ<i class="m">p</i><sub>i</sub><sup>2</sup> is the chance that two gene copies drawn at random, with replacement, are the same allele (the coloured squares); <i class="m">H</i><sub>e</sub> is the chance they differ, the heterozygosity expected under Hardy–Weinberg proportions.</p>
+    </div>
+    <div class="b" data-b="3">
+      <div class="align">
+        <span class="l"><i>H</i><sub>e</sub></span><span class="r">= 1 − 0.305 = 0.695</span>
+        <span class="l">corrected</span><span class="r">= <span class="sf">16⁄15</span> × 0.695 = 0.742</span>
+      </div>
+      <p class="gloss">Here expected exceeds the observed 0.625. Small samples bias the plain formula low, so field studies apply Nei’s (1978) correction, 2<i class="m">n</i>/(2<i class="m">n</i> − 1) for <i class="m">n</i> plants. Observed well below expected is commonly read as a sign of inbreeding or population structure.</p>
+    </div>
+    <div class="b" data-b="4">
+      <p class="line">founders: <i>H</i><sub>0</sub> = 1 − 1/(2<i>K</i>) = 0.999</p>
+      <p class="gloss">The model’s <i class="m">H</i> is this expected form, with allele frequencies <i class="m">q</i><sub>j</sub> among retained adults (<span class="sref" data-ref="s-div"></span>). Every founder allele is unique, so <i class="m">H</i> starts near its ceiling of 1; alleles are lost by chance each generation (genetic drift), so it tends to fall, while immigrants add new ones. The regime difference in <span class="sref" data-ref="s-res"></span> is 0.0191.</p>
+    </div>
+  </div>
+</section>
+
+<!-- A3 DISTRIBUTIONS -->
+<section class="scene one primer" id="p-dist" data-title="The random ingredients" data-short="Distributions" data-code="A3">
+  <div class="dist">
+    <div class="drow dhd"><span></span><span>Distribution</span><span>What it produces</span><span>Where it is used</span></div>
+    <div class="drow b" data-b="1"><svg class="gly" data-g="bern" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm">Bernoulli(<i>p</i>)</span><span class="what">One yes-or-no outcome, yes with probability <i class="m">p</i>.</span><span class="where">Flowering (<i class="m">φ</i>) and the fruit gate (<i class="m">q</i>), scenes <span class="sn" data-ref="s-events"></span> and <span class="sn" data-ref="s-rec"></span></span></div>
+    <div class="drow b" data-b="1"><svg class="gly" data-g="binom" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm">Binomial(<i>n</i>, <i>p</i>)</span><span class="what">The number of yeses in <i class="m">n</i> independent tries, each with probability <i class="m">p</i>.</span><span class="where">Fruits from a plant’s flowers, each setting fruit with probability <i class="m">f</i>, <span class="sref" data-ref="s-events"></span></span></div>
+    <div class="drow b" data-b="1"><svg class="gly" data-g="pois" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm">Poisson(<i>λ</i>)</span><span class="what">A count of independent events with mean <i class="m">λ</i>. Its variance equals its mean.</span><span class="where">Flowers per plant (<i class="m">L</i>), extra candidates (<i class="m">λ</i>), recruits from an open fruit (<i class="m">μ</i>), immigrants (<i class="m">mK</i>), scenes <span class="sn" data-ref="s-events"></span> to <span class="sn" data-ref="s-reg"></span></span></div>
+    <div class="drow b" data-b="2"><svg class="gly" data-g="gamma" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm">Gamma(<i>a</i>, 1)</span><span class="what">A positive random weight. A small shape <i class="m">a</i> gives a few heavy weights and many light ones.</span><span class="where">Resident donor weights: <i class="m">a</i> = 0.6, or 3 in the even-donor settings, scenes <span class="sn" data-ref="s-pat"></span> and <span class="sn" data-ref="s-bound"></span></span></div>
+    <div class="drow b" data-b="2"><svg class="gly" data-g="dir" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm">Dirichlet(<i>α</i><sub>1</sub>, …, <i>α</i><sub><i>k</i></sub>)</span><span class="what"><i class="m">k</i> random shares that sum to 1. Larger <i class="m">α</i> gives more even shares.</span><span class="where">Paternal shares within a fruit, first candidate boosted by <i class="m">b</i>; recruits then draw fathers from them by multinomial sampling, <span class="sref" data-ref="s-pat"></span></span></div>
+    <div class="drow b" data-b="3"><svg class="gly" data-g="beta" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm">Beta</span><span class="what">A random proportion between 0 and 1, with a chosen mean and spread.</span><span class="where">Fruit-level establishment multiplier <i class="m">u</i>, mean <i class="m">q</i> and variance <i class="m">ρq</i>(1 − <i class="m">q</i>), in the correlation sensitivity, <span class="sref" data-ref="s-estc"></span></span></div>
+    <div class="drow b" data-b="3"><svg class="gly" data-g="unif" viewBox="0 0 190 76" aria-hidden="true"></svg><span class="nm sm">uniform sample, without replacement</span><span class="what">Every candidate is equally likely to be kept, and none is kept twice.</span><span class="where">Density regulation back to <i class="m">K</i> adults, <span class="sref" data-ref="s-reg"></span></span></div>
+    <p class="gloss seed b" data-b="3">All draws come from a seeded pseudo-random generator: the same seed reproduces the same run exactly, which is why <span class="sref" data-ref="s-impl"></span> asks for scenario order to be preserved.</p>
+  </div>
+</section>
+
+<!-- A4 STATISTICS -->
+<section class="scene two primer" id="p-stats" data-title="Summary statistics in plain terms" data-short="Statistics" data-code="A4">
+  <svg class="vis" id="v-stats" viewBox="0 0 860 640"></svg>
+  <div class="eq">
+    <div class="b" data-b="1">
+      <p class="line">effective number = <span class="frac"><span>1</span><span>Σ<sub><i>i</i></sub> <i>p</i><span class="ss"><span>2</span><span><i>i</i></span></span></span></span></p>
+      <p class="gloss">The number of equal contributors that would give the same concentration. Three equal fathers give 3; shares of 0.8, 0.1 and 0.1 give 1.52, much closer to a single father (<span class="sref" data-ref="s-ae"></span>).</p>
+    </div>
+    <div class="b" data-b="2">
+      <p class="line">CV<span class="ss"><span>2</span><span>m</span></span> = <span class="frac"><span>Var(<i>w</i>)</span><span><i>w̄</i><sup>2</sup></span></span>, <i>M</i><sub>e</sub> = <span class="frac"><span><i>N</i></span><span>1 + CV<span class="ss"><span>2</span><span>m</span></span></span></span></p>
+      <p class="gloss">CV²ₘ measures how unequal male success is, relative to the average. Mₑ is the number of equally successful residents that would be just as unequal. It describes resident males in one generation; it is not Nₑ, the effective size of the whole population (<span class="sref" data-ref="s-skew"></span>).</p>
+    </div>
+    <p class="gloss b" data-b="3">Each replicate population is an independent run with the same inputs; results are means over 100 of them. A percentile bootstrap resamples those populations with replacement, 1,000 times, and reads the 95% interval from percentiles of the resampled means. It measures simulation uncertainty, not variation among orchid taxa (scenes <span class="sn" data-ref="s-div"></span> and <span class="sn" data-ref="s-res"></span>).</p>
+    <p class="gloss b" data-b="4">When the interval for a difference includes zero, the runs do not distinguish that difference from no difference (<span class="sref" data-ref="s-bound"></span>). An axis that starts above zero magnifies small gaps, so it is always labelled (<span class="sref" data-ref="s-res"></span>).</p>
+  </div>
+</section>
+
+<nav id="rail" aria-label="Scenes">
+  <div id="ticks"></div>
+  <span id="stepinfo"></span>
+  <div class="ctl">
+    <button id="bPrev" aria-label="Previous step">Back</button>
+    <button id="bNext" class="pri" aria-label="Next step">Next</button>
+    <button id="bAuto" aria-pressed="false">Autoplay<span id="dwell"></span></button>
+    <button id="bNotes" aria-pressed="false">Script</button><button id="bFull" aria-label="Toggle fullscreen">Fullscreen</button>
+  </div>
+</nav>
+
+<aside id="notes" aria-live="polite"><h4>Suggested voice-over<span id="notescene"></span></h4><div id="notetext"></div></aside>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+const NS="http://www.w3.org/2000/svg";
+const RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+function el(tag,a,parent){const e=document.createElementNS(NS,tag);if(a)for(const k in a){if(k==="text")e.textContent=a[k];else e.setAttribute(k,a[k]);}if(parent)parent.appendChild(e);return e;}
+function clear(s){while(s.firstChild)s.removeChild(s.firstChild);}
+
+/* ---------- random numbers ---------- */
+let S=20260725>>>0;
+function rand(){S=S+0x6D2B79F5|0;let t=Math.imul(S^S>>>15,1|S);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}
+function normal(){let u=0;while(u===0)u=rand();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*rand());}
+function poisson(l){if(l<=0)return 0;const L=Math.exp(-l);let k=0,p=1;do{k++;p*=rand();}while(p>L);return k-1;}
+function gamma(a){if(a<1)return gamma(a+1)*Math.pow(rand(),1/a);const d=a-1/3,c=1/Math.sqrt(9*d);for(;;){let x,v;do{x=normal();v=1+c*x;}while(v<=0);v=v*v*v;const u=rand();if(u<1-0.0331*x*x*x*x)return d*v;if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v;}}
+function dirichlet(al){const g=al.map(gamma);const s=g.reduce((a,b)=>a+b,0);return g.map(x=>x/s);}
+
+/* ---------- model pieces used for live illustration ---------- */
+const REG=[
+ {name:"Strict single paternity",lam:0,e:1,al:1,b:1,kmax:1},
+ {name:"Low sire",lam:1.2,e:0.62,al:0.7,b:3,kmax:4},
+ {name:"Granular reference",lam:3.5,e:0,al:1.5,b:1,kmax:8},
+ {name:"High mixing",lam:7,e:0,al:4,b:1,kmax:16}];
+const NFLOW=350, DONOR_A=0.6;
+const donors=(function(){const cum=[];let s=0;for(let i=0;i<NFLOW;i++){s+=gamma(DONOR_A);cum.push(s);}return{cum,tot:s,n:NFLOW};})();
+function drawDonor(mother){for(;;){const u=rand()*donors.tot;let lo=0,hi=donors.n-1;while(lo<hi){const m=(lo+hi)>>1;if(donors.cum[m]<u)lo=m+1;else hi=m;}if(lo!==mother)return lo;}}
+function sampleFruit(r){
+  const arr=[{kept:true}];const D=poisson(r.lam);
+  for(let i=0;i<D;i++)arr.push({kept:rand()<1-r.e});
+  let n=0;arr.forEach(a=>{if(a.kept){n++;if(n>r.kmax){a.kept=false;a.capped=true;}}});
+  const kept=arr.filter(a=>a.kept),k=kept.length,mother=Math.floor(rand()*donors.n);
+  kept.forEach(a=>a.father=drawDonor(mother));
+  let sh;if(k===1)sh=[1];else{const al=kept.map(()=>Math.max(r.al,1e-6));al[0]*=Math.max(r.b,1e-6);sh=dirichlet(al);}
+  kept.forEach((a,i)=>a.share=sh[i]);
+  const m=new Map();kept.forEach(a=>m.set(a.father,(m.get(a.father)||0)+a.share));
+  const p=[...m.entries()].map(([f,s])=>({f,s})).sort((x,y)=>y.s-x.s);
+  return{arr,k,p,ae:1/p.reduce((s,q)=>s+q.s*q.s,0)};
+}
+const fmt=(v,d)=>v.toFixed(d);
+
+/* ---------- animation helpers ---------- */
+let GEN=0,INSTANT=false;
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+const easeOut=t=>1-Math.pow(1-t,3);
+function T(dur,fn,delay,ez){
+  if(INSTANT||RM){fn(1);return Promise.resolve(true);}
+  const E=ez||ease;
+  const g=GEN;return new Promise(res=>{const t0=performance.now()+(delay||0);
+    function f(now){if(g!==GEN)return res(false);let t=(now-t0)/dur;if(t<0){requestAnimationFrame(f);return;}if(t>1)t=1;fn(E(t));if(t<1)requestAnimationFrame(f);else res(true);}
+    requestAnimationFrame(f);});
+}
+const wait=ms=>T(ms,()=>{});
+const lerp=(a,b,t)=>a+(b-a)*t;
+const fadeIn=(e,delay,dur)=>{e.setAttribute("opacity",0);return T(dur||380,t=>e.setAttribute("opacity",t),delay||0,easeOut);};
+
+/* ---------- typesetting ----------
+   Unicode subscripts (ₑ, ₘ) and ⅓ are not in the served font subsets, so they are
+   set as real scripts; the wording is unchanged. */
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const SS='CV<span class="ss"><span>2</span><span>m</span></span>';
+function richHTML(s,math){
+  let h=esc(s).replace(/CV²ₘ/g,SS).replace(/([A-Z])ₑ/g,(m,c)=>`<i class="m">${c}</i><sub>e</sub>`).replace(/⅓/g,'<span class="sf">1⁄3</span>');
+  if(!math)h=h.replace(/[≈≤≠→←]/g,c=>`<span class="sym">${c}</span>`).replace(/[α-ω]\u0304?/g,c=>`<i class="m">${c}</i>`);
+  return h;
+}
+function typeset(root){
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode(n){const p=n.parentElement;
+    if(!p||p.closest("svg,code,pre,script,style,#help"))return NodeFilter.FILTER_REJECT;
+    return /[ₑₘ⅓≈≤≠→←]/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;}});
+  const list=[];while(w.nextNode())list.push(w.currentNode);
+  list.forEach(n=>{
+    const math=!!n.parentElement.closest(".line,.align,.ds,.ct,.calc,.tick,td.v,td.m,.m");
+    const t=document.createElement("template");t.innerHTML=richHTML(n.nodeValue,math);n.replaceWith(t.content);
+  });
+}
+
+/* SVG text with light markup: *x* italic (maths font), _x or _{..} subscript, ^x or ^{..} superscript,
+   ^a_b stacked, \ escapes. Symbols that the sans face lacks fall to the maths stack. */
+function runs(spec){
+  const out=[];let it=false,buf="";
+  const push=()=>{if(buf){out.push({s:buf,it});buf="";}};
+  for(let i=0;i<spec.length;i++){
+    const c=spec[i];
+    if(c==="\\"){buf+=spec[++i];continue;}
+    if(c==="*"){push();it=!it;continue;}
+    if(c==="_"||c==="^"){
+      push();
+      const read=()=>{let a;if(spec[i+1]==="{"){const j=spec.indexOf("}",i+2);a=spec.slice(i+2,j);i=j;}else{a=spec[i+1];i++;}return a;};
+      const a1=read();
+      if((spec[i+1]==="_"||spec[i+1]==="^")&&spec[i+1]!==c){i++;const a2=read();out.push({lvl:"stack",sup:c==="^"?a1:a2,sub:c==="_"?a1:a2});}
+      else out.push({lvl:c==="_"?"sub":"sup",arg:a1});
+      continue;
+    }
+    buf+=c;
+  }
+  push();return out;
+}
+function tx(parent,x,y,spec,a){
+  a=Object.assign({},a||{});
+  const fs=+(a["font-size"]||18);
+  const t=el("text",Object.assign({x,y},a),parent);
+  const mathBase=/\bmt\b/.test(a.class||"");
+  const SUB=.24*fs,SUP=.4*fs,SC=.7;
+  let off=0;
+  const span=(s,o)=>{const e=el("tspan",o,t);e.textContent=s;return e;};
+  const scr=arg=>{let it=false;if(/^\*.*\*$/.test(arg)){it=true;arg=arg.slice(1,-1);}return{arg,it};};
+  const ital=(o,it)=>{if(it){o["font-style"]="italic";o.class="mt";}else if(!mathBase)o.class="mt";return o;};
+  runs(spec).forEach(r=>{
+    if(!r.lvl){
+      const parts=mathBase||r.it?[r.s]:r.s.split(/([≈≤≠→←])/);
+      parts.forEach((p,pi)=>{if(!p)return;const o={};if(off){o.dy=-off;off=0;}
+        if(r.it){o["font-style"]="italic";o.class="mt";}else if(pi%2===1)o.class="mt";
+        span(p,o);});
+    }else if(r.lvl==="sub"||r.lvl==="sup"){
+      const target=r.lvl==="sub"?SUB:-SUP;const q=scr(r.arg);
+      const o=ital({dy:target-off,"font-size":fs*SC},q.it);off=target;span(q.arg,o);
+    }else{
+      const q1=scr(r.sup),q2=scr(r.sub);
+      const s1=span(q1.arg,ital({dy:-SUP-off,"font-size":fs*SC},q1.it));
+      let w=0;try{w=s1.getComputedTextLength();}catch(e){}
+      if(!w)w=q1.arg.length*.5*fs*SC;
+      span(q2.arg,ital({dy:SUP+SUB,dx:-w,"font-size":fs*SC},q2.it));off=SUB;
+    }
+  });
+  return t;
+}
+/* colour for a paternal share by its rank within the fruit: the largest share is orchid, the rest recede */
+const tailOp=i=>Math.max(.36,.88-(i-1)*.08);
+function shareFill(e,i){e.setAttribute("class",i?"f-tail":"f-orchid");if(i)e.setAttribute("fill-opacity",tailOp(i).toFixed(2));else e.removeAttribute("fill-opacity");}
+
+/* ---------- scene renderers: render(k, instant) draws the static state for build step k,
+   then animates only what step k introduces ---------- */
+const H={};
+
+/* title: 500 adults */
+H["s-title"]={render(k){
+  const s=$("#v-title");
+  if(!s.dataset.b){
+    const order=[];for(let i=0;i<500;i++)order.push(i);
+    for(let i=499;i>0;i--){const j=Math.floor(rand()*(i+1));[order[i],order[j]]=[order[j],order[i]];}
+    for(let i=0;i<500;i++){const c=i%25,r=Math.floor(i/25);el("circle",{cx:13+c*21.1,cy:13+r*21.1,r:7,class:"f-leaf","data-o":order[i]},s);}
+    tx(s,6,462,"*K* = 500 adults, one dot each",{class:"t-muted","font-size":17});
+    s.dataset.b=1;
+  }
+  const cs=[...s.querySelectorAll("circle")];
+  if(k===0){cs.forEach(c=>c.style.opacity=0);T(1600,t=>{const n=t*520;cs.forEach(c=>{c.style.opacity=Math.max(0,Math.min(1,(n-(+c.dataset.o))/20));});});}
+  else cs.forEach(c=>c.style.opacity=1);
+}};
+
+/* events: walk down the pipeline; past rows settle, the current row counts up */
+H["s-events"]={render(k,instant){
+  const rows=[...document.querySelectorAll("#s-events .row")];
+  rows.forEach(r=>{const b=+r.dataset.b;r.classList.toggle("cur",b===k);r.classList.toggle("done",b<k);r.classList.toggle("todo",b>k);});
+  rows.forEach(r=>{const c=r.querySelector(".ct[data-v]");if(!c)return;const v=+c.dataset.v;const bar=r.querySelector(".bar i");
+    c.textContent=v.toLocaleString("en-GB");if(bar)bar.style.setProperty("--w",v/2625);});
+  const r=rows.find(r=>+r.dataset.b===k);if(!r||instant)return;
+  const ct=r.querySelector(".ct[data-v]");if(!ct)return;const v=+ct.dataset.v;const bar=r.querySelector(".bar i");
+  T(900,t=>{ct.textContent=Math.round(v*t).toLocaleString("en-GB");bar.style.setProperty("--w",v/2625*t);});
+}};
+
+/* paternity: one fruit, sampled live */
+let patK=0;
+function drawFruit(r){
+  const s=$("#v-pat");clear(s);
+  s.classList.toggle("live",!!r);
+  tx(s,0,30,r?r.name:"A fruit waits for candidates",{class:"t-text","font-size":26,"font-weight":600});
+  if(r)tx(s,0,64,r.lam===0?"*λ* = 0,  *k*_{max} = 1;  *e*, *α* and *b* do not apply":`*λ* = ${r.lam},  *e* = ${r.e},  *α* = ${r.al},  *b* = ${r.b},  *k*_{max} = ${r.kmax}`,{class:"t-muted mt","font-size":21,style:"white-space:pre"});
+  /* three zones, labelled at the top so the drawing reads left to right */
+  const ZY=118;
+  tx(s,40,ZY,"arriving candidates",{class:"t-muted","font-size":16});
+  tx(s,330,ZY,"exclusion",{class:"t-muted","font-size":16,"text-anchor":"middle"});
+  tx(s,620,ZY,"fruit",{class:"t-muted","font-size":16,"text-anchor":"middle"});
+  el("line",{x1:330,y1:136,x2:330,y2:440,class:"s-faint","stroke-dasharray":"4 6","stroke-width":1.5},s);
+  el("ellipse",{cx:620,cy:288,rx:112,ry:154,class:"f-panel s-text","stroke-width":1.75},s);
+  el("path",{d:"M620 136 Q 586 288 620 440 M620 136 Q 654 288 620 440",class:"f-none s-rule","stroke-width":1.25},s);
+  if(!r){tx(s,0,560,"Click Next to send candidates to the fruit.",{class:"t-muted","font-size":20});return;}
+  tx(s,860,30,"click the drawing to resample",{class:"t-muted","font-size":16,"text-anchor":"end"});
+  const F=sampleFruit(r);const n=F.arr.length;
+  const ys=F.arr.map((_,i)=>n===1?288:152+i*(272/(n-1)));
+  const rank=new Map(F.p.map((q,i)=>[q.f,i]));
+  const kept=F.arr.filter(a=>a.kept),kk=kept.length;
+  const inside=kept.map((a,i)=>{
+    if(kk===1)return[620,288];
+    if(kk<=8){const sp=Math.min(36,260/(kk-1));return[620+(i%2?18:-18),288-(kk-1)*sp/2+i*sp];}
+    const rows=Math.ceil(kk/2),sp=Math.min(34,240/(rows-1)),c=i%2,rw=Math.floor(i/2);
+    return[620+(c?34:-34),288-(rows-1)*sp/2+rw*sp+(c?sp/4:-sp/4)];});
+  let ki=0,tEnd=0;
+  F.arr.forEach((a,i)=>{
+    let tx_,ty_;
+    if(a.kept){[tx_,ty_]=inside[ki++];}else if(a.capped){tx_=470;ty_=ys[i];}else{tx_=300;ty_=ys[i];}
+    const e=el("ellipse",{cx:40,cy:ys[i],rx:14,ry:7,class:"f-pollen"},s);
+    const d=i*110;tEnd=Math.max(tEnd,d+750);
+    const fin=()=>{if(a.kept)shareFill(e,rank.get(a.father));else e.setAttribute("class","f-grey");};
+    T(750,t=>{e.setAttribute("cx",lerp(40,tx_,t));e.setAttribute("cy",lerp(ys[i],ty_,t));if(t>=1)fin();},d);
+    if(!a.kept){const lb=tx(s,tx_-24,ty_+5,a.capped?"cap":"excluded",{class:"t-muted","font-size":14,"text-anchor":"end"});fadeIn(lb,d+700,300);}
+  });
+  /* shares, sorted, after merging repeated fathers */
+  const BW=860,by=524,bh=40,GAP=2;
+  tx(s,0,506,"paternal shares after merging repeated fathers",{class:"t-muted","font-size":17});
+  let acc=0;
+  F.p.forEach((q,i)=>{
+    const x=acc*BW,w=q.s*BW;acc+=q.s;
+    const ww=Math.max(1,w-(i<F.p.length-1?GAP:0));
+    const rc=el("rect",{x,y:by,width:0,height:bh,rx:2},s);shareFill(rc,i);
+    T(620,t=>rc.setAttribute("width",ww*t),tEnd+i*35,easeOut);
+    if(w>54){const lb=tx(s,x+ww/2,by+26,fmt(q.s,2),{"text-anchor":"middle","font-size":16,class:(i?"t-ontail":"t-onorchid")+" mt"});fadeIn(lb,tEnd+380+i*35,300);}
+  });
+  const sum=tx(s,0,604,`*k* = ${F.k},  distinct fathers = ${F.p.length},  *A*_e = ${fmt(F.ae,2)}`,{class:"t-text mt","font-size":27,style:"white-space:pre"});
+  fadeIn(sum,tEnd+550,400);
+}
+H["s-pat"]={render(k){
+  patK=k;drawFruit(k>0?REG[k-1]:null);
+  document.querySelectorAll("#s-pat table.rt tr").forEach((tr,i)=>tr.classList.toggle("cur",i>0&&i===k));
+}};
+$("#v-pat").addEventListener("click",()=>{if(patK>0){GEN++;drawFruit(REG[patK-1]);}});
+
+/* Ae grid */
+const AEGRID=REG.map(r=>{const show=[];for(let i=0;i<28;i++)show.push(sampleFruit(r));let s=0;for(let i=0;i<3000;i++)s+=sampleFruit(r).ae;return{r,show,mean:s/3000};});
+const AEREF=["1","1.206","3.148","6.402"],PIREF=["1","0.887","0.381","0.178"];
+H["s-ae"]={render(k,instant){
+  const s=$("#v-ae");clear(s);
+  if(k<2){tx(s,0,40,k<1?"":"Next: 28 sampled fruits per regime, one bar per fruit.",{class:"t-muted","font-size":20});return;}
+  const fresh=!instant&&k===2;
+  tx(s,0,24,"Each bar is one fruit, split by paternal share. Sampled live in this page from the stated distributions.",{class:"t-muted","font-size":16.5});
+  const BH=112,GAP=1.5;
+  AEGRID.forEach((G,ri)=>{
+    const y0=62+ri*146,base=y0+BH;
+    tx(s,0,y0+34,G.r.name,{class:"t-text","font-size":20,"font-weight":600});
+    tx(s,0,y0+66,`mean *A*_e here ≈ ${fmt(G.mean,2)}`,{class:"t-muted mt","font-size":19});
+    tx(s,0,y0+92,`released run: *A*_e = ${AEREF[ri]}`,{class:"t-orchid mt","font-size":18});
+    tx(s,0,y0+116,`*π̄* = ${PIREF[ri]}`,{class:"t-orchid mt","font-size":18});
+    if(ri<3)el("line",{x1:0,y1:base+17,x2:860,y2:base+17,class:"s-rule"},s);
+    G.show.forEach((F,i)=>{
+      const x=270+i*21;let acc=0;
+      F.p.forEach((q,j)=>{const h=q.s*BH;const yy=base-acc-h;acc+=h;
+        const hh=Math.max(.6,h-(j<F.p.length-1?GAP:0));const top=yy+(h-hh);
+        const rc=el("rect",{x:x,y:base,width:16,height:0,rx:1},s);shareFill(rc,j);
+        if(fresh)T(520,t=>{rc.setAttribute("height",hh*t);rc.setAttribute("y",lerp(base,top,t));},ri*200+i*16,easeOut);
+        else{rc.setAttribute("height",hh);rc.setAttribute("y",top);}
+      });
+    });
+  });
+}};
+
+/* recruitment */
+const REC=(function(){const g=[],r=[];for(let i=0;i<20;i++){const b=rand()<0.5?1:0;g.push(b);r.push(b?poisson(10):0);}return{g,r};})();
+function pR(r){const q=.5,mu=10;let p=q*Math.exp(-mu);for(let i=1;i<=r;i++)p*=mu/i;return r===0?1-q+p:p;}
+H["s-rec"]={render(k,instant){
+  const s=$("#v-rec");clear(s);
+  const X=i=>28+i*42;
+  const caps=REC.g.map((b,i)=>el("rect",{x:X(i)-12,y:14,width:24,height:48,rx:12,class:"f-panel s-text","stroke-width":1.5},s));
+  if(k>=1){
+    const fresh=!instant&&k===1;
+    REC.g.forEach((b,i)=>{const c=caps[i];
+      const fin=()=>{c.setAttribute("class",b?"f-leaf":"f-grey");c.setAttribute("stroke-width",0);
+        if(!b){const x=X(i),y=38,d=4.5;el("path",{d:`M${x-d} ${y-d}L${x+d} ${y+d}M${x+d} ${y-d}L${x-d} ${y+d}`,class:"s-text","stroke-width":1.8,"stroke-linecap":"round"},s);}};
+      if(fresh)T(260,t=>{if(t>=1)fin();},i*55);else fin();});
+    const pass=REC.g.reduce((a,b)=>a+b,0);
+    const cap=tx(s,0,98,`${pass} of 20 fruits pass the gate in this draw`,{class:"t-muted","font-size":17});
+    if(fresh)fadeIn(cap,20*55+100);
+  }
+  const CY=122+Math.max(...REC.r)*8+18;
+  if(k>=2){
+    const fresh=!instant&&k===2;
+    REC.r.forEach((n,i)=>{
+      for(let j=0;j<n;j++){const d=el("circle",{cx:X(i),cy:122+j*8,r:3.3,class:"f-leaf"},s);
+        if(fresh){d.setAttribute("opacity",0);T(380,t=>{d.setAttribute("cy",lerp(112,122+j*8,t));d.setAttribute("opacity",t);},i*45+j*22,easeOut);}}
+      const lb=tx(s,X(i),CY,String(n),{"text-anchor":"middle","font-size":16,class:(n?"t-text":"t-faint")+" mt"});
+      if(fresh)fadeIn(lb,i*45+n*22+200);
+    });
+    const cp=tx(s,0,CY+30,"potential recruits *R*_{*f*} per fruit",{class:"t-muted","font-size":16});
+    if(fresh)fadeIn(cp,600);
+  }
+  if(k>=3){
+    const fresh=!instant&&k===3;
+    /* exact distribution of Rf; one probability axis, the zero bar is broken and labelled */
+    const base=592,Hh=214,x0=62,bw=29,YMAX=.07,top=base-Hh;
+    const Y=p=>base-p/YMAX*Hh;
+    const g=el("g",{},s);
+    tx(g,0,top-22,"probability",{class:"t-muted","font-size":14});
+    [0,.02,.04,.06].forEach(v=>{el("line",{x1:x0-6,y1:Y(v),x2:x0+25*bw,y2:Y(v),class:v?"s-rule":"s-muted","stroke-width":v?1:1.25},g);
+      tx(g,x0-12,Y(v)+5,v?fmt(v,2):"0",{"text-anchor":"end","font-size":14,class:"t-faint mt"});});
+    if(fresh)fadeIn(g,0,300);
+    let humpTop=base;
+    for(let r=0;r<=24;r++){const p=pR(r);const x=x0+r*bw+2;
+      const h=r===0?Hh+14:base-Y(p);if(r>0)humpTop=Math.min(humpTop,base-h);
+      const rc=el("rect",{x:x,y:base,width:bw-4,height:0,rx:1.5,class:r===0?"f-grey":"f-leaf"},s);
+      if(fresh)T(520,t=>{rc.setAttribute("height",h*t);rc.setAttribute("y",base-h*t);},r*28,easeOut);
+      else{rc.setAttribute("height",h);rc.setAttribute("y",base-h);}
+      if(r%4===0)tx(s,x+(bw-4)/2,base+22,String(r),{"text-anchor":"middle","font-size":15,class:"t-faint mt"});
+    }
+    /* break mark across the zero bar */
+    const bx=x0+2,bY=top+2,brk=el("path",{d:`M${bx-5} ${bY+4}L${bx+bw+1} ${bY-4}L${bx+bw+1} ${bY+3}L${bx-5} ${bY+11}Z`,class:"f-bg"},s);
+    const lab=el("g",{},s);
+    tx(lab,x0+bw+10,top-6,"P(*R* = 0) ≈ 0.50002",{class:"t-text mt","font-size":20});
+    tx(lab,x0+bw+10,top+14,"bar truncated, not to scale",{class:"t-muted","font-size":13.5});
+    tx(lab,x0+8.5*bw,humpTop-14,"gate open: Poisson(10)",{class:"t-muted","font-size":16.5});
+    const xc=tx(s,x0-2,base+48,"exact distribution of *R*_{*f*}, before density regulation",{class:"t-muted","font-size":16});
+    if(fresh){fadeIn(brk,520);fadeIn(lab,700);fadeIn(xc,300);}
+  }
+}};
+
+/* inheritance */
+const INH={mom:{id:17,a:[34,35]},dad:{id:203,a:[406,407]},kids:[[0,1],[1,1],[1,0]].map(()=>[Math.floor(rand()*2),Math.floor(rand()*2)])};
+function chip(s,x,y,label,cls,tcls){const g=el("g",{},s);el("rect",{x:-32,y:-17,width:64,height:34,rx:7,class:cls},g);tx(g,0,6.5,String(label),{"text-anchor":"middle","font-size":19,class:tcls+" mt"});g.setAttribute("transform",`translate(${x},${y})`);return g;}
+const bez=(p0,p1,p2,p3,t)=>{const u=1-t;return u*u*u*p0+3*u*u*t*p1+3*u*t*t*p2+t*t*t*p3;};
+H["s-inh"]={render(k,instant){
+  const s=$("#v-inh");clear(s);
+  const M=[215,150],D=[645,150],KX=[180,430,680],KY=446;
+  const lines=el("g",{},s);
+  [[M,"mother, founder 17",INH.mom,"f-orchid","t-onorchid"],[D,"father *j*, founder 203",INH.dad,"f-sky","t-onsky"]].forEach(([p,lab,P,cls,tc])=>{
+    el("rect",{x:p[0]-118,y:p[1]-56,width:236,height:112,rx:16,class:"f-panel s-rule2","stroke-width":1.5},s);
+    tx(s,p[0],p[1]-74,lab,{"text-anchor":"middle","font-size":18,class:"t-muted"});
+    chip(s,p[0]-38,p[1],P.a[0],cls,tc);chip(s,p[0]+38,p[1],P.a[1],cls,tc);
+  });
+  KX.forEach((x,i)=>{el("rect",{x:x-96,y:KY-52,width:192,height:104,rx:16,class:"f-none s-faint","stroke-width":1.5,"stroke-dasharray":"5 5"},s);
+    tx(s,x,KY+80,`recruit ${i+1}`,{"text-anchor":"middle","font-size":17,class:"t-muted"});});
+  const show=k>=2?3:(k>=1?1:0);
+  for(let i=0;i<show;i++){
+    const [ma,pa]=INH.kids[i];
+    const fresh=!instant&&((k===1&&i===0)||(k===2&&i>0));
+    const d=(k===2&&i>0)?(i-1)*600:0;
+    const sx1=M[0]+(ma?38:-38),sx2=D[0]+(pa?38:-38),ex1=KX[i]-36,ex2=KX[i]+36,ey=KY-10;
+    const segs=[[sx1,M[1]+17,ex1,ey-17,"s-orchid",INH.mom.a[ma],"f-orchid","t-onorchid"],[sx2,D[1]+17,ex2,ey-17,"s-sky",INH.dad.a[pa],"f-sky","t-onsky"]];
+    segs.forEach(([ax,ay,bx,by,sc,lab,fc,tc])=>{
+      const my=(ay+by)/2,path=el("path",{d:`M${ax} ${ay}C${ax} ${my} ${bx} ${my} ${bx} ${by}`,class:"f-none "+sc,"stroke-width":1.5,"stroke-opacity":.38},lines);
+      const c=chip(s,bx,by+17,lab,fc,tc);
+      if(fresh){let L=0;try{L=path.getTotalLength();}catch(e){}
+        if(L){path.setAttribute("stroke-dasharray",L);path.setAttribute("stroke-dashoffset",L);}
+        c.setAttribute("transform",`translate(${ax},${ay-17})`);
+        T(900,t=>{if(L)path.setAttribute("stroke-dashoffset",L*(1-t));
+          c.setAttribute("transform",`translate(${bez(ax,ax,bx,bx,t)},${bez(ay,my,my,by,t)+lerp(-17,17,t)})`);},d);}
+    });
+    if(k>=3){const lb=tx(s,KX[i],KY+34,"// 2 → 17, 203",{"text-anchor":"middle","font-size":17,class:"t-text mt"});if(!instant)fadeIn(lb,i*120);}
+  }
+}};
+
+/* regulation: the potential recruits as an even field (positions jittered by the seeded draws) */
+const REGP=(function(){const pts=[];for(let i=0;i<263;i++)pts.push([30+rand()*800,70+rand()*440]);const keep=new Set();while(keep.size<50)keep.add(Math.floor(rand()*263));return{pts,keep};})();
+H["s-reg"]={render(k,instant){
+  const s=$("#v-reg");clear(s);
+  if(k<1)return;
+  tx(s,0,30,"each dot ≈ 10 potential recruits: about 2,625 in total",{class:"t-muted","font-size":18});
+  const COLS=24,x0=36,y0=66,cw=32.5,rh=38;
+  const pos=REGP.pts.map((p,i)=>{const u=(p[0]-30)/800,v=(p[1]-70)/440,c=i%COLS,r=Math.floor(i/COLS);
+    return[x0+(c+.5)*cw+(u-.5)*cw*.5,y0+(r+.5)*rh+(v-.5)*rh*.5];});
+  const f1=!instant&&k===1,f2=!instant&&k===2;
+  const cs=pos.map((p,i)=>{const keep=REGP.keep.has(i);const c=el("circle",{cx:p[0],cy:p[1],r:5.5,class:"f-leaf",opacity:.9,"data-i":i},s);
+    if(f1){c.setAttribute("opacity",0);T(300,t=>c.setAttribute("opacity",.9*t),i*4);}
+    if(k>=2){
+      if(keep){c.setAttribute("class","f-orchid");s.appendChild(c);}
+      if(f2)T(700,t=>{c.setAttribute("opacity",keep?.9+.1*t:lerp(.9,.24,t));c.setAttribute("r",keep?lerp(5.5,8.5,t):5.5);},400+(keep?0:i),easeOut);
+      else{c.setAttribute("opacity",keep?1:.24);c.setAttribute("r",keep?8.5:5.5);}
+    }
+    return c;});
+  const imm=el("g",{},s);
+  [[792,548],[818,548]].forEach(p=>el("circle",{cx:p[0],cy:p[1],r:6,class:"f-none s-muted","stroke-dasharray":"2 2.5","stroke-width":1.3},imm));
+  tx(imm,776,553,"immigrants, only when *m* > 0 (about 15 at *m* = 0.03)",{"text-anchor":"end",class:"t-muted","font-size":15.5});
+  if(f1)fadeIn(imm,600);
+  if(k>=2){const t2=tx(s,0,614,"*K* = 500 kept (50 dots), uniformly, without replacement",{class:"t-text mt","font-size":25});if(f2)fadeIn(t2,900);}
+}};
+
+/* skew: two worked examples */
+const SK=[{w:[4,0,0,0],lab:"one resident sires all"},{w:[1,1,1,1],lab:"equal contributions"}];
+function stats(w){const N=w.length,m=w.reduce((a,b)=>a+b,0)/N,v=w.reduce((a,b)=>a+(b-m)*(b-m),0)/N,c=v/(m*m);return{m,v,c,me:N/(1+c)};}
+H["s-skew"]={render(k,instant){
+  const s=$("#v-skew");clear(s);
+  if(k<2){tx(s,0,40,k===1?"Worked example: four residents, four retained offspring.":"",{class:"t-muted","font-size":20});return;}
+  SK.forEach((E,pi)=>{
+    if(pi===1&&k<3)return;
+    const fresh=!instant&&((pi===0&&k===2)||(pi===1&&k===3));
+    const x0=pi*450,base=392,unit=72,AW=360;
+    const hd=el("g",{},s);
+    tx(hd,x0,40,`*w* = [${E.w.join(", ")}]`,{class:"t-text mt","font-size":25});
+    tx(hd,x0,70,E.lab,{class:"t-muted","font-size":17});
+    if(fresh)fadeIn(hd,0,300);
+    el("line",{x1:x0,y1:base,x2:x0+AW,y2:base,class:"s-muted","stroke-width":1.25},s);
+    const st=stats(E.w);
+    E.w.forEach((v,i)=>{const x=x0+22+i*86;const r=el("rect",{x:x,y:base,width:56,height:0,rx:3,class:"f-orchid"},s);
+      const h=v*unit;
+      if(fresh)T(700,t=>{r.setAttribute("height",h*t);r.setAttribute("y",base-h*t);},200+i*120,easeOut);else{r.setAttribute("height",h);r.setAttribute("y",base-h);}
+      tx(s,x+28,base+26,`${i+1}`,{"text-anchor":"middle","font-size":16,class:"t-muted"});});
+    /* reference line at the mean */
+    const ref=el("g",{},s);
+    el("line",{x1:x0,y1:base-st.m*unit,x2:x0+AW,y2:base-st.m*unit,class:"s-text","stroke-width":1.25,"stroke-dasharray":"5 5","stroke-opacity":.55},ref);
+    tx(ref,x0+AW+8,base-st.m*unit+6,"*w̄*",{class:"t-muted mt","font-size":19});
+    if(fresh)fadeIn(ref,760,400);
+    const L=[["*w̄*",fmt(st.m,0)],["Var(*w*)",fmt(st.v,0)],["CV^2_m",fmt(st.c,0)],["*M*_e",fmt(st.me,0)]];
+    L.forEach(([l,r],i)=>{const g=el("g",{class:(i===3?"t-orchid":"t-text")},s);const y=466+i*42;
+      tx(g,x0+112,y,l,{class:"mt","font-size":27,"text-anchor":"end"});
+      tx(g,x0+130,y,"=",{class:"mt","font-size":27,"text-anchor":"middle"});
+      tx(g,x0+148,y,r,{class:"mt","font-size":27});
+      if(fresh)fadeIn(g,1000+i*230,360);});
+  });
+}};
+
+/* diversity, drift and founder retention */
+const LOST=new Set([2,3,6,7,9,10,11]);
+H["s-div"]={render(k,instant){
+  const s=$("#v-div");clear(s);
+  if(k<1)return;
+  const f1=!instant&&k===1,f2=!instant&&k===2,f3=!instant&&k===3;
+  const all=el("g",{},s);
+  tx(all,0,30,"Six founders, twelve unique allele IDs at generation 0",{class:"t-muted","font-size":18});
+  for(let f=0;f<6;f++){
+    const fx=16+f*142,cx0=fx+58;
+    el("rect",{x:fx,y:252,width:116,height:54,rx:10,class:"f-panel s-rule2","stroke-width":1.5},all);
+    tx(all,cx0,286,`founder ${f}`,{"text-anchor":"middle","font-size":21,class:"t-text mt"});
+    for(let j=0;j<2;j++){const id=2*f+j;const cx=cx0+(j?27:-27);
+      const lost=LOST.has(id)&&k>=3;
+      const ln=el("line",{x1:cx,y1:130,x2:cx0,y2:250,class:"s-muted","stroke-width":1.25},all);
+      const g=el("g",{},all);
+      const rc=el("rect",{x:cx-23,y:92,width:46,height:38,rx:7,class:"f-sky"},g);
+      const t=tx(g,cx,117,String(id),{"text-anchor":"middle","font-size":19,class:"t-onsky mt"});
+      if(lost){
+        const end=()=>{rc.setAttribute("class","f-grey");t.setAttribute("class","t-muted mt");};
+        if(f3)T(520,t2=>{g.setAttribute("opacity",lerp(1,.8,t2));ln.setAttribute("opacity",lerp(1,.28,t2));if(t2>=1)end();},f*90,easeOut);
+        else{g.setAttribute("opacity",.8);ln.setAttribute("opacity",.28);end();}
+      }
+    }
+  }
+  tx(all,0,372,"identity = allele\\_id // 2",{class:"t-muted mt","font-size":21});
+  if(f1)fadeIn(all,0,450);
+  if(k>=2){
+    /* schematic of the N_eH estimate */
+    const g=el("g",{},s),gx=g=>120+g/50*700,top=500,bot=618,yy=gen=>top+12+(gen/50)*(bot-top-34);
+    tx(g,0,476,"Schematic, not simulation output: ln *H̄* against generation",{class:"t-muted","font-size":15.5});
+    el("rect",{x:gx(10),y:top,width:gx(50)-gx(10),height:bot-top,class:"f-rule",opacity:.55},g);
+    el("line",{x1:gx(0),y1:bot,x2:gx(50),y2:bot,class:"s-rule2","stroke-width":1.5},g);
+    el("line",{x1:gx(0),y1:top,x2:gx(0),y2:bot,class:"s-rule2","stroke-width":1.5},g);
+    [0,10,50].forEach(v=>tx(g,gx(v),bot+20,String(v),{"text-anchor":"middle","font-size":14,class:"t-muted mt"}));
+    tx(g,gx(0)-10,top+12,"ln *H̄*",{"text-anchor":"end","font-size":15,class:"t-muted"});
+    tx(g,gx(30),bot+20,"generation",{"text-anchor":"middle","font-size":14,class:"t-muted"});
+    el("path",{d:`M${gx(0)} ${yy(0)-2}Q${gx(4)} ${yy(3)} ${gx(10)} ${yy(10)}`,class:"f-none s-muted","stroke-width":2,"stroke-dasharray":"4 4"},g);
+    el("line",{x1:gx(10),y1:yy(10),x2:gx(50),y2:yy(50),class:"s-orchid","stroke-width":3,"stroke-linecap":"round"},g);
+    tx(g,gx(31),yy(31)-14,"slope *β*, generations 10–50",{class:"t-orchid","font-size":15});
+    tx(g,860,top-10,"*N*_{eH} ≈ −1/(2*β*)",{"text-anchor":"end",class:"t-text mt","font-size":21});
+    if(f2)fadeIn(g,0,480);
+  }
+  if(k>=3){
+    const kept=new Set();for(let id=0;id<12;id++)if(!LOST.has(id))kept.add(id>>1);
+    const g2=el("g",{},s);
+    for(let f=0;f<6;f++){if(!kept.has(f))tx(g2,16+f*142+58,332,"lost",{"text-anchor":"middle","font-size":16,class:"t-muted"});}
+    tx(g2,0,416,`surviving alleles: 5 of 12, founder identities retained: ${kept.size} of 6`,{class:"t-text mt","font-size":24});
+    tx(g2,0,442,"Illustrative tokens, not simulation output.",{class:"t-muted","font-size":15.5});
+    if(f3)fadeIn(g2,600,450);
+  }
+}};
+
+/* closed-reference results: Table 2 means; intervals are the recomputed 95% intervals of Table S3 */
+const RSET=[{c:"orchid",h:0,n:"Strict single paternity"},{c:"orchid",h:1,n:"Low sire"},{c:"sky",h:0,n:"Granular reference"},{c:"sky",h:1,n:"High mixing"}];
+const RES2=[
+ {sym:"*A*_e,",desc:"effective sires per fruit, generations 1–50",lo:0,hi:7,ticks:[0,1,2,3,4,5,6,7],tf:0,v:["1","1.21","3.15","6.40"],ci:null,step:1},
+ {sym:"CV^2_m,",desc:"male reproductive skew",lo:0,hi:6,ticks:[0,1,2,3,4,5,6],tf:0,v:["5.60","5.42","4.54","4.13"],ci:[[5.46,5.74],[5.30,5.56],[4.45,4.63],[4.04,4.22]],step:2},
+ {sym:"*M*_e,",desc:"effective resident male contributors",lo:0,hi:100,ticks:[0,25,50,75,100],tf:0,v:["76.6","78.6","90.9","98.3"],ci:[[75.2,78.2],[77.0,80.0],[89.5,92.4],[96.7,100.0]],step:3},
+ {sym:"*H*,",desc:"founder-allele gene diversity",note:"axis starts at 0.80",lo:0.80,hi:0.90,ticks:[0.80,0.82,0.84,0.86,0.88,0.90],tf:2,v:["0.856","0.862","0.875","0.881"],ci:[[0.847,0.863],[0.854,0.869],[0.868,0.881],[0.874,0.887]],step:4},
+ {sym:"*N*_{eH},",desc:"inbreeding effective size, generations 10–50",lo:0,hi:250,ticks:[0,50,100,150,200,250],tf:0,v:["160","162","187","198"],ci:[[148,171],[150,175],[174,202],[185,212]],step:5}];
+function regimeDot(p,x,y,r,R){const hollow=R.h;return el("circle",{cx:x,cy:y,r:hollow?r-1.2:r,class:hollow?`f-bg s-${R.c}`:`f-${R.c} s-bg`,"stroke-width":hollow?2.6:2.5},p);}
+H["s-res"]={render(k,instant){
+  const s=$("#v-res");clear(s);
+  let lx=0;RSET.forEach(R=>{regimeDot(s,lx+8,16,8,R);const t=tx(s,lx+22,22,R.n,{class:"t-text","font-size":16});lx+=R.n.length*8.1+48;});
+  tx(s,0,46,"Means of 100 populations at generation 50 unless stated; bars are 95% bootstrap intervals (Table S3).",{class:"t-muted","font-size":14.5});
+  el("line",{x1:0,y1:60,x2:860,y2:60,class:"s-rule"},s);
+  const AX0=282,AX1=848;
+  RES2.forEach((R,i)=>{
+    if(k<R.step)return;
+    const fresh=!instant&&k===R.step;
+    const y=130+i*108,X=v=>lerp(AX0,AX1,(v-R.lo)/(R.hi-R.lo));
+    const lab=el("g",{},s);
+    tx(lab,0,y-4,R.sym,{class:"t-text mt","font-size":24});
+    tx(lab,0,y+19,R.desc,{class:"t-muted","font-size":14.5});
+    if(R.note)tx(lab,0,y+39,R.note,{class:"t-muted","font-size":14});
+    const axis=el("g",{},s);
+    el("line",{x1:AX0,y1:y,x2:AX1,y2:y,class:"s-rule2","stroke-width":1.5},axis);
+    R.ticks.forEach(v=>{el("line",{x1:X(v),y1:y,x2:X(v),y2:y+5,class:"s-rule2","stroke-width":1.25},axis);
+      tx(axis,X(v),y+40,fmt(v,R.tf),{"text-anchor":"middle","font-size":13.5,class:"t-faint mt"});});
+    if(R.note)el("path",{d:`M${AX0-34} ${y}L${AX0-24} ${y}L${AX0-19} ${y-6}L${AX0-11} ${y+6}L${AX0-6} ${y}L${AX0} ${y}`,class:"f-none s-rule2","stroke-width":1.5,"stroke-linejoin":"round"},axis);
+    if(fresh){lab.setAttribute("opacity",0);axis.setAttribute("opacity",0);T(360,t=>{lab.setAttribute("opacity",t);axis.setAttribute("opacity",t);},0,easeOut);}
+    const marks=RSET.map((Rg,j)=>{
+      const v=parseFloat(R.v[j]);
+      const bar=R.ci?el("line",{x1:X(R.ci[j][0]),y1:y,x2:X(R.ci[j][1]),y2:y,class:`s-${Rg.c}`,"stroke-width":3,"stroke-linecap":"round","stroke-opacity":.55},s):null;
+      const d=regimeDot(s,X(R.lo),y,8,Rg);
+      const up=!Rg.h;
+      const t=tx(s,X(v),up?y-15:y+23,R.v[j],{"text-anchor":"middle",class:(up?"t-text":"t-muted")+" mt","font-size":up?18:15,opacity:0});
+      return{v,d,t,bar};});
+    const go=t=>marks.forEach(m=>{m.d.setAttribute("cx",X(lerp(R.lo,m.v,t)));m.t.setAttribute("opacity",Math.max(0,(t-.55)/.45));if(m.bar)m.bar.setAttribute("opacity",Math.max(0,(t-.4)/.6));});
+    if(fresh)T(950,go,240);else go(1);
+  });
+}};
+
+/* decomposition: all-generation mean CV2m, Table 2 (simulated, and predicted (1 + 1/a)/phi + rbar*pibar) */
+const DEC=[{n:"Strict single paternity",pi:"1",sim:5.67,pred:5.72,pk:"1.91"},{n:"Low sire",pi:"0.887",sim:5.45,pred:5.50},
+ {n:"Granular reference",pi:"0.381",sim:4.49,pred:4.54,pk:"0.73"},{n:"High mixing",pi:"0.178",sim:4.11,pred:4.15},
+ {n:"Milkweed comparison",pi:"1",sim:8.11,pred:8.18,pk:"4.37",milk:true}];
+const DACC=3.81;
+H["s-decomp"]={render(k,instant){
+  const s=$("#v-decomp");clear(s);
+  if(k<1)return;
+  const X0=232,X1=790,X=v=>X0+v/9*(X1-X0),AY=566,fr=i=>!instant&&k===i;
+  const frame=el("g",{},s);
+  el("line",{x1:X0,y1:AY,x2:X1,y2:AY,class:"s-rule2","stroke-width":1.5},frame);
+  for(let v=0;v<=9;v++){el("line",{x1:X(v),y1:AY,x2:X(v),y2:AY+5,class:"s-rule2"},frame);tx(frame,X(v),AY+24,String(v),{"text-anchor":"middle","font-size":14,class:"t-muted mt"});}
+  tx(frame,X1,AY+50,"all-generation mean CV^2_m, closed populations",{"text-anchor":"end","font-size":14.5,class:"t-muted"});
+  const lg=el("g",{},frame);
+  el("rect",{x:0,y:8,width:16,height:16,rx:3,class:"f-tail",opacity:.8},lg);tx(lg,24,21,"donor access (1 + 1/*a*)/*φ*",{class:"t-text","font-size":15});
+  el("rect",{x:260,y:8,width:16,height:16,rx:3,class:"f-orchid"},lg);tx(lg,284,21,"sibling packaging *r̄π̄*",{class:"t-text","font-size":15});
+  if(k>=4){el("line",{x1:470,y1:6,x2:470,y2:26,class:"s-text","stroke-width":2.5},lg);tx(lg,482,21,"simulated",{class:"t-text","font-size":15});}
+  DEC.forEach((d,i)=>{
+    if(d.milk&&k<4)return;
+    const y=d.milk?452:66+i*82,h=38;
+    const g=el("g",{},s),fm=d.milk&&fr(4);
+    if(d.milk)el("line",{x1:0,y1:y-28,x2:860,y2:y-28,class:"s-rule","stroke-dasharray":"3 4"},g);
+    tx(g,0,y+17,d.n,{class:"t-text","font-size":16.5,"font-weight":600});
+    tx(g,0,y+38,d.milk?`*π̄* = 1, *r̄* = 4.37; *f* = 0.055, *S* = 120`:`*π̄* = ${d.pi}`,{class:"t-muted mt","font-size":15});
+    if(fr(1)||fm)fadeIn(g,i*60,320);
+    if(k>=2){const r=el("rect",{x:X(0),y:y,width:0,height:h,rx:2,class:"f-tail",opacity:.8},s);const w=X(DACC)-X(0)-1.5;
+      if(fr(2)||fm)T(560,t=>r.setAttribute("width",w*t),i*70,easeOut);else r.setAttribute("width",w);
+      if(i===0){const l=tx(s,X(0)+12,y+25,"3.81",{class:"t-ontail mt","font-size":16});if(fr(2))fadeIn(l,500);}}
+    if(k>=3){const w=X(d.pred)-X(DACC);const r=el("rect",{x:X(DACC),y:y,width:0,height:h,rx:2,class:"f-orchid"},s);
+      if(fr(3)||fm)T(620,t=>r.setAttribute("width",w*t),i*90+(fm?560:0),easeOut);else r.setAttribute("width",w);
+      const ls=el("g",{},s);
+      if(d.pk)tx(ls,X(DACC)+w/2,y+25,d.pk,{"text-anchor":"middle",class:"t-onorchid mt","font-size":16});
+      tx(ls,X(d.pred)+12,y+18,`${fmt(d.pred,2)} predicted`,{class:"t-text mt","font-size":17});
+      if(fr(3)||fm)fadeIn(ls,i*90+500+(fm?560:0),300);}
+    if(k>=4){const m=el("g",{},s);
+      el("line",{x1:X(d.sim),y1:y-6,x2:X(d.sim),y2:y+h+6,class:"s-text","stroke-width":2.5},m);
+      tx(m,X(d.pred)+12,y+37,`${fmt(d.sim,2)} simulated`,{class:"t-muted mt","font-size":14.5});
+      if(fr(4))fadeIn(m,(d.milk?1200:i*90),320);}
+  });
+}};
+
+/* pollination opportunity: Table 3 */
+const T3={f:[0.5,0.25,0.1,0.05,0.025],rbar:["0.95","1.91","4.78","9.63","19.41"],Fe:[147.2,116.1,68.6,42.1,23.2],
+ st:[87.5,74.8,53.7,35.5,21.1],ls:[91.3,78.2,56.2,37.9,23.0],gr:[96.5,91.8,77.6,61.0,42.0],
+ meR:[[9.3,6.9,11.6],[18.5,16.3,20.7],[30.8,28.7,32.7],[41.8,39.6,44.0],[49.8,47.2,52.4]],
+ neR:[[9.4,1.2,17.2],[11.9,2.5,20.8],[11.9,-0.3,22.2],[20.8,7.4,31.6],[27.6,15.5,37.8]]};
+const PIBAR={st:1,ls:0.887,gr:0.381};
+const meAn=(f,pi)=>500/(1+(1+1/0.6)/0.7+pi/(0.7*6*f*0.5));
+H["s-fruit"]={render(k,instant){
+  const s=$("#v-fruit");clear(s);
+  const L0=Math.log10(0.019),L1=Math.log10(0.62),X=f=>96+(Math.log10(f)-L0)/(L1-L0)*744;
+  const Y1=v=>292-v/160*240,Y2=v=>600-(v+5)/65*168,fr=i=>!instant&&k===i;
+  const frame=el("g",{},s);
+  tx(frame,0,22,"Effective numbers of resident male contributors (and of mothers), generation 50",{class:"t-muted","font-size":15.5});
+  [0,40,80,120,160].forEach(v=>{el("line",{x1:86,y1:Y1(v),x2:850,y2:Y1(v),class:v?"s-rule":"s-rule2","stroke-width":v?1:1.5},frame);tx(frame,76,Y1(v)+5,String(v),{"text-anchor":"end","font-size":13.5,class:"t-muted mt"});});
+  T3.f.forEach((f,i)=>{el("line",{x1:X(f),y1:Y1(160),x2:X(f),y2:Y2(-5),class:"s-rule","stroke-dasharray":"2 4"},frame);
+    tx(frame,X(f),316,String(f),{"text-anchor":"middle","font-size":15,class:"t-text mt"});tx(frame,X(f),336,T3.rbar[i],{"text-anchor":"middle","font-size":13.5,class:"t-muted mt"});});
+  tx(frame,0,316,"fruit set *f*",{"font-size":14.5,class:"t-text"});tx(frame,0,336,"*r̄*",{"font-size":14.5,class:"t-muted"});
+  if(fr(1))fadeIn(frame,0,400);
+  const curve=(pi,f0,f1)=>{let d="";for(let i=0;i<=48;i++){const f=Math.pow(10,Math.log10(f0)+i/48*(Math.log10(f1)-Math.log10(f0)));d+=(i?"L":"M")+X(f).toFixed(1)+" "+Y1(meAn(f,pi)).toFixed(1);}return d;};
+  const series=(vals,cls,dash,hollow,lab)=>{const g=el("g",{},s);let d="";T3.f.forEach((f,i)=>{d+=(i?"L":"M")+X(f).toFixed(1)+" "+Y1(vals[i]).toFixed(1);});
+    el("path",{d,class:"f-none "+cls,"stroke-width":2.5,"stroke-dasharray":dash||"none","stroke-linejoin":"round"},g);
+    T3.f.forEach((f,i)=>el("circle",{cx:X(f),cy:Y1(vals[i]),r:hollow?4.6:5.5,class:hollow?"f-bg "+cls:cls.replace("s-","f-")+" s-bg","stroke-width":hollow?2.2:2},g));return g;};
+  if(k>=2){
+    const an=el("g",{},s);
+    el("path",{d:curve(PIBAR.st,0.025,0.5),class:"f-none s-orchid","stroke-width":1.5,"stroke-dasharray":"5 4",opacity:.7},an);
+    el("path",{d:curve(PIBAR.gr,0.025,0.5),class:"f-none s-sky","stroke-width":1.5,"stroke-dasharray":"5 4",opacity:.7},an);
+    const gl=series(T3.ls,"s-orchid",null,true),gg=series(T3.gr,"s-sky"),gs=series(T3.st,"s-orchid");
+    const lab=el("g",{},s);
+    tx(lab,X(0.025)-12,Y1(21.1)+5,"21.1",{"text-anchor":"end",class:"t-text mt","font-size":15});
+    tx(lab,X(0.025)-12,Y1(42.0)+5,"42.0",{"text-anchor":"end",class:"t-text mt","font-size":15});
+    tx(lab,X(0.5)+12,Y1(87.5)+9,"87.5",{class:"t-text mt","font-size":15});
+    tx(lab,X(0.5)+12,Y1(96.5)-2,"96.5",{class:"t-text mt","font-size":15});
+    const lg=el("g",{},lab);let lx=220;
+    [["Strict single paternity","orchid",0,""],["Low sire","orchid",1,""],["Granular reference","sky",0,""]].forEach(([n,c,h,da])=>{
+      el("line",{x1:lx,y1:42,x2:lx+22,y2:42,class:"s-"+c,"stroke-width":2.5,"stroke-dasharray":da||"none"},lg);
+      el("circle",{cx:lx+11,cy:42,r:h?4.2:5,class:h?"f-bg s-"+c:"f-"+c+" s-bg","stroke-width":2},lg);
+      tx(lg,lx+30,47,n,{"font-size":14.5,class:"t-text"});lx+=n.length*7.6+52;});
+    el("line",{x1:lx,y1:42,x2:lx+22,y2:42,class:"s-muted","stroke-width":1.5,"stroke-dasharray":"5 4"},lg);tx(lg,lx+30,47,"analytical",{"font-size":14.5,class:"t-muted"});
+    if(fr(2)){[an,gl,gg,gs].forEach((g,i)=>fadeIn(g,i*160,420));fadeIn(lab,600,360);}
+  }
+  if(k>=3){
+    const g=el("g",{},s);
+    tx(g,0,384,"Reduction under strict paternity, relative to granular (%)",{class:"t-muted","font-size":15.5});
+    [0,20,40,60].forEach(v=>{el("line",{x1:86,y1:Y2(v),x2:850,y2:Y2(v),class:v?"s-rule":"s-muted","stroke-width":v?1:1.4},g);tx(g,76,Y2(v)+5,String(v),{"text-anchor":"end","font-size":13.5,class:"t-muted mt"});});
+    let d="";for(let i=0;i<=48;i++){const f=Math.pow(10,Math.log10(0.025)+i/48*(Math.log10(0.5)-Math.log10(0.025)));d+=(i?"L":"M")+X(f).toFixed(1)+" "+Y2(100*(1-meAn(f,1)/meAn(f,0.381))).toFixed(1);}
+    el("path",{d,class:"f-none s-orchid","stroke-width":1.5,"stroke-dasharray":"5 4",opacity:.7},g);
+    T3.f.forEach((f,i)=>{const [m,lo,hi]=T3.meR[i],[n,nl,nh]=T3.neR[i],x=X(f);
+      el("line",{x1:x-8,y1:Y2(lo),x2:x-8,y2:Y2(hi),class:"s-orchid","stroke-width":2.5,"stroke-linecap":"round"},g);
+      el("circle",{cx:x-8,cy:Y2(m),r:5.5,class:"f-orchid s-bg","stroke-width":2},g);
+      el("line",{x1:x+8,y1:Y2(nl),x2:x+8,y2:Y2(nh),class:"s-orchid","stroke-width":2,"stroke-linecap":"round",opacity:.6},g);
+      el("rect",{x:x+3.5,y:Y2(n)-4.5,width:9,height:9,class:"f-bg s-orchid","stroke-width":2},g);});
+    tx(g,X(0.025)-16,Y2(49.8)+5,"49.8",{"text-anchor":"end",class:"t-text mt","font-size":15});
+    tx(g,X(0.025)-16,Y2(27.6)+5,"27.6",{"text-anchor":"end",class:"t-muted mt","font-size":15});
+    tx(g,X(0.5)+18,Y2(9.3)-6,"9.3",{class:"t-text mt","font-size":15});
+    const k2=el("g",{},g);el("circle",{cx:560,cy:378,r:5,class:"f-orchid s-bg","stroke-width":2},k2);tx(k2,572,383,"*M*_e",{"font-size":14.5,class:"t-text"});
+    el("rect",{x:628,y:373.5,width:9,height:9,class:"f-bg s-orchid","stroke-width":2},k2);tx(k2,645,383,"*N*_{eH}",{"font-size":14.5,class:"t-text"});
+    if(fr(3))fadeIn(g,0,480);
+  }
+  if(k>=4){
+    const g=el("g",{},s);let d="";T3.f.forEach((f,i)=>{d+=(i?"L":"M")+X(f).toFixed(1)+" "+Y1(T3.Fe[i]).toFixed(1);});
+    el("path",{d,class:"f-none s-muted","stroke-width":2,"stroke-dasharray":"2 3"},g);
+    T3.f.forEach((f,i)=>el("rect",{x:X(f)-4.5,y:Y1(T3.Fe[i])-4.5,width:9,height:9,class:"f-bg s-muted","stroke-width":2},g));
+    tx(g,X(0.5)+12,Y1(147.2)+5,"147.2",{class:"t-muted mt","font-size":15});
+    tx(g,X(0.25)-14,Y1(116.1)-16,"*F*_e, effective number of mothers",{"text-anchor":"end",class:"t-muted","font-size":14.5});
+    tx(g,X(0.025)+18,Y1(6),"fathers 21.1, mothers 23.2",{class:"t-text","font-size":14.5});
+    if(fr(4))fadeIn(g,0,480);
+  }
+  if(k>=5){
+    const g=el("g",{},s),x=X(0.25)+22;
+    [[76.6,"orchid"],[90.9,"sky"]].forEach(([v,c])=>el("path",{d:`M${x} ${Y1(v)-6}l6 6-6 6-6-6z`,class:`f-bg s-${c}`,"stroke-width":2},g));
+    el("path",{d:`M${X(0.1)+40} ${Y1(16)-6}l6 6-6 6-6-6z`,class:"f-bg s-muted","stroke-width":2},g);
+    tx(g,X(0.1)+54,Y1(16)+5,"closed reference, Table 2: 76.6 and 90.9",{class:"t-muted","font-size":14});
+    if(fr(5))fadeIn(g,0,420);
+  }
+}};
+
+/* establishment correlation: Table S4 */
+const TS4={rho:["0","0.25","0.5","1"],
+ a:{me:[[9.0,6.7,11.4],[11.5,8.8,14.0],[14.5,12.4,16.6],[18.5,16.3,20.7]],ne:[[3.4,-6.6,12.5],[13.6,3.8,21.9],[9.5,-0.9,18.1],[11.9,2.5,20.8]]},
+ b:{me:[[44.4,42.5,46.1],[44.5,42.2,46.5],[47.6,45.4,49.8],[49.8,47.2,52.4]],ne:[[25.5,13.8,36.4],[23.6,12.4,33.5],[22.3,8.7,33.0],[27.6,15.5,37.8]]}};
+H["s-estc"]={render(k,instant){
+  const s=$("#v-estc");clear(s);
+  if(k<1)return;
+  const fr=i=>!instant&&k===i;
+  /* what rho means for one fruit's establishment multiplier u (mean q = 0.5) */
+  const sch=el("g",{},s);
+  tx(sch,0,20,"Fruit-level establishment multiplier *u*, mean *q* = 0.5",{class:"t-muted","font-size":15.5});
+  const bdens=(a,b,x)=>Math.exp((a-1)*Math.log(x)+(b-1)*Math.log(1-x)+lnGamma(a+b)-lnGamma(a)-lnGamma(b));
+  [["0","point"],["0.25",[1.5,1.5]],["0.5",[0.5,0.5]],["1 (gate)","gate"]].forEach(([r,spec],i)=>{
+    const x0=i*218,w=176,base=118,top=48,X=u=>x0+u*w;
+    el("line",{x1:x0,y1:base,x2:x0+w,y2:base,class:"s-rule2","stroke-width":1.25},sch);
+    if(spec==="point")el("line",{x1:X(.5),y1:base,x2:X(.5),y2:top,class:"s-orchid","stroke-width":4,"stroke-linecap":"round"},sch);
+    else if(spec==="gate"){el("line",{x1:X(0)+2,y1:base,x2:X(0)+2,y2:top+26,class:"s-orchid","stroke-width":4,"stroke-linecap":"round"},sch);el("line",{x1:X(1)-2,y1:base,x2:X(1)-2,y2:top+26,class:"s-orchid","stroke-width":4,"stroke-linecap":"round"},sch);}
+    else{let d=`M${X(0.002)} ${base}`;for(let j=1;j<=60;j++){const u=0.004+j/60*0.992;const v=Math.min(bdens(spec[0],spec[1],u),3.2);d+=`L${X(u).toFixed(1)} ${(base-v/3.2*(base-top)*0.9).toFixed(1)}`;}d+=`L${X(.998)} ${base}Z`;
+      el("path",{d,class:"f-orchid",opacity:.28},sch);el("path",{d,class:"f-none s-orchid","stroke-width":2},sch);}
+    tx(sch,X(0),base+18,"0",{"text-anchor":"middle","font-size":13,class:"t-muted mt"});tx(sch,X(1),base+18,"1",{"text-anchor":"middle","font-size":13,class:"t-muted mt"});
+    tx(sch,x0,top-6,`*ρ* = ${r}`,{class:"t-text","font-size":15.5,"font-weight":600});
+  });
+  if(fr(1))fadeIn(sch,0,450);
+  if(k<2)return;
+  const Y=v=>590-(v+10)/70*360;
+  [["a","f = 0.25",40],["b","f = 0.025",470]].forEach(([key,title,px])=>{
+    const W=380,D=TS4[key],slot=j=>px+(j+.5)*(W/4),g=el("g",{},s);
+    tx(g,px,196,title.replace("f","*f*"),{class:"t-text","font-size":17,"font-weight":600});
+    [-10,0,20,40,60].forEach(v=>{el("line",{x1:px,y1:Y(v),x2:px+W,y2:Y(v),class:v===0?"s-muted":"s-rule","stroke-width":v===0?1.5:1},g);tx(g,px-8,Y(v)+5,v<0?"−"+(-v):String(v),{"text-anchor":"end","font-size":13,class:"t-muted mt"});});
+    TS4.rho.forEach((r,j)=>{tx(g,slot(j),612,r,{"text-anchor":"middle","font-size":14.5,class:"t-text mt"});});
+    tx(g,px+W,634,"*ρ*",{"text-anchor":"end","font-size":15,class:"t-muted"});
+    if(fr(2))fadeIn(g,0,380);
+    const me=el("g",{},s);
+    D.me.forEach(([m,lo,hi],j)=>{const x=slot(j)-9;el("line",{x1:x,y1:Y(lo),x2:x,y2:Y(hi),class:"s-orchid","stroke-width":2.5,"stroke-linecap":"round"},me);el("circle",{cx:x,cy:Y(m),r:6,class:"f-orchid s-bg","stroke-width":2},me);});
+    tx(me,slot(3)-9,Y(D.me[3][0])-16,fmt(D.me[3][0],1),{"text-anchor":"middle","font-size":14.5,class:"t-text mt"});
+    tx(me,slot(0)-9,Y(D.me[0][0])-16,fmt(D.me[0][0],1),{"text-anchor":"middle","font-size":14.5,class:"t-text mt"});
+    if(fr(2))fadeIn(me,200,420);
+    if(k>=3){const ne=el("g",{},s);
+      D.ne.forEach(([n,lo,hi],j)=>{const x=slot(j)+9;el("line",{x1:x,y1:Y(lo),x2:x,y2:Y(hi),class:"s-orchid","stroke-width":2,"stroke-linecap":"round",opacity:.6},ne);el("rect",{x:x-4.5,y:Y(n)-4.5,width:9,height:9,class:"f-bg s-orchid","stroke-width":2},ne);});
+      if(fr(3))fadeIn(ne,0,420);}
+    if(k>=4){const a=el("g",{},s);
+      tx(a,px+W/2,226,key==="a"?"effect halves without the gate":"funnel persists at every *ρ*",{"text-anchor":"middle","font-size":14.5,class:"t-orchid","font-weight":600});
+      if(fr(4))fadeIn(a,0,380);}
+  });
+  const kg=el("g",{},s);el("circle",{cx:592,cy:162,r:5,class:"f-orchid s-bg","stroke-width":2},kg);tx(kg,604,167,"*M*_e reduction",{"font-size":14.5,class:"t-text"});
+  if(k>=3){el("rect",{x:718,y:157.5,width:9,height:9,class:"f-bg s-orchid","stroke-width":2},kg);tx(kg,734,167,"*N*_{eH} reduction",{"font-size":14.5,class:"t-text"});}
+  tx(kg,0,162,"Strict relative to granular paternity (%), 95% intervals",{"font-size":14.5,class:"t-muted"});
+  if(fr(2))fadeIn(kg,0,380);
+}};
+
+/* ---------- voice-over script ---------- */
+const NOTES={
+"s-title":"This is the technical companion to the paper on orchid paternity, built on model release 3.3. It follows diploid adults through fifty discrete generations and asks one question: if paternity within a fruit is concentrated, what happens to the next generation of adults? Every scenario is neutral and outcrossing. The paternity regimes are specified distributions, not fitted species, and pollen transport is not simulated.",
+"s-params":"Here is the closed reference. Five hundred adults, fifty generations, a hundred replicate populations per regime. Both external inputs are switched off. With these values a population makes about five hundred and twenty five fruits per generation, before any recruitment filter. Later scenes vary fruit set, donor evenness, external input and the correlation of establishment within fruits.",
+"s-events":"Each generation runs in a fixed order. Adults flower, make flowers and fruits, fathers are assigned within each fruit, recruits are drawn and inherit alleles, immigrants may arrive, and the pool is cut back to K. Nobody survives into the next generation, and if fewer than two adults flower the population is extinct.",
+"s-pat":"Paternity is decided fruit by fruit. Every fruit gets one candidate; extra arrivals are Poisson and may be excluded. Each candidate is drawn from the flowering residents using uneven Gamma weights, never the mother. A Dirichlet draw then splits the fruit among its candidates. Under strict single paternity every fruit has one sire; in the other regimes the single-sire fractions, 63.6, 3.1 and 0.10 percent, are set by the parameters rather than emerging from them.",
+"s-evid":"The regimes stand for pollen units, not species. Every progeny study of hard-pollinium orchids found only single-sire capsules, in Phalaenopsis, Rhynchostylis and Laelia, though the evidence differs in quality from species to species. Soft pollinia give a minority of multiply sired capsules, sectile pollinia receive pollen from several donors, monad pollen gives mostly multiply sired fruits, and milkweed pollinaria are single-sire but come with a very different demography. The hard-pollinium evidence is thin: 477 progeny arrays, only 18 at high resolution, and a second sire with a small share would often go undetected.",
+"s-ae":"We summarise a fruit's paternity with the effective number of sires, one over the sum of squared shares. Three fathers can mean three effective sires or barely one and a half. Its reciprocal, paternal identity, is the chance that two seeds of the fruit share a father; averaged over fruits it is the model's analogue of correlated paternity in progeny arrays. In the released run Aₑ was 1, 1.21, 3.15 and 6.40 across the four regimes. It is assigned before recruitment.",
+"s-rec":"Recruitment has a shared gate. Half of all fruits recruit nothing; the other half draw Poisson with mean ten. So the mean is five but the variance is thirty, and siblings succeed or fail together. The gate stands for the shared fate of a capsule's seeds, and a later scene relaxes it.",
+"s-inh":"Each recruit picks its father from its fruit's shares and takes one of each parent's two alleles at random. Founders start with unique alleles, so allele ID divided by two recovers the founder identity: five hundred founders, a thousand alleles.",
+"s-reg":"About two thousand six hundred potential recruits compete for five hundred places. Immigrants would join this pool, but not in the closed reference. A uniform sample without replacement becomes the next generation. From here on, a recruit means an offspring that made it into the next adult generation.",
+"s-skew":"Male skew uses realised success: retained recruits per resident, counting everyone, including zeros. CV squared and the effective number of resident male contributors, Mₑ, describe the same distribution. One resident siring everything gives Mₑ of one; equal shares give four. Mₑ is the male component of drift, not the population effective size. Because success is counted after recruitment, skew also includes the filtering of whole sibships.",
+"s-decomp":"Why does paternity matter? Male skew splits into two terms. Donor access, 3.81, comes from flowering and uneven donor weights and is the same in every regime. Sibling packaging is the mean number of recruits per establishing fruit times paternal identity: 1.91 under strict paternity, 0.73 under granular pollen. The regimes differ only in this term, and the prediction matched the simulations within 1.1 percent. Flowering, flower number, fruit set and the gate act only through their product, which sets sibship size, so the paternity effect grows as fruit set falls.",
+"s-div":"Neutral diversity is the gene diversity of founder alleles at an artificial marker, starting at 0.999. Its decay gives a second measure of drift, the inbreeding effective size, approximately minus one over twice the slope of log H over generations ten to fifty. Founder retention counts which original identities still appear. Intervals throughout are 95 percent percentile bootstrap intervals over replicate populations.",
+"s-res":"The main result, with demography held constant. Strict paternity raises skew from 4.54 to 5.60 and lowers the effective number of resident male contributors from 90.9 to 76.6, a reduction of 15.7 percent. Diversity differs by about 0.02, which is 15.2 percent more homozygosity, and the inbreeding effective size falls from 187 to 160, a reduction that matches the one in Mₑ. The four regimes line up in order of paternal identity.",
+"s-fruit":"Now vary fruit set while potential recruitment stays constant. With fewer fruits, each establishing fruit sends more siblings into the next generation, from about one to nineteen. Mₑ falls in every regime, but most under single paternity: from 87.5 to 21.1, against 96.5 to 42.0 under granular pollen. The reduction rises from 9.3 to 49.8 percent, as the decomposition predicts. At the lowest fruit set the effective number of fathers under strict paternity converges on the effective number of mothers. Strictly, what sets the funnel is sibship size; fruit set is the route that matters most in orchids.",
+"s-estc":"The gate assumes that all seeds of a capsule share one fate. Here it is replaced by a beta-distributed multiplier whose correlation, rho, runs from zero, independent seeds, to one, the gate. At fruit set 0.25 the Mₑ reduction falls from 18.5 to 9.0 percent without the gate, and the drift reductions are no longer distinguishable from zero. At fruit set 0.025 the funnel persists at every level of correlation. Across all these cells, the paternity effect follows effective sibship size almost exactly.",
+"s-bound":"Open settings. Strict paternity lowered Mₑ in all eight, by 15.5 to 27.1 percent. The factorial separates two things. Even donor weights drive the largest reductions, because they shrink donor access and leave packaging a larger share of skew. External input compresses the diversity difference as H approaches its ceiling, although homozygosity stays higher under single paternity; in the model the outside source is effectively unlimited. Only the small, lower-input case has intervals for the diversity difference that include zero.",
+"s-impl":"Everything is reproducible from the released engine and parameter file. Seeds are deterministic by scenario and replicate, so preserve ordering. The 2026 runs use the unmodified engine, except the establishment-correlation set, which uses a copy that changes only the establishment draw.",
+"s-pred":"The model makes testable predictions. Pollinator decline should reduce effective size most in hard-pollinium orchids; deceptive species with low fruit set should have lower effective size relative to census size than rewarding ones; and pleurothallids should have the deepest funnels. Sibship size itself can be measured directly, by genotyping recruits around mapped mothers. These are tests of effective size, not of diversity at two sites: the expected difference in H is about half its spread among replicate populations. Correlated paternity from progeny arrays measures the depth of the funnel directly.",
+"s-scope":"So the claim is conditional. Every sibling of a single-sire fruit shares one father, so the number of fruits that recruit sets the scale of the effective paternal pool. Pollination opportunity controls the funnel through sibship size. The model covers outcrossing and one recruitment episode with shared establishment; it does not estimate effective size in real orchids, and the link to orchid diversification is a hypothesis it leaves untested."};
+
+
+/* ---------- primer (appendix) ----------
+   Explanatory illustrations. They draw from their own seeded generator (PR), so the model's
+   random stream above, and every live sample in scenes 4 and 5, is untouched. */
+function mkRand(seed){let s=seed>>>0;return function(){s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const PR=mkRand(11);
+function pNormal(){let u=0;while(u===0)u=PR();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*PR());}
+function pGamma(a){if(a<1)return pGamma(a+1)*Math.pow(PR(),1/a);const d=a-1/3,c=1/Math.sqrt(9*d);for(;;){let x,v;do{x=pNormal();v=1+c*x;}while(v<=0);v=v*v*v;const u=PR();if(u<1-0.0331*x*x*x*x)return d*v;if(Math.log(u)<0.5*x*x+d*(1-v+Math.log(v)))return d*v;}}
+function pDirichlet(al){const g=al.map(pGamma);const s=g.reduce((a,b)=>a+b,0);return g.map(x=>x/s).sort((a,b)=>b-a);}
+function lnGamma(z){const g=7,c=[0.99999999999980993,676.5203681218851,-1259.1392167224028,771.32342877765313,-176.61503916999185,12.507343278686905,-0.13857109526572012,9.9843695780195716e-6,1.5056327351493116e-7];
+  if(z<.5)return Math.log(Math.PI/Math.sin(Math.PI*z))-lnGamma(1-z);z-=1;let x=c[0];for(let i=1;i<g+2;i++)x+=c[i]/(z+i);const t=z+g+.5;return .5*Math.log(2*Math.PI)+(z+.5)*Math.log(t)-t+Math.log(x);}
+
+/* worked example: eight illustrative plants at one locus; every number shown is computed here */
+const GENO=["AA","AB","AC","BB","BC","AD","CC","AB"],ALLELES="ABCD";
+const HETN=GENO.filter(g=>g[0]!==g[1]).length;
+const ACNT=[...ALLELES].map(a=>GENO.join("").split(a).length-1);
+const NCOPY=GENO.length*2,PF=ACNT.map(c=>c/NCOPY);
+const SUMP2=PF.reduce((s,p)=>s+p*p,0),HEXP=1-SUMP2,HCOR=NCOPY/(NCOPY-1)*HEXP,HOBS=HETN/GENO.length;
+const alCls=a=>"f-al"+ALLELES.indexOf(a);
+function allele(s,x,y,a,w,h){const g=el("g",{transform:`translate(${x},${y})`},s);el("rect",{x:-w/2,y:-h/2,width:w,height:h,rx:Math.min(9,h/3),class:alCls(a)},g);
+  tx(g,0,h*.22,a,{"text-anchor":"middle","font-size":Math.round(h*.52),"font-weight":600,class:"t-onal"});return g;}
+
+H["p-het"]={render(k,instant){
+  const s=$("#v-het");clear(s);
+  tx(s,0,22,"Illustrative genotypes at one locus, not simulation output. Letters name the alleles.",{class:"t-muted","font-size":16});
+  const f1=!instant&&k===1,f2=!instant&&k===2,f3=!instant&&k===3,f4=!instant&&k===4;
+  if(k<1)return;
+  GENO.forEach((g,i)=>{
+    const x=(i%4)*218,y=50+Math.floor(i/4)*152,het=g[0]!==g[1];
+    const card=el("g",{},s);
+    const r=el("rect",{x:x,y:y,width:196,height:128,rx:14,class:"f-panel s-rule2","stroke-width":1.5},card);
+    tx(card,x+16,y+26,`plant ${i+1}`,{class:"t-muted","font-size":15});
+    allele(card,x+98-34,y+68,g[0],58,44);allele(card,x+98+34,y+68,g[1],58,44);
+    if(f1){card.setAttribute("opacity",0);T(420,t=>card.setAttribute("opacity",t),i*70,easeOut);}
+    if(k>=2){
+      const lab=tx(s,x+98,y+114,het?"heterozygous":"homozygous",{"text-anchor":"middle","font-size":15,class:het?"t-orchid":"t-muted","font-weight":het?600:400});
+      if(het){r.setAttribute("class","f-panel s-orchid");r.setAttribute("stroke-width",2.25);}
+      if(f2){lab.setAttribute("opacity",0);T(360,t=>lab.setAttribute("opacity",t),i*90,easeOut);}
+    }
+  });
+  if(k>=3){
+    const g=el("g",{},s),y=372;
+    GENO.forEach((ge,i)=>{const het=ge[0]!==ge[1];el("rect",{x:i*30,y:y-18,width:22,height:22,rx:4,class:het?"f-orchid":"f-none s-rule2","stroke-width":1.5},g);});
+    tx(g,8*30+14,y,`${HETN} of ${GENO.length} plants heterozygous`,{class:"t-text","font-size":19});
+    tx(g,0,y+54,`*H*_o = ${HETN} / ${GENO.length} = ${fmt(HOBS,3)}`,{class:"t-text mt","font-size":30});
+    if(f3)fadeIn(g,0,420);
+  }
+  if(k>=4){
+    const g=el("g",{},s),y0=502;
+    tx(g,0,y0-14,"How it is measured in real populations",{class:"t-muted","font-size":16});
+    const B=[["Sample plants",["collect tissue,","extract DNA"]],["Genotype markers",["microsatellites","or SNPs"]],["Score each locus",["homozygous or","heterozygous?"]],["Average over loci",["report observed","heterozygosity"]]];
+    B.forEach(([a,b],i)=>{const x=i*220;const bx=el("g",{},g);
+      el("rect",{x:x,y:y0,width:196,height:100,rx:12,class:"f-panel s-rule2","stroke-width":1.5},bx);
+      tx(bx,x+16,y0+32,a,{class:"t-text","font-size":17,"font-weight":600});
+      b.forEach((ln,j)=>tx(bx,x+16,y0+58+j*20,ln,{class:"t-muted","font-size":15}));
+      if(i<3)el("path",{d:`M${x+200} ${y0+50}h16m-6 -5 6 5 -6 5`,class:"f-none s-muted","stroke-width":1.6,"stroke-linecap":"round","stroke-linejoin":"round"},g);
+      if(f4){bx.setAttribute("opacity",0);T(380,t=>bx.setAttribute("opacity",t),i*160,easeOut);}});
+    if(f4){const hd=g.firstChild;fadeIn(hd,0,300);}
+  }
+}};
+
+H["p-gd"]={render(k,instant){
+  const s=$("#v-gd");clear(s);
+  if(k<1)return;
+  const f1=!instant&&k===1,f2=!instant&&k===2,f3=!instant&&k===3;
+  tx(s,0,22,"The 16 gene copies of the same eight plants, pooled by allele.",{class:"t-muted","font-size":16});
+  /* allele frequency columns */
+  const base=378,cw=64,ch=26,gap=4;
+  [...ALLELES].forEach((a,i)=>{
+    const x=16+i*96;
+    for(let j=0;j<ACNT[i];j++){const c=allele(s,x+cw/2,base-ch/2-j*(ch+gap),a,cw,ch);
+      if(f1){c.setAttribute("opacity",0);T(320,t=>c.setAttribute("opacity",t),i*160+j*60,easeOut);}}
+    const lb=el("g",{},s);
+    tx(lb,x+cw/2,base+32,`${ACNT[i]}⁄${NCOPY}`,{"text-anchor":"middle","font-size":19,class:"t-text mt sf"});
+    tx(lb,x+cw/2,base+56,fmt(PF[i],3),{"text-anchor":"middle","font-size":15,class:"t-muted mt"});
+    if(f1)fadeIn(lb,700,300);
+  });
+  el("line",{x1:8,y1:base+8,x2:16+3*96+cw+8,y2:base+8,class:"s-rule2","stroke-width":1.25},s);
+  if(k>=2){
+    /* unit square: rows and columns split by allele frequency; the diagonal is "same allele" */
+    const g=el("g",{},s),X0=476,Y0=58,S=320,cum=[0];PF.forEach(p=>cum.push(cum[cum.length-1]+p));
+    tx(g,X0+S/2,Y0-14,"first gene copy",{"text-anchor":"middle",class:"t-muted","font-size":14.5});
+    const lt=tx(g,X0-16,Y0+S/2,"second gene copy",{"text-anchor":"middle",class:"t-muted","font-size":14.5});lt.setAttribute("transform",`rotate(-90 ${X0-16} ${Y0+S/2})`);
+    for(let i=0;i<4;i++)for(let j=0;j<4;j++){
+      const x=X0+cum[j]*S,y=Y0+cum[i]*S,w=PF[j]*S,h=PF[i]*S;
+      const r=el("rect",{x:x+1,y:y+1,width:Math.max(0,w-2),height:Math.max(0,h-2),class:i===j?alCls(ALLELES[i]):"f-rule"},g);
+      if(i===j&&w>40)tx(g,x+w/2,y+h/2+7,ALLELES[i]+ALLELES[i],{"text-anchor":"middle","font-size":19,"font-weight":600,class:"t-onal"});
+    }
+    [...ALLELES].forEach((a,i)=>{const m=X0+(cum[i]+PF[i]/2)*S;
+      tx(g,m,Y0+S+22,a,{"text-anchor":"middle","font-size":15,class:"t-muted","font-weight":600});
+      tx(g,X0+S+14,Y0+(cum[i]+PF[i]/2)*S+5,a,{"font-size":15,class:"t-muted","font-weight":600});});
+    const lg=el("g",{},g),ly=Y0+S+62;
+    el("rect",{x:X0,y:ly-13,width:16,height:16,rx:3,class:"f-al0"},lg);
+    tx(lg,X0+24,ly,`same allele: Σ*p*^2_{*i*} = ${fmt(SUMP2,3)}`,{class:"t-text mt","font-size":19});
+    el("rect",{x:X0,y:ly+17,width:16,height:16,rx:3,class:"f-rule"},lg);
+    tx(lg,X0+24,ly+30,`different alleles: *H*_e = ${fmt(HEXP,3)}`,{class:"t-text mt","font-size":19});
+    if(f2){g.setAttribute("opacity",0);T(520,t=>g.setAttribute("opacity",t),0,easeOut);}
+  }
+  if(k>=3){
+    /* observed and expected on one 0 to 1 scale */
+    const g=el("g",{},s),y=588,A0=16,A1=800,X=v=>lerp(A0,A1,v);
+    tx(g,0,y-62,"Observed and expected heterozygosity of the same eight plants",{class:"t-muted","font-size":16});
+    el("line",{x1:A0,y1:y,x2:A1,y2:y,class:"s-rule2","stroke-width":1.5},g);
+    [0,.25,.5,.75,1].forEach(v=>{el("line",{x1:X(v),y1:y,x2:X(v),y2:y+6,class:"s-rule2","stroke-width":1.25},g);tx(g,X(v),y+26,v===0||v===1?String(v):fmt(v,2),{"text-anchor":"middle","font-size":14.5,class:"t-muted mt"});});
+    el("circle",{cx:X(HOBS),cy:y,r:9,class:"f-orchid s-bg","stroke-width":2.5},g);
+    el("circle",{cx:X(HEXP),cy:y,r:9,class:"f-sky s-bg","stroke-width":2.5},g);
+    el("circle",{cx:X(HCOR),cy:y,r:7.5,class:"f-bg s-sky","stroke-width":2.5},g);
+    tx(g,X(HOBS)+2,y-18,`observed *H*_o ${fmt(HOBS,3)}`,{"text-anchor":"end",class:"t-text mt","font-size":17});
+    tx(g,X(HEXP)-4,y+50,`expected *H*_e ${fmt(HEXP,3)}`,{"text-anchor":"middle",class:"t-text mt","font-size":17});
+    tx(g,X(HCOR)-2,y-18,`corrected ${fmt(HCOR,3)}`,{class:"t-text mt","font-size":17});
+    if(f3){g.setAttribute("opacity",0);T(480,t=>g.setAttribute("opacity",t),0,easeOut);}
+  }
+}};
+
+/* A3 glyphs: exact probability functions, except the example draws, which use PR */
+const binomP=(n,p,k)=>{let c=1;for(let i=0;i<k;i++)c=c*(n-i)/(i+1);return c*Math.pow(p,k)*Math.pow(1-p,n-k);};
+const poisP=(l,k)=>{let v=Math.exp(-l);for(let i=1;i<=k;i++)v*=l/i;return v;};
+const DIRX=[[.7,.7,.7,.7],[.7,.7,.7,.7],[4,4,4,4],[4,4,4,4]].map(pDirichlet);
+const UNIF=(function(){const o=[];for(let i=0;i<40;i++)o.push(i);for(let i=39;i>0;i--){const j=Math.floor(PR()*(i+1));[o[i],o[j]]=[o[j],o[i]];}return new Set(o.slice(0,10));})();
+function drawGlyph(svg){
+  const kind=svg.dataset.g,cap=(t)=>tx(svg,0,72,t,{class:"t-muted","font-size":12.5});
+  const bars=(vals,w,gap,x0,cls)=>{const m=Math.max(...vals);vals.forEach((v,i)=>{const h=v/m*44;el("rect",{x:x0+i*(w+gap),y:52-h,width:w,height:h,rx:1.5,class:cls||"f-sky"},svg);});el("line",{x1:0,y1:52.5,x2:190,y2:52.5,class:"s-rule2"},svg);};
+  if(kind==="bern"){bars([.3,.7],34,22,40);cap("no, yes: p = 0.7");}
+  if(kind==="binom"){const v=[];for(let k=0;k<=6;k++)v.push(binomP(6,.25,k));bars(v,18,6,6);cap("n = 6, p = 0.25");}
+  if(kind==="pois"){const v=[];for(let k=0;k<=15;k++)v.push(poisP(6,k));bars(v,8.5,3,4);cap("λ = 6: mean 6, variance 6");}
+  if(kind==="gamma"){
+    const dens=(a,x)=>Math.exp((a-1)*Math.log(x)-x-lnGamma(a));
+    [[.6,"s-orchid"],[3,"s-muted"]].forEach(([a,c])=>{let d="";for(let i=0;i<=120;i++){const x=.03+i*(7-.03)/120;const y=Math.min(dens(a,x),1.1);d+=(i?"L":"M")+(x/7*186+2).toFixed(1)+" "+(52-y/1.1*46).toFixed(1);}
+      el("path",{d,class:"f-none "+c,"stroke-width":2,"stroke-linecap":"round"},svg);});
+    el("line",{x1:0,y1:52.5,x2:190,y2:52.5,class:"s-rule2"},svg);
+    tx(svg,40,18,"a = 0.6",{class:"t-orchid mt","font-size":12.5});tx(svg,98,34,"a = 3",{class:"t-muted mt","font-size":12.5});
+    cap("density of the weight");}
+  if(kind==="dir"){
+    DIRX.forEach((sh,r)=>{const x0=r<2?0:100,y=2+(r%2)*19;let acc=0;sh.forEach((p,i)=>{const w=p*88;const rc=el("rect",{x:x0+acc,y:y,width:Math.max(.8,w-1.5),height:15,rx:1.5},svg);shareFill(rc,i);acc+=w;});});
+    tx(svg,0,52,"α = 0.7",{class:"t-muted mt","font-size":12.5});tx(svg,100,52,"α = 4",{class:"t-muted mt","font-size":12.5});
+    cap("k = 4, example draws");}
+  if(kind==="beta"){
+    const bd=(a,x)=>Math.exp((a-1)*Math.log(x*(1-x))+lnGamma(2*a)-2*lnGamma(a));
+    [[1.5,"s-orchid"],[.5,"s-muted"]].forEach(([a,c])=>{let d="";for(let i=0;i<=100;i++){const x=.012+i*.976/100;const y=Math.min(bd(a,x),3);d+=(i?"L":"M")+(x*186+2).toFixed(1)+" "+(52-y/3*46).toFixed(1);}
+      el("path",{d,class:"f-none "+c,"stroke-width":2,"stroke-linecap":"round"},svg);});
+    el("line",{x1:0,y1:52.5,x2:190,y2:52.5,class:"s-rule2"},svg);
+    tx(svg,95,21,"ρ = 0.25",{"text-anchor":"middle",class:"t-orchid mt","font-size":12.5});tx(svg,24,14,"ρ = 0.5",{class:"t-muted mt","font-size":12.5});
+    cap("mean 0.5, spread set by ρ");}
+  if(kind==="unif"){for(let i=0;i<40;i++){const c=i%10,r=Math.floor(i/10),on=UNIF.has(i);el("circle",{cx:8+c*19,cy:8+r*13,r:on?5:4,class:on?"f-orchid":"f-leaf",opacity:on?1:.35},svg);}cap("keep 10 of 40, example draw");}
+}
+
+/* A4: effective numbers on rulers, replicates and an interval, one pair of means on two axes */
+const BOOT=(function(){const v=[];for(let i=0;i<100;i++)v.push(pNormal());const mean=v.reduce((a,b)=>a+b,0)/100;
+  const ms=[];for(let b=0;b<1000;b++){let s=0;for(let i=0;i<100;i++)s+=v[Math.floor(PR()*100)];ms.push(s/100);}ms.sort((a,b)=>a-b);
+  const jit=v.map(()=>PR());return{v,mean,lo:ms[24],hi:ms[974],jit};})();
+const effN=p=>1/p.reduce((s,x)=>s+x*x,0);
+const HPAIR={st:0.856,gr:0.875}; /* Table 2, strict and granular */
+H["p-stats"]={render(k,instant){
+  const s=$("#v-stats");clear(s);
+  if(k<1)return;
+  const fr=i=>!instant&&k===i;
+  const ruler=(g,y,lo,hi,A0,A1,ticks)=>{const X=v=>lerp(A0,A1,(v-lo)/(hi-lo));el("line",{x1:A0,y1:y,x2:A1,y2:y,class:"s-rule2","stroke-width":1.5},g);
+    ticks.forEach(v=>el("line",{x1:X(v),y1:y,x2:X(v),y2:y+5,class:"s-rule2","stroke-width":1.25},g));return X;};
+  /* 1: effective number of fathers */
+  {const g=el("g",{},s);tx(g,0,20,"Effective number of fathers, 1 / Σ*p*^2_{*i*}",{class:"t-muted","font-size":16});
+    const EX=[[[1],"(1)"],[[.8,.1,.1],"(0.8, 0.1, 0.1)"],[[1/3,1/3,1/3],"(⅓, ⅓, ⅓)"]];
+    const X=ruler(g,138,1,3,70,780,[1,1.5,2,2.5,3]);
+    EX.forEach(([sh,lab])=>{const e=effN(sh),x=X(e);let acc=0;
+      tx(g,x,50,lab.replace(/⅓/g,"1⁄3"),{"text-anchor":"middle",class:"t-text mt"+(lab.includes("⅓")?" sf":""),"font-size":17});
+      sh.forEach((p,i)=>{const rc=el("rect",{x:x-60+acc*120,y:62,width:Math.max(1,p*120-2),height:24,rx:2},g);shareFill(rc,i);acc+=p;});
+      el("line",{x1:x,y1:92,x2:x,y2:130,class:"s-rule2","stroke-width":1.25,"stroke-dasharray":"3 3"},g);
+      el("circle",{cx:x,cy:138,r:6.5,class:"f-orchid s-bg","stroke-width":2},g);
+      tx(g,x,164,fmt(e,2),{"text-anchor":"middle",class:"t-text mt","font-size":18});});
+    if(fr(1)){g.setAttribute("opacity",0);T(480,t=>g.setAttribute("opacity",t),0,easeOut);}}
+  if(k>=2){const g=el("g",{},s);tx(g,0,208,"Equally successful residents that would be just as unequal, *M*_e (*N* = 4)",{class:"t-muted","font-size":16});
+    const EX=[[4,0,0,0],[2,1,1,0],[1,1,1,1]];
+    const X=ruler(g,330,1,4,70,780,[1,2,3,4]);
+    EX.forEach(w=>{const st=stats(w),x=X(st.me);
+      tx(g,x,236,`*w* = [${w.join(", ")}]`,{"text-anchor":"middle",class:"t-text mt","font-size":16});
+      w.forEach((v,i)=>el("rect",{x:x-34+i*18,y:312-v*16,width:14,height:v*16,rx:1.5,class:"f-orchid"},g));
+      el("line",{x1:x-38,y1:312.5,x2:x+38,y2:312.5,class:"s-muted"},g);
+      tx(g,x,356,`CV^2_m = ${st.c%1?fmt(st.c,1):fmt(st.c,0)},  *M*_e = ${st.me%1?fmt(st.me,2):fmt(st.me,0)}`,{"text-anchor":"middle",class:"t-text mt","font-size":17,style:"white-space:pre"});});
+    if(fr(2)){g.setAttribute("opacity",0);T(480,t=>g.setAttribute("opacity",t),0,easeOut);}}
+  if(k>=3){const g=el("g",{},s),y=446;tx(g,0,384,"Illustrative values, not simulation output: 100 replicates, their mean and a 95% percentile bootstrap interval",{class:"t-muted","font-size":14.5});
+    const X=v=>lerp(70,780,(v+3)/6);
+    BOOT.v.forEach((v,i)=>el("circle",{cx:X(Math.max(-3,Math.min(3,v))),cy:y-14+BOOT.jit[i]*28,r:3.2,class:"f-sky",opacity:.55},g));
+    el("line",{x1:X(BOOT.mean),y1:y-24,x2:X(BOOT.mean),y2:y+24,class:"s-text","stroke-width":2},g);
+    const iy=y+40;el("path",{d:`M${X(BOOT.lo)} ${iy-6}v6H${X(BOOT.hi)}v-6`,class:"f-none s-orchid","stroke-width":2},g);
+    tx(g,X(BOOT.hi)+10,iy+4,"interval for the mean",{class:"t-orchid","font-size":14.5});
+    tx(g,X(BOOT.mean)+8,y-12,"mean",{class:"t-text","font-size":14.5});
+    if(fr(3)){g.setAttribute("opacity",0);T(480,t=>g.setAttribute("opacity",t),0,easeOut);}}
+  if(k>=4){const g=el("g",{},s);tx(g,0,524,`The same two *H* means from scene ${sceneNo("s-res")}, drawn on two axes`,{class:"t-muted","font-size":16});
+    [[0,1,556,"axis from 0"],[.8,.9,612,"axis starts at 0.80"]].forEach(([lo,hi,y,lab])=>{const X=ruler(g,y,lo,hi,190,780,[lo,hi]);
+      tx(g,0,y+5,lab,{class:"t-text","font-size":15});
+      tx(g,190,y+24,lo===0?"0":fmt(lo,2),{"text-anchor":"middle",class:"t-muted mt","font-size":13.5});tx(g,780,y+24,hi===1?"1":fmt(hi,2),{"text-anchor":"middle",class:"t-muted mt","font-size":13.5});
+      el("circle",{cx:X(HPAIR.st),cy:y,r:7,class:"f-orchid s-bg","stroke-width":2},g);el("circle",{cx:X(HPAIR.gr),cy:y,r:7,class:"f-sky s-bg","stroke-width":2},g);
+      if(lo>0){tx(g,X(HPAIR.st),y-14,fmt(HPAIR.st,3),{"text-anchor":"middle",class:"t-text mt","font-size":14.5});tx(g,X(HPAIR.gr),y-14,fmt(HPAIR.gr,3),{"text-anchor":"middle",class:"t-text mt","font-size":14.5});}});
+    if(fr(4)){g.setAttribute("opacity",0);T(480,t=>g.setAttribute("opacity",t),0,easeOut);}}
+}};
+
+const PNOTES={
+"p-het":"A short primer for anyone new to population genetics. The model's plants are diploid: each carries two copies of every gene, one from each parent, and the versions of a gene are called alleles. A plant with two identical copies is homozygous; one with two different copies is heterozygous. Observed heterozygosity is simply the share of plants that are heterozygous, measured by genotyping a sample at neutral markers and averaging over loci. Here five of eight plants are heterozygous, so it is 0.625.",
+"p-gd":"Expected heterozygosity, also called gene diversity, starts from allele frequencies instead. Pick two gene copies at random: the sum of squared frequencies is the chance they match, and one minus that sum is the chance they differ. Here that gives 0.695, a little above the observed value; for small samples Nei's correction raises it to 0.742. The model's H is this expected form. Because every founder allele is unique it starts at 0.999, close to its ceiling, and tends to fall as alleles are lost by chance.",
+"p-dist":"The model is built from a handful of standard random ingredients. Bernoulli is a single yes or no, Binomial counts the yeses over several tries, and Poisson counts independent events with a given mean. Gamma draws positive weights, very uneven when its shape is small, and Dirichlet splits a whole into random shares. Regulation keeps a uniform sample without replacement. Everything runs from a seeded generator, so any run can be reproduced.",
+"p-stats":"Three summaries recur. An effective number, one over the sum of squared shares, is the number of equal contributors that would give the same concentration. CV squared measures how unequal male success is, and Mₑ converts it into an equivalent number of equally successful residents; it is not the population effective size. Results are means over a hundred replicate runs, with percentile bootstrap intervals that describe simulation uncertainty. When an interval for a difference includes zero, the runs cannot tell that difference from none."};
+Object.assign(NOTES,PNOTES);
+/* which primer pages help with which scene */
+const PLINK={"s-params":["p-dist"],"s-events":["p-dist"],"s-pat":["p-dist"],"s-evid":["p-stats"],"s-ae":["p-stats","p-gd"],"s-rec":["p-dist"],"s-inh":["p-het"],"s-reg":["p-dist"],"s-skew":["p-stats"],"s-decomp":["p-stats"],"s-div":["p-het","p-gd"],"s-res":["p-stats"],"s-fruit":["p-stats"],"s-estc":["p-dist","p-stats"],"s-bound":["p-stats","p-dist"],"s-impl":["p-dist"],"s-pred":["p-gd","p-stats"]};
+
+/* ---------- controller ---------- */
+const stage=$("#stage");
+typeset(stage);
+/* presentation scaffolding derived from the markup: separators, stagger order, pipeline bars */
+document.querySelectorAll("#s-params td.m, #s-params td.v").forEach(td=>{td.innerHTML=td.innerHTML.replace(/;/g,'<span class="sep">;</span>');});
+document.querySelectorAll(".eq>div.b").forEach(b=>{b.classList.add("stag");[...b.children].forEach((c,i)=>c.style.setProperty("--i",i));});
+document.querySelectorAll(".bmx>*").forEach((c,i)=>c.style.setProperty("--i",i));
+document.querySelectorAll(".bmx .cell").forEach(c=>{c.insertAdjacentHTML("afterbegin",'<svg class="ic" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="14" class="f-none s-orchid" stroke-width="1.5"/><path d="M15 8v13M9.5 15.5 15 21l5.5-5.5" class="f-none s-orchid" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');});
+document.querySelectorAll(".gloss i.m, .lede i.m, .clean i.m, .aside i.m").forEach(i=>{
+  const nx=i.nextSibling,pv=i.previousSibling;let a=null,b=null;
+  if(nx&&nx.nodeType===3){const m=nx.nodeValue.match(/^\s[=−<>]\s[^\s,;)]+?(?=[\s,;)]|\.(\s|$)|$)/);if(m)a=m[0];}
+  if(pv&&pv.nodeType===3){const m=pv.nodeValue.match(/\S+\s[−+]\s$/);if(m)b=m[0];}
+  if(!a&&!b)return;
+  const sp=document.createElement("span");sp.className="nw";i.replaceWith(sp);
+  if(b){pv.nodeValue=pv.nodeValue.slice(0,-b.length);sp.appendChild(document.createTextNode(b));}
+  sp.appendChild(i);
+  if(a){nx.nodeValue=nx.nodeValue.slice(a.length);sp.appendChild(document.createTextNode(a));}
+});
+document.querySelectorAll("#s-events .row").forEach(r=>{const b=document.createElement("span");b.className="bar";b.innerHTML="<i></i>";r.appendChild(b);});
+document.querySelectorAll("svg.gly").forEach(drawGlyph);
+
+const scenes=[...document.querySelectorAll(".scene")];
+let cur=0,step=0,auto=false,autoT=null,dwell=7000,returnTo=null;
+const isPr=s=>s.classList.contains("primer");
+const MAIN=scenes.filter(s=>!isPr(s)).length;
+const sceneNo=id=>scenes.findIndex(s=>s.id===id)+1;
+const label=i=>isPr(scenes[i])?scenes[i].dataset.code:`${i+1} / ${MAIN}`;
+function maxStep(s){let m=0;s.querySelectorAll("[data-b]").forEach(e=>m=Math.max(m,+e.dataset.b));return m;}
+const ticks=$("#ticks");
+const tickBtns=scenes.map((s,i)=>{if(i===MAIN){const g=document.createElement("span");g.className="gap";ticks.appendChild(g);}
+  const b=document.createElement("button");const pr=isPr(s);if(pr)b.classList.add("pr");
+  b.setAttribute("aria-label",pr?`Primer ${s.dataset.code}: ${s.dataset.short}`:`Scene ${i+1}: ${s.dataset.short}`);
+  b.innerHTML=`<span class="tip"><b>${pr?s.dataset.code:i+1}</b>${pr?"Primer · ":""}${richHTML(s.dataset.short,false)}</span>`;b.onclick=()=>go(i,0);ticks.appendChild(b);return b;});
+document.querySelectorAll(".sref[data-ref]").forEach(e=>{const j=sceneNo(e.dataset.ref)-1;if(j<0)return;
+  e.textContent=`scene ${j+1}`;e.setAttribute("role","link");e.tabIndex=0;e.title=scenes[j].dataset.short;
+  e.addEventListener("click",ev=>{ev.stopPropagation();go(j,0);});
+  e.addEventListener("keydown",ev=>{if(ev.key==="Enter"){ev.preventDefault();ev.stopPropagation();go(j,0);}});});
+document.querySelectorAll(".sn[data-ref]").forEach(e=>{e.textContent=String(sceneNo(e.dataset.ref));});
+function toPrimer(j){returnTo={i:cur,st:step};go(j,maxStep(scenes[j]),true);}
+function goBack(){if(!returnTo)return;const r=returnTo;returnTo=null;go(r.i,r.st,true);}
+function links(){
+  const pl=$("#plinks"),s=scenes[cur];pl.innerHTML="";
+  if(isPr(s)){if(returnTo){const b=document.createElement("button");b.innerHTML=`← Back to ${returnTo.i+1} · ${richHTML(scenes[returnTo.i].dataset.short,false)}`;b.onclick=goBack;pl.appendChild(b);}return;}
+  const L=PLINK[s.id]||[];if(!L.length)return;
+  pl.insertAdjacentHTML("beforeend",'<span>Primer</span>');
+  L.forEach(id=>{const j=scenes.findIndex(x=>x.id===id);const b=document.createElement("button");b.innerHTML=`<b>${scenes[j].dataset.code}</b>${richHTML(scenes[j].dataset.short,false)}`;b.onclick=()=>toPrimer(j);pl.appendChild(b);});
+}
+function info(){
+  const s=scenes[cur],M=maxStep(s);let p="";for(let j=1;j<=M;j++)p+=`<i class="${j<step?"on":j===step?"at":""}"></i>`;
+  const si=$("#stepinfo");si.innerHTML=`<span>${label(cur)}</span><span class="pips">${p}</span>`;
+  si.setAttribute("aria-label",`${isPr(s)?"Primer "+s.dataset.code:"Scene "+(cur+1)+" of "+MAIN}, step ${step} of ${M}`);
+  $("#dwell").textContent=auto?`${dwell/1000} s`:"";
+}
+function apply(instant){
+  const s=scenes[cur];
+  if(instant)stage.classList.add("instant");
+  s.dataset.step=step;
+  s.querySelectorAll("[data-b]").forEach(e=>{const b=+e.dataset.b;e.classList.toggle("on",b<=step);e.classList.toggle("now",b===step);});
+  INSTANT=!!instant;
+  if(H[s.id])H[s.id].render(step,!!instant);
+  INSTANT=false;
+  info();
+  if(instant){void stage.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>stage.classList.remove("instant")));}
+}
+function go(i,st,instant){
+  if(document.querySelector("#scene-picker"))document.querySelector("#scene-picker").value=String(i);
+  GEN++;cur=i;step=st;
+  if(!isPr(scenes[i]))returnTo=null;
+  scenes.forEach((s,j)=>s.classList.toggle("active",j===i));
+  document.body.classList.toggle("first",i===0);
+  document.body.classList.toggle("inprimer",isPr(scenes[i]));
+  $("#sno").textContent=label(i);
+  links();
+  $("#stitle").innerHTML=richHTML(scenes[i].dataset.title,false);
+  tickBtns.forEach((b,j)=>{b.classList.toggle("now",j===i);b.classList.toggle("done",j<i);if(j===i)b.setAttribute("aria-current","step");else b.removeAttribute("aria-current");});
+  $("#notetext").innerHTML=richHTML(NOTES[scenes[i].id]||"",false);
+  $("#notescene").innerHTML=`${label(i)} · ${richHTML(scenes[i].dataset.short,false)}`;
+  apply(!!instant);
+  schedule();
+}
+function next(){const s=scenes[cur];if(step<maxStep(s)){GEN++;step++;apply(false);schedule();}
+  else if(cur<scenes.length-1){if(auto&&cur===MAIN-1){stopAuto();return;}go(cur+1,0);}else stopAuto();}
+function prev(){if(step>0)go(cur,step-1,true);else if(cur>0)go(cur-1,maxStep(scenes[cur-1]),true);}
+function replay(){go(cur,0);}
+function schedule(){clearTimeout(autoT);if(auto)autoT=setTimeout(next,step===0?dwell*0.8:dwell);}
+function stopAuto(){auto=false;$("#bAuto").setAttribute("aria-pressed","false");clearTimeout(autoT);info();}
+function toggleAuto(){auto=!auto;$("#bAuto").setAttribute("aria-pressed",String(auto));schedule();info();}
+function toggleNotes(){const n=$("#notes");n.classList.toggle("show");$("#bNotes").setAttribute("aria-pressed",String(n.classList.contains("show")));}
+function isDark(){const t=document.documentElement.getAttribute("data-theme");if(t)return t==="dark";return !!(window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);}
+$("#bNext").onclick=next;$("#bPrev").onclick=prev;$("#bAuto").onclick=toggleAuto;$("#bNotes").onclick=toggleNotes;
+document.addEventListener("keydown",e=>{
+  if(e.metaKey||e.ctrlKey||e.altKey)return;
+  if(e.target.closest("input,select,textarea"))return;
+  const k=e.key;
+  if(k==="ArrowRight"||k===" "||k==="PageDown"){e.preventDefault();next();}
+  else if(k==="ArrowLeft"||k==="PageUp"){e.preventDefault();prev();}
+  else if(k==="r"||k==="R")replay();
+  else if(k==="a"||k==="A")toggleAuto();
+  else if(k==="n"||k==="N")toggleNotes();
+  else if(k==="p"||k==="P"){if(isPr(scenes[cur]))goBack();else{const L=PLINK[scenes[cur].id];if(L)toPrimer(scenes.findIndex(x=>x.id===L[0]));}}
+  else if(k==="h"||k==="H")document.body.classList.toggle("rec");
+  else if(k==="f"||k==="F"){if(document.fullscreenElement)document.exitFullscreen();else if(document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});}
+  else if(k==="t"||k==="T"){document.documentElement.setAttribute("data-theme",isDark()?"light":"dark");}
+  else if(k==="+"||k==="="){dwell=Math.min(20000,dwell+1000);info();}
+  else if(k==="-"){dwell=Math.max(2000,dwell-1000);info();}
+});
+/* swipe on touch */
+let tx0=null;document.addEventListener("touchstart",e=>{tx0=e.touches[0].clientX;},{passive:true});
+document.addEventListener("touchend",e=>{if(tx0===null)return;const dx=e.changedTouches[0].clientX-tx0;if(Math.abs(dx)>50){dx<0?next():prev();}tx0=null;},{passive:true});
+
+function fit(){const st=$("#stage"),vw=window.innerWidth,vh=window.innerHeight;const sc=Math.min(vw/1600,vh/900);st.style.transform=`scale(${sc})`;st.style.left=((vw-1600*sc)/2)+"px";st.style.top=((vh-900*sc)/2)+"px";}
+window.addEventListener("resize",fit);fit();
+const picker=document.querySelector('#scene-picker');scenes.forEach((s,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(isPr(s)?'Primer '+s.dataset.code:'Scene '+(i+1))+' · '+s.dataset.short;picker.append(o);});picker.addEventListener('change',()=>{stopAuto();go(+picker.value,0,true);});
+document.querySelector('#bFull').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});
+window.__atlas={scenes:()=>scenes.map((s,i)=>({id:s.id,title:s.dataset.short,steps:maxStep(s),primer:isPr(s)})),seek:(i,st)=>{stopAuto();go(i,Math.max(0,Math.min(st,maxStep(scenes[i]))),true);},state:()=>({scene:cur,step,auto})};
+go(0,0);
+})();
+</script>
+</body>
+</html>
