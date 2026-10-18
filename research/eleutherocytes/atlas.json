@@ -1,0 +1,327 @@
+[
+  {
+    "genus": "Aspasia",
+    "lineage": "Cymbidieae: Oncidiinae",
+    "shape": "Elongated irregular to ovoid",
+    "contents": "Large clear compartments; granular peripheral layer; abundant refractile globules",
+    "packing": "Dense, optically heterogeneous clusters",
+    "accessions": 1,
+    "stills": 6,
+    "videos": 0,
+    "taxa": [
+      "Aspasia epidendroides"
+    ],
+    "figure": 1,
+    "panel": "a",
+    "qualifier": ""
+  },
+  {
+    "genus": "Brassia",
+    "lineage": "Cymbidieae: Oncidiinae",
+    "shape": "Small crescent, reniform and short fusiform",
+    "contents": "Partly masked by dark pigment; some clear internal zones",
+    "packing": "Tightly packed cell groups within pigment-rich material",
+    "accessions": 1,
+    "stills": 13,
+    "videos": 0,
+    "taxa": [
+      "Brassia arcuigera"
+    ],
+    "figure": 1,
+    "panel": "b",
+    "qualifier": ""
+  },
+  {
+    "genus": "Cochleanthes",
+    "lineage": "Cymbidieae: Zygopetalinae",
+    "shape": "Large, nearly spherical to ovoid",
+    "contents": "One large clear compartment; granular material at the periphery or at one pole",
+    "packing": "Dense but discrete cells; clear intercellular matrix",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Cochleanthes aromatica"
+    ],
+    "figure": 1,
+    "panel": "c",
+    "qualifier": ""
+  },
+  {
+    "genus": "Coelogyne",
+    "lineage": "Arethuseae: Coelogyninae",
+    "shape": "Curved, elongated and clavate, mixed with ovoid",
+    "contents": "Large clear compartments, peripheral strands, granular domains, small refractile bodies",
+    "packing": "Abundant in all treatments; pollen tubes among cells in the 48 h AP C. pulverula flower",
+    "accessions": 3,
+    "stills": 144,
+    "videos": 4,
+    "taxa": [
+      "Coelogyne pulverula",
+      "Coelogyne lawrenceana",
+      "Coelogyne Burfordiense"
+    ],
+    "figure": 1,
+    "panel": "d",
+    "qualifier": "The atlas panel shows an unpollinated C. lawrenceana flower sampled at the 48 h session."
+  },
+  {
+    "genus": "Coryanthes",
+    "lineage": "Cymbidieae: Stanhopeinae",
+    "shape": "Large angular to ovoid",
+    "contents": "Broad clear regions with sparse granules",
+    "packing": "Separate cells in a comparatively clear matrix",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Coryanthes hunteriana"
+    ],
+    "figure": 1,
+    "panel": "e",
+    "qualifier": ""
+  },
+  {
+    "genus": "Dracula",
+    "lineage": "Epidendreae: Pleurothallidinae",
+    "shape": "Small irregular and reniform; some folded or collapsed",
+    "contents": "Clear regions with reticulate internal strands",
+    "packing": "Compact clusters with locally overlapping outlines",
+    "accessions": 1,
+    "stills": 3,
+    "videos": 0,
+    "taxa": [
+      "Dracula astuta"
+    ],
+    "figure": 1,
+    "panel": "f",
+    "qualifier": ""
+  },
+  {
+    "genus": "Encyclia",
+    "lineage": "Epidendreae: Laeliinae",
+    "shape": "Elongated, dumbbell-shaped and fusiform",
+    "contents": "Large clear compartments; fine peripheral granularity",
+    "packing": "Sparse to moderate; mostly isolated cells or short groups",
+    "accessions": 1,
+    "stills": 11,
+    "videos": 0,
+    "taxa": [
+      "Encyclia cordigera"
+    ],
+    "figure": 2,
+    "panel": "b",
+    "qualifier": ""
+  },
+  {
+    "genus": "Epidendrum",
+    "lineage": "Epidendreae: Laeliinae",
+    "shape": "Elongated and fusiform",
+    "contents": "Large clear compartments; dense granular domains and refractile inclusions, often at one pole",
+    "packing": "Mostly dispersed; similar polar arrangement in both accessions",
+    "accessions": 2,
+    "stills": 12,
+    "videos": 0,
+    "taxa": [
+      "Epidendrum ciliare",
+      "Epidendrum circinatum"
+    ],
+    "figure": 2,
+    "panel": "a",
+    "qualifier": ""
+  },
+  {
+    "genus": "Gongora",
+    "lineage": "Cymbidieae: Stanhopeinae",
+    "shape": "Large pear-shaped or irregular (sp. 1); elongated fusiform (sp. 2)",
+    "contents": "Large clear compartments; strands; granular inclusions",
+    "packing": "Dense, locally aligned; marked difference between specimens",
+    "accessions": 2,
+    "stills": 28,
+    "videos": 0,
+    "taxa": [
+      "Gongora sp. 1",
+      "Gongora sp. 2"
+    ],
+    "figure": 2,
+    "panel": "c",
+    "qualifier": ""
+  },
+  {
+    "genus": "Govenia",
+    "lineage": "Epidendreae: Calypsoinae",
+    "shape": "Slender, elongated to fusiform",
+    "contents": "Fine granularity; modest clear regions",
+    "packing": "Dense, low-contrast, interlaced",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Govenia quadriplicata"
+    ],
+    "figure": 2,
+    "panel": "d",
+    "qualifier": ""
+  },
+  {
+    "genus": "Guarianthe",
+    "lineage": "Epidendreae: Laeliinae",
+    "shape": "Ovoid, fusiform and irregular",
+    "contents": "Granular layer around clear internal regions",
+    "packing": "Dense; cells variously oriented",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Guarianthe skinneri"
+    ],
+    "figure": 2,
+    "panel": "e",
+    "qualifier": ""
+  },
+  {
+    "genus": "Heterotaxis",
+    "lineage": "Cymbidieae: Maxillariinae",
+    "shape": "Large elongated and clavate",
+    "contents": "Numerous refractile globules and smaller optical bodies",
+    "packing": "Well-separated cells with heterogeneous contents",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Heterotaxis maleolens"
+    ],
+    "figure": 2,
+    "panel": "f",
+    "qualifier": ""
+  },
+  {
+    "genus": "Kefersteinia",
+    "lineage": "Cymbidieae: Zygopetalinae",
+    "shape": "Ovoid to polygonal; several folded or wrinkled",
+    "contents": "Large clear regions crossed by reticulate strands",
+    "packing": "Sparse clusters exposing individual outlines",
+    "accessions": 1,
+    "stills": 5,
+    "videos": 0,
+    "taxa": [
+      "Kefersteinia lactea"
+    ],
+    "figure": 3,
+    "panel": "a",
+    "qualifier": ""
+  },
+  {
+    "genus": "Lycaste",
+    "lineage": "Cymbidieae: Maxillariinae",
+    "shape": "Rounded to ovoid; faint margins",
+    "contents": "Fine granularity; numerous small refractile bodies",
+    "packing": "Very dense, cell-rich matrix",
+    "accessions": 1,
+    "stills": 3,
+    "videos": 0,
+    "taxa": [
+      "Lycaste dowiana"
+    ],
+    "figure": 3,
+    "panel": "b",
+    "qualifier": ""
+  },
+  {
+    "genus": "Mormodes",
+    "lineage": "Cymbidieae: Catasetinae",
+    "shape": "Ovoid; faint but continuous outlines",
+    "contents": "Clear spaces within cells; abundant refractile droplets and unidentified particles in the matrix",
+    "packing": "Particle-rich matrix; cells less conspicuous than in most genera",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Mormodes fractiflexa"
+    ],
+    "figure": 3,
+    "panel": "c",
+    "qualifier": "The illustrated composite was sampled 48 h after pollinarium removal, from one flower."
+  },
+  {
+    "genus": "Phalaenopsis",
+    "lineage": "Vandeae: Aeridinae",
+    "shape": "Large elongated, ovoid and clavate",
+    "contents": "One very large clear compartment; thin granular peripheral layer",
+    "packing": "Dispersed, conspicuous large cells",
+    "accessions": 1,
+    "stills": 4,
+    "videos": 0,
+    "taxa": [
+      "Phalaenopsis amabilis (cultivated)"
+    ],
+    "figure": 3,
+    "panel": "d",
+    "qualifier": ""
+  },
+  {
+    "genus": "Rossioglossum",
+    "lineage": "Cymbidieae: Oncidiinae",
+    "shape": "Small ovoid, reniform and clavate",
+    "contents": "Clear zones with granular contents",
+    "packing": "Dense field of compact cells; one field with a bundle of needle-shaped crystals",
+    "accessions": 1,
+    "stills": 11,
+    "videos": 0,
+    "taxa": [
+      "Rossioglossum ampliatum"
+    ],
+    "figure": 3,
+    "panel": "e",
+    "qualifier": ""
+  },
+  {
+    "genus": "Sobralia",
+    "lineage": "Sobralieae",
+    "shape": "S. macrantha: round or reniform to elongated; S. turrialbina: plump ovoid to clavate",
+    "contents": "Large clear compartments; peripheral strands; granularity at one pole",
+    "packing": "Loose to dense; intracellular movement recorded in both (Videos S1–S7)",
+    "accessions": 2,
+    "stills": 43,
+    "videos": 7,
+    "taxa": [
+      "Sobralia macrantha",
+      "Sobralia turrialbina"
+    ],
+    "figure": 4,
+    "panel": "a",
+    "qualifier": "The plate illustrates S. macrantha; both S. macrantha and S. turrialbina are in the survey."
+  },
+  {
+    "genus": "Trigonidium",
+    "lineage": "Cymbidieae: Maxillariinae",
+    "shape": "Compact ovoid, reniform and irregular",
+    "contents": "Strongly granular; small clear regions",
+    "packing": "Crowded, tightly juxtaposed cells",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Trigonidium egertonianum"
+    ],
+    "figure": 4,
+    "panel": "b",
+    "qualifier": ""
+  },
+  {
+    "genus": "Warreopsis",
+    "lineage": "Cymbidieae: Zygopetalinae",
+    "shape": "Long fusiform and curved, with tapered ends",
+    "contents": "Large clear compartments; granular peripheral layer",
+    "packing": "Dense; often parallel or curved arrangements",
+    "accessions": 1,
+    "stills": 9,
+    "videos": 0,
+    "taxa": [
+      "Warreopsis parviflora (identification to be confirmed)"
+    ],
+    "figure": 4,
+    "panel": "d",
+    "qualifier": "Species identification pending for JBL 47782."
+  }
+]
