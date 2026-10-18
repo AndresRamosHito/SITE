@@ -1,0 +1,128 @@
+[
+  {
+    "id": "all",
+    "label": "All valid full-pollinarium trials",
+    "n": 16,
+    "groups": [
+      {
+        "rate": "<=50",
+        "retained": 4,
+        "possible": 20,
+        "trials": 5
+      },
+      {
+        "rate": "75",
+        "retained": 0,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": ">=100",
+        "retained": 19,
+        "possible": 40,
+        "trials": 10
+      }
+    ],
+    "rates": [
+      {
+        "rate": 10,
+        "retained": 0,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": 30,
+        "retained": 2,
+        "possible": 8,
+        "trials": 2
+      },
+      {
+        "rate": 50,
+        "retained": 2,
+        "possible": 8,
+        "trials": 2
+      },
+      {
+        "rate": 75,
+        "retained": 0,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": 100,
+        "retained": 5,
+        "possible": 16,
+        "trials": 4
+      },
+      {
+        "rate": 150,
+        "retained": 10,
+        "possible": 16,
+        "trials": 4
+      },
+      {
+        "rate": 300,
+        "retained": 4,
+        "possible": 8,
+        "trials": 2
+      }
+    ]
+  },
+  {
+    "id": "clean",
+    "label": "Five contact-clean trials",
+    "n": 5,
+    "groups": [
+      {
+        "rate": "<=50",
+        "retained": 0,
+        "possible": 12,
+        "trials": 3
+      },
+      {
+        "rate": "75",
+        "retained": null,
+        "possible": null,
+        "trials": 0
+      },
+      {
+        "rate": ">=100",
+        "retained": 7,
+        "possible": 8,
+        "trials": 2
+      }
+    ],
+    "rates": [
+      {
+        "rate": 10,
+        "retained": 0,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": 30,
+        "retained": 0,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": 50,
+        "retained": 0,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": 100,
+        "retained": 3,
+        "possible": 4,
+        "trials": 1
+      },
+      {
+        "rate": 150,
+        "retained": 4,
+        "possible": 4,
+        "trials": 1
+      }
+    ]
+  }
+]
