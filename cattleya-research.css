@@ -2,36 +2,36 @@
 .cattleya-page .nav__inner{padding-left:32px;padding-right:32px}
 .cattleya-page .stigma-hero h1{font-size:clamp(3.2rem,6.3vw,6.2rem)}
 .cattleya-page .stigma-hero__figure{padding:10px}
-.cattleya-page .stigma-hero__figure figcaption{padding:14px 8px 4px;font-family:Newsreader,Georgia,serif;font-size:.88rem}
+.cattleya-page .stigma-hero__figure figcaption{padding:14px 8px 4px;font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:.88rem}
 .cattleya-page .stigma-hero__figure a{display:block}
 .cattleya-page .stigma-small{font-size:.91rem!important}
 .cattleya-pathways{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .cattleya-pathways article{border:1px solid var(--rule);padding:30px;background:rgba(255,255,255,.25)}
 .cattleya-pathways article:last-child{background:var(--forest);color:var(--paper)}
 .cattleya-pathways article:last-child .stigma-eyebrow{color:#d6ba92}
-.cattleya-pathways h3{font:430 clamp(1.6rem,2.7vw,2.4rem)/1.1 Fraunces,Georgia,serif;max-width:22ch;margin-bottom:20px}
+.cattleya-pathways h3{font:700 clamp(1.6rem,2.7vw,2.4rem)/1.1 Cambria,Georgia,"Times New Roman",serif;max-width:22ch;margin-bottom:20px;font-weight:700}
 .cattleya-pathways p{font-size:1.08rem;line-height:1.6;max-width:52ch;margin-bottom:25px}
-.cattleya-pathways strong{font:450 2.8rem/1.15 Fraunces,Georgia,serif}
-.cattleya-pathways strong span{display:block;font:400 .82rem/1.6 'JetBrains Mono',monospace;margin-top:9px}
+.cattleya-pathways strong{font:700 2.8rem/1.15 Cambria,Georgia,"Times New Roman",serif;font-weight:700}
+.cattleya-pathways strong span{display:block;font:700 .82rem/1.6 Assistant,"Segoe UI","Helvetica Neue",sans-serif,monospace;margin-top:9px}
 .cattleya-retention{border:1px solid var(--rule);background:rgba(255,255,255,.3);padding:30px}
 .cattleya-cohorts{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px}
-.cattleya-cohorts button{font:500 .75rem/1.5 'JetBrains Mono',monospace;color:var(--forest);border:1px solid var(--rule);background:transparent;padding:12px 16px;cursor:pointer}
+.cattleya-cohorts button{font:700 .75rem/1.5 Assistant,"Segoe UI","Helvetica Neue",sans-serif,monospace;color:var(--forest);border:1px solid var(--rule);background:transparent;padding:12px 16px;cursor:pointer}
 .cattleya-cohorts button[aria-pressed=true]{background:var(--forest);color:var(--paper);border-color:var(--forest)}
 .cattleya-cohorts button:hover{border-color:var(--ochre)}
-.cattleya-retention h3{font:430 1.7rem/1.25 Fraunces,Georgia,serif;margin-bottom:9px;color:var(--forest)}
+.cattleya-retention h3{font:700 1.7rem/1.25 Cambria,Georgia,"Times New Roman",serif;margin-bottom:9px;color:var(--forest);font-weight:700}
 .cattleya-bar-key{font-size:.94rem;color:var(--moss);margin-bottom:25px}
 .cattleya-bar-row{display:grid;grid-template-columns:130px minmax(0,1fr) 200px;gap:20px;align-items:center;margin:22px 0}
-.cattleya-bar-row>span{font:500 1.35rem/1.2 Fraunces,Georgia,serif}
-.cattleya-bar-row small{font:400 .72rem/1.5 'JetBrains Mono',monospace;color:var(--moss)}
-.cattleya-bar-row>strong{font:500 1.1rem/1.5 'JetBrains Mono',monospace;text-align:right}
-.cattleya-bar-track{height:27px;background:rgba(15,36,24,.08);border-right:1px solid var(--rule);overflow:hidden}
+.cattleya-bar-row>span{font:700 1.35rem/1.2 Cambria,Georgia,"Times New Roman",serif;font-weight:700}
+.cattleya-bar-row small{font:700 .72rem/1.5 Assistant,"Segoe UI","Helvetica Neue",sans-serif,monospace;color:var(--moss)}
+.cattleya-bar-row>strong{font:700 1.1rem/1.5 Assistant,"Segoe UI","Helvetica Neue",sans-serif,monospace;text-align:right}
+.cattleya-bar-track{height:27px;background:rgba(28,6,25,.08);border-right:1px solid var(--rule);overflow:hidden}
 .cattleya-bar-track span{display:block;height:100%;background:var(--forest)}
 .cattleya-denominator{border-top:1px solid var(--rule);padding-top:17px;margin-bottom:0}
 .cattleya-table-scroll{overflow-x:auto;margin-bottom:20px}
 .cattleya-table{width:100%;min-width:610px;border-collapse:collapse;text-align:left;margin-bottom:12px}
 .cattleya-table caption{text-align:left;font-size:.94rem;margin:0 0 15px;color:var(--moss)}
 .cattleya-table th,.cattleya-table td{padding:13px 12px;border-bottom:1px solid var(--rule)}
-.cattleya-table thead th{font:500 .7rem/1.5 'JetBrains Mono',monospace;color:var(--moss)}
+.cattleya-table thead th{font:700 .7rem/1.5 Assistant,"Segoe UI","Helvetica Neue",sans-serif,monospace;color:var(--moss)}
 .cattleya-table tbody th{font-weight:500}
 .cattleya-text-link{text-decoration:underline;text-underline-offset:5px;color:var(--forest)}
 .cattleya-text-link:hover{color:var(--ochre)}
