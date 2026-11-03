@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark-academia">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>RAR · Panel de control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Orchidarc Design System — Dark Academia tokens */
+:root{
+  --ground:#1C0619;--ground-raised:#2B0D27;--ground-lifted:#3D1638;--damask-line:#3E1236;
+  --sheet:#FAF6EE;--ink:#0F2147;--ink-muted:#4A4E68;--text:#FFFFFF;--text-muted:#D9C8D6;
+  --gold:#E2B54A;--rose:#FF5FAE;--saffron:#FFC72C;--garnet:#FF6B78;--amethyst:#C9A2FF;
+  --turquoise:#5FE0D2;--lapis:#9DB8FF;--fill-rose:#E4007C;--fill-garnet:#C4182E;--fill-turquoise:#0B7A70;
+  --fill-lapis:#2B57C9;--focus:#FFC72C;
+  --display:Cambria,Georgia,"Times New Roman",serif;--body:Assistant,"Segoe UI","Helvetica Neue",sans-serif;
+  --label:Georgia,Cambria,"Times New Roman",serif;
+  --r-panel:18px;--r-pill:999px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--ground);color:var(--text);font-family:var(--body);font-size:16px;line-height:1.5}
+body{min-height:100vh;
+  background:
+   radial-gradient(1200px 600px at 80% -10%, rgba(228,0,124,.10), transparent 60%),
+   radial-gradient(900px 500px at -10% 110%, rgba(11,122,112,.12), transparent 60%),
+   var(--ground);}
+/* damask-ish tile, very faint */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%233E1236' stroke-width='1'%3E%3Cpath d='M32 8l6 18 18 6-18 6-6 18-6-18-18-6 18-6z'/%3E%3Crect x='22' y='22' width='20' height='20' transform='rotate(45 32 32)'/%3E%3C/g%3E%3C/svg%3E");}
+/* GiltMargin: double gold rule */
+.gilt{position:fixed;inset:14px;border:2px solid var(--gold);pointer-events:none;z-index:50;border-radius:4px;opacity:.85}
+.gilt::after{content:"";position:absolute;inset:6px;border:1px solid var(--gold);border-radius:2px;opacity:.6}
+button,input,select,textarea{font-family:var(--body);font-size:15px}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1480px;margin:0 auto;padding:40px 44px 60px}
+.eyebrow{font-weight:700;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted)}
+.display{font-family:var(--display);font-weight:700}
+.muted{color:var(--text-muted)}
+.star{display:inline-block;width:12px;height:12px;vertical-align:middle;margin:0 8px}
+.hidden{display:none!important}
+
+/* ---------- login ---------- */
+#login{min-height:100vh;display:grid;place-items:center;padding:40px}
+.login-card{width:min(460px,100%);text-align:center}
+.login-card h1{font-family:var(--display);font-size:46px;line-height:1.05;margin:14px 0 6px;text-shadow:0 0 28px rgba(226,181,74,.25)}
+.login-card h1 em{color:var(--gold);font-style:italic}
+.login-card p{color:var(--text-muted);margin:0 0 28px}
+.field{display:flex;gap:10px}
+.field input{flex:1;padding:14px 18px;border-radius:var(--r-pill);border:1px solid var(--gold);background:var(--ground-raised);color:var(--text)}
+.btn{border:0;border-radius:var(--r-pill);padding:12px 20px;font-weight:700;letter-spacing:.06em;cursor:pointer;color:#fff;background:var(--fill-rose);transition:transform .08s, filter .15s}
+.btn:hover{filter:brightness(1.12)}.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.btn.quiet{background:var(--ground-lifted);color:var(--text);border:1px solid var(--damask-line)}
+.btn.danger{background:var(--fill-garnet)}
+.btn.small{padding:7px 14px;font-size:13px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.err{color:var(--garnet);min-height:24px;margin-top:12px;font-weight:600}
+
+/* ---------- header ---------- */
+header.top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:20px}
+.brand h1{font-family:var(--display);font-size:38px;line-height:1;margin:6px 0 0}
+.brand h1 em{color:var(--gold);font-style:italic;font-weight:400}
+.top-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.clock{font-family:var(--label);font-size:15px;color:var(--text-muted);letter-spacing:.04em}
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 26px}
+.tab{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:14px;background:var(--ground-raised);border:1px solid var(--damask-line);cursor:pointer;color:var(--text);min-width:190px;text-align:left}
+.tab .pl{font-family:var(--label);font-style:italic;color:var(--gold);font-size:13px}
+.tab .nm{font-weight:700;font-size:14.5px;line-height:1.2}
+.tab .st{font-size:12.5px;color:var(--text-muted)}
+.tab.active{border-color:var(--gold);background:var(--ground-lifted);box-shadow:0 0 0 1px var(--gold) inset, 0 8px 30px rgba(0,0,0,.35)}
+.dot{width:10px;height:10px;border-radius:50%;background:#6b5a69;flex:none}
+.dot.on{background:var(--turquoise);box-shadow:0 0 0 0 rgba(95,224,210,.7);animation:pulse 2s infinite}
+.dot.warn{background:var(--saffron)}.dot.bad{background:var(--garnet)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(95,224,210,.6)}70%{box-shadow:0 0 0 10px rgba(95,224,210,0)}100%{box-shadow:0 0 0 0 rgba(95,224,210,0)}}
+
+/* ---------- grid ---------- */
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+.card{background:linear-gradient(180deg, rgba(61,22,56,.92), rgba(43,13,39,.92));border:1px solid var(--damask-line);border-radius:var(--r-panel);padding:20px 22px;position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:6px;border:1px solid rgba(226,181,74,.18);border-radius:13px;pointer-events:none}
+.card h2{font-family:var(--display);font-size:22px;margin:2px 0 14px;font-weight:700}
+.card h2 small{font-family:var(--body);font-size:13px;color:var(--text-muted);font-weight:400;margin-left:8px}
+.c3{grid-column:span 3}.c4{grid-column:span 4}.c5{grid-column:span 5}.c6{grid-column:span 6}.c7{grid-column:span 7}.c8{grid-column:span 8}.c12{grid-column:span 12}
+@media (max-width:1100px){.c3,.c4,.c5{grid-column:span 6}.c6,.c7,.c8{grid-column:span 12}}
+@media (max-width:700px){.c3,.c4,.c5,.c6{grid-column:span 12}.wrap{padding:34px 22px}.tabs{display:grid;grid-template-columns:1fr 1fr}.tab{min-width:0}.brand h1{font-size:30px}.gilt{inset:8px}.tl-legend span:nth-child(2){display:none}}
+
+/* status banner */
+.banner{display:flex;align-items:center;gap:14px;padding:12px 18px;border-radius:14px;margin-bottom:18px;background:var(--ground-raised);border:1px solid var(--damask-line);flex-wrap:wrap}
+.banner b{font-weight:700}
+.banner.offline{border-color:var(--garnet)}
+.banner .grow{flex:1}
+
+/* gauges */
+.gauges{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.gauge{text-align:center}
+.gauge svg{width:100%;max-width:240px;height:auto;display:block;margin:0 auto}
+.gauge .lbl{margin-top:-6px}
+.big{font-family:var(--display);font-size:46px;line-height:1;font-weight:400}
+.unit{font-size:18px;color:var(--text-muted);margin-left:2px}
+
+/* actuators */
+.acts{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.act{padding:14px;border-radius:14px;background:rgba(28,6,25,.55);border:1px solid var(--damask-line)}
+.act .k{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);font-weight:700}
+.act .v{font-family:var(--display);font-size:26px;margin-top:4px}
+.act.on{border-color:var(--turquoise);box-shadow:0 0 18px rgba(95,224,210,.12) inset}
+.act.on .v{color:var(--turquoise)}
+.act.alarm{border-color:var(--garnet)}.act.alarm .v{color:var(--garnet)}
+.bar{height:6px;border-radius:6px;background:rgba(255,255,255,.08);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--turquoise);border-radius:6px;transition:width .6s}
+.faults{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{padding:5px 12px;border-radius:var(--r-pill);font-size:13px;font-weight:700;letter-spacing:.04em;border:1px solid}
+.chip.ok{color:var(--turquoise);border-color:rgba(95,224,210,.5)}
+.chip.bad{color:#fff;background:var(--fill-garnet);border-color:var(--fill-garnet)}
+.chip.note{color:var(--saffron);border-color:rgba(255,199,44,.5)}
+
+/* timeline */
+.tl{position:relative;margin-top:34px}
+.tl-track{display:flex;height:46px;border-radius:12px;overflow:hidden;border:1px solid var(--gold)}
+.tl-seg{position:relative;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;letter-spacing:.04em;color:#fff;white-space:nowrap;overflow:hidden;padding:0 6px;border-right:1px solid rgba(226,181,74,.35)}
+.tl-seg:last-child{border-right:0}
+.tl-now{position:absolute;top:-8px;bottom:-8px;width:2px;background:var(--saffron);box-shadow:0 0 12px var(--saffron)}
+.tl-now::after{content:attr(data-l);position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:12px;font-weight:700;color:var(--saffron);white-space:nowrap}
+.tl-legend{display:flex;justify-content:space-between;font-family:var(--label);font-size:13px;color:var(--text-muted);margin-top:8px}
+
+/* charts */
+.chart{position:relative;width:100%;height:240px}
+.chart svg{width:100%;height:100%;display:block}
+.range{display:flex;gap:6px;flex-wrap:wrap}
+.range button{background:transparent;border:1px solid var(--damask-line);color:var(--text-muted);border-radius:var(--r-pill);padding:5px 12px;cursor:pointer;font-weight:700;font-size:12.5px}
+.range button.on{border-color:var(--gold);color:var(--gold)}
+.tip{position:absolute;pointer-events:none;background:var(--sheet);color:var(--ink);padding:8px 10px;border-radius:10px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.4);white-space:nowrap;transform:translate(-50%,-110%);display:none}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--text-muted);margin-bottom:6px}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+
+/* camera */
+.cam{position:relative;border-radius:12px;overflow:hidden;background:#000;aspect-ratio:4/3;border:1px solid var(--gold)}
+.cam img{width:100%;height:100%;object-fit:cover;display:block}
+.cam .ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--text-muted);padding:20px}
+.cam .ts{position:absolute;left:10px;bottom:10px;background:rgba(28,6,25,.75);padding:4px 10px;border-radius:999px;font-size:12.5px;font-family:var(--label)}
+.cam .rec{position:absolute;right:10px;top:10px;display:flex;gap:6px;align-items:center;background:rgba(28,6,25,.75);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.1em}
+.strip{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-top:10px}
+.strip img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:6px;cursor:pointer;border:1px solid var(--damask-line)}
+
+/* controls */
+.ctl-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.ctl-row label{font-size:13.5px;color:var(--text-muted)}
+.num{width:84px;padding:8px 10px;border-radius:10px;border:1px solid var(--damask-line);background:var(--ground);color:var(--text)}
+input[type=range]{accent-color:var(--gold);width:160px}
+.sep{height:1px;background:linear-gradient(90deg,transparent,rgba(226,181,74,.5),transparent);margin:14px 0}
+.log{max-height:260px;overflow:auto;font-size:13.5px}
+.log table{width:100%;border-collapse:collapse}
+.log td{padding:6px 6px;border-bottom:1px solid rgba(255,255,255,.06);vertical-align:top}
+.log td:first-child{color:var(--text-muted);white-space:nowrap;font-family:var(--label);font-size:12.5px}
+.st-done{color:var(--turquoise)}.st-failed{color:var(--garnet)}.st-sent{color:var(--saffron)}.st-pending{color:var(--text-muted)}
+
+/* scenario editor */
+.sc-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.sc-table th{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);text-align:left;padding:6px 4px;font-weight:700}
+.sc-table td{padding:4px}
+.sc-table input[type=text],.sc-table input[type=number]{width:100%;min-width:52px;padding:6px 8px;border-radius:8px;border:1px solid var(--damask-line);background:var(--ground);color:var(--text)}
+.sc-table input[type=text]{min-width:110px}
+.sc-scroll{overflow-x:auto}
+dialog{border:0;border-radius:var(--r-panel);background:var(--ground-raised);color:var(--text);padding:26px;max-width:min(1200px,94vw);box-shadow:0 30px 80px rgba(0,0,0,.6);outline:1px solid var(--gold)}
+dialog::backdrop{background:rgba(10,2,9,.72)}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--sheet);color:var(--ink);padding:12px 20px;border-radius:999px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.4);z-index:100;display:none}
+footer{margin-top:28px;text-align:center;font-family:var(--label);font-style:italic;color:var(--text-muted);font-size:13.5px}
+.demo-flag{background:var(--saffron);color:#1C0619;font-weight:700;padding:3px 10px;border-radius:999px;font-size:12px;letter-spacing:.08em}
+</style>
+</head>
+<body>
+<div class="gilt" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="khatam" viewBox="0 0 20 20"><g fill="none" stroke="#E2B54A" stroke-width="1.4"><rect x="4.5" y="4.5" width="11" height="11"/><rect x="4.5" y="4.5" width="11" height="11" transform="rotate(45 10 10)"/></g></symbol>
+</svg>
+
+<!-- ================= LOGIN ================= -->
+<section id="login">
+  <div class="login-card">
+    <div class="eyebrow">Orchidarc · Universidad Veracruzana</div>
+    <h1>Reactor Ambiental <em>Ramos</em></h1>
+    <p>Panel de control para usuarios UV · Control panel for UV users</p>
+    <form id="loginForm" class="field" autocomplete="on">
+      <input id="pw" type="password" placeholder="Contraseña / Password" autocomplete="current-password" required aria-label="Password">
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+    <div class="err" id="loginErr" role="alert"></div>
+    <div class="muted" style="font-size:13px;margin-top:18px"><svg class="star"><use href="#khatam"/></svg>Acceso restringido · Restricted access<svg class="star"><use href="#khatam"/></svg></div>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<main id="app" class="wrap hidden">
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Panel de control · Vol. I · MMXXVI <span id="demoFlag" class="demo-flag hidden">DEMO</span></div>
+      <h1>Reactor Ambiental <em>Ramos</em></h1>
+    </div>
+    <div class="top-right">
+      <span class="clock" id="clock">—</span>
+      <button class="btn ghost small" id="exportAllBtn">Exportar todo</button>
+      <button class="btn quiet small" id="pwBtn">Contraseña</button>
+      <button class="btn quiet small" id="logoutBtn">Salir</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs" aria-label="Reactors"></nav>
+
+  <div class="banner" id="banner"></div>
+
+  <div class="grid">
+    <!-- Live -->
+    <section class="card c5">
+      <h2>En vivo <small id="liveAge">—</small></h2>
+      <div class="gauges">
+        <div class="gauge" id="gT"></div>
+        <div class="gauge" id="gRH"></div>
+      </div>
+      <div class="faults" id="faults"></div>
+    </section>
+
+    <!-- Camera -->
+    <section class="card c4">
+      <h2>Cámara <small id="camAge"></small></h2>
+      <div class="cam" id="cam"><div class="ph">Sin imagen todavía.<br>Conecta la cámara del reactor.</div></div>
+      <div class="ctl-row" style="margin-top:10px">
+        <button class="btn small" id="snapBtn">Tomar foto ahora</button>
+        <button class="btn quiet small" id="galleryBtn">Galería</button>
+      </div>
+    </section>
+
+    <!-- Actuators -->
+    <section class="card c3">
+      <h2>Actuadores</h2>
+      <div class="acts" id="acts" style="grid-template-columns:1fr 1fr"></div>
+    </section>
+
+    <!-- Scenario timeline -->
+    <section class="card c12">
+      <h2>Escenario <small id="scName"></small></h2>
+      <div class="tl" id="timeline"></div>
+    </section>
+
+    <!-- Charts -->
+    <section class="card c6">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">Temperatura <small>°C</small></h2>
+        <div class="range" data-chart="t"></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--turquoise)"></i>Medida</span><span><i style="background:var(--gold)"></i>Objetivo</span><span><i style="background:rgba(255,95,174,.6)"></i>Calefactor</span></div>
+      <div class="chart" id="chartT"></div>
+    </section>
+    <section class="card c6">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 style="margin:0">Humedad relativa <small>%</small></h2>
+        <div class="range" data-chart="rh"></div>
+      </div>
+      <div class="legend"><span><i style="background:var(--lapis)"></i>Medida</span><span><i style="background:var(--gold)"></i>Objetivo</span><span><i style="background:rgba(95,224,210,.55)"></i>Niebla / lluvia</span></div>
+      <div class="chart" id="chartRH"></div>
+    </section>
+
+    <!-- Controls -->
+    <section class="card c7">
+      <h2>Controles</h2>
+      <div class="ctl-row">
+        <button class="btn" id="startBtn">Iniciar experimento (día 0)</button>
+        <button class="btn quiet" id="pauseBtn">Pausar</button>
+        <button class="btn quiet" id="resumeBtn">Reanudar</button>
+        <button class="btn quiet" id="statusBtn">Pedir estado</button>
+      </div>
+      <div class="sep"></div>
+      <div class="ctl-row">
+        <label for="mistS">Niebla / lluvia manual</label>
+        <input class="num" id="mistS" type="number" min="1" max="120" value="10"> <span class="muted">s</span>
+        <button class="btn quiet small" id="mistBtn">Rociar</button>
+        <span style="width:18px"></span>
+        <label for="dayN">Ir al día</label>
+        <input class="num" id="dayN" type="number" min="0" step="0.5" value="0">
+        <button class="btn quiet small" id="dayBtn">Aplicar</button>
+      </div>
+      <div class="sep"></div>
+      <div class="ctl-row">
+        <label>Modo manual (temporal)</label>
+      </div>
+      <div class="ctl-row">
+        <label for="ovFan">Ventiladores <b id="ovFanV">auto</b></label>
+        <input id="ovFan" type="range" min="-1" max="100" value="-1">
+        <label for="ovLight">Luz <b id="ovLightV">auto</b></label>
+        <input id="ovLight" type="range" min="-1" max="100" value="-1">
+      </div>
+      <div class="ctl-row">
+        <label for="ovMin">Duración</label>
+        <input class="num" id="ovMin" type="number" min="1" max="240" value="15"> <span class="muted">min</span>
+        <button class="btn quiet small" id="ovBtn">Aplicar manual</button>
+        <button class="btn quiet small" id="ovClear">Volver a automático</button>
+      </div>
+      <div class="muted" style="font-size:13px">El calefactor y la bomba nunca se controlan a mano: el supervisor de seguridad siempre decide.</div>
+      <div class="sep"></div>
+      <div class="ctl-row">
+        <button class="btn ghost" id="scenarioBtn">Editar escenario…</button>
+        <span style="flex:1"></span>
+        <label for="exFrom">Exportar</label>
+        <input class="num" style="width:150px" id="exFrom" type="date">
+        <input class="num" style="width:150px" id="exTo" type="date">
+        <button class="btn small" id="exportBtn">CSV</button>
+      </div>
+    </section>
+
+    <!-- Log -->
+    <section class="card c5">
+      <h2>Bitácora <small>órdenes y eventos</small></h2>
+      <div class="log" id="log"></div>
+    </section>
+  </div>
+
+  <footer><svg class="star"><use href="#khatam"/></svg>RAR · Orchidarc × Universidad Veracruzana · Ixhuacán de los Reyes, Veracruz<svg class="star"><use href="#khatam"/></svg></footer>
+</main>
+
+<!-- Scenario editor -->
+<dialog id="scDlg">
+  <h2 class="display" style="margin:0 0 4px;font-size:28px">Editor de escenario</h2>
+  <p class="muted" style="margin:0 0 14px">Cada etapa dura N días; con «rampa» los valores cambian poco a poco desde la etapa anterior. T máx a las 13:00, T mín a las 03:00.</p>
+  <div class="ctl-row">
+    <label>Plantilla</label>
+    <select id="preset" class="num" style="width:auto"></select>
+    <button class="btn quiet small" id="presetLoad">Cargar plantilla</button>
+    <span style="flex:1"></span>
+    <label>Amanecer</label><input class="num" id="sunR" type="number" min="0" max="23" step="0.5" style="width:70px">
+    <label>Atardecer</label><input class="num" id="sunS" type="number" min="1" max="24" step="0.5" style="width:70px">
+  </div>
+  <div class="sc-scroll"><table class="sc-table" id="scTable"></table></div>
+  <div class="ctl-row" style="margin-top:12px">
+    <button class="btn quiet small" id="addStage">+ Etapa</button>
+    <span style="flex:1"></span>
+    <button class="btn quiet" id="scCancel">Cancelar</button>
+    <button class="btn" id="scSend">Enviar al reactor</button>
+  </div>
+</dialog>
+
+<!-- Gallery -->
+<dialog id="galDlg">
+  <h2 class="display" style="margin:0 0 12px;font-size:28px">Galería · últimas fotos</h2>
+  <div class="strip" id="gallery" style="grid-template-columns:repeat(4,1fr)"></div>
+  <div class="ctl-row" style="margin-top:14px;justify-content:flex-end"><button class="btn quiet" onclick="this.closest('dialog').close()">Cerrar</button></div>
+</dialog>
+
+<!-- Password -->
+<dialog id="pwDlg">
+  <h2 class="display" style="margin:0 0 12px;font-size:26px">Cambiar contraseña</h2>
+  <div class="ctl-row"><input class="num" style="width:280px" id="pwOld" type="password" placeholder="Contraseña actual"></div>
+  <div class="ctl-row"><input class="num" style="width:280px" id="pwNew" type="password" placeholder="Nueva (mín. 10 caracteres)"></div>
+  <div class="err" id="pwErr"></div>
+  <div class="ctl-row" style="justify-content:flex-end"><button class="btn quiet" onclick="this.closest('dialog').close()">Cancelar</button><button class="btn" id="pwSave">Guardar</button></div>
+</dialog>
+
+<div class="toast" id="toast" role="status"></div>
+<script src="app.js"></script>
+</body>
+</html>
