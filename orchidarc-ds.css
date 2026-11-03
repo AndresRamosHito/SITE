@@ -1,0 +1,59 @@
+/* ============================================================
+   ORCHIDARC DESIGN SYSTEM — Light Academia layer for article pages
+   (pages with their own inline chrome: .nav-inner / .links / .footer)
+   ============================================================ */
+:root{--ground:#F6F1E7;--text:#2A0E27;--text-muted:#5B4A58;--gold:#9A7420;--rose:#B8005F;--saffron:#8A5A00;--garnet:#B01E30;
+  --sheet:#FFFFFF;--sheet-wood:#E8D3AE;--fill-rose:#E4007C;--aubergine:#1C0619;
+  --display:Cambria,Georgia,"Times New Roman",serif;--label:Georgia,Cambria,"Times New Roman",serif;--body:Assistant,"Segoe UI","Helvetica Neue",sans-serif;
+  --khatam:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'><path fill='none' stroke='%239A7420' stroke-width='1.5' d='M14,2 L17.5,5.5 L22.5,5.5 L22.5,10.5 L26,14 L22.5,17.5 L22.5,22.5 L17.5,22.5 L14,26 L10.5,22.5 L5.5,22.5 L5.5,17.5 L2,14 L5.5,10.5 L5.5,5.5 L10.5,5.5Z'/></svg>")}
+html,body{background:var(--ground) url("/images/orchidarc-damask-light.svg")!important;background-size:120px 160px!important;color:var(--text)!important;font-family:var(--body)!important}
+h1,h2,h3,h4{font-family:var(--display)!important;font-weight:700!important;letter-spacing:-.01em!important}
+h1 em,h2 em,h3 em{color:var(--rose)!important}
+em,i{font-family:inherit}
+a{text-decoration-color:rgba(184,0,95,.45)}
+/* ticker: rose strip */
+.ticker{background:var(--fill-rose)!important;color:#fff!important}
+.ticker div,.ticker__track{font-family:var(--body)!important;font-weight:700!important;letter-spacing:.18em!important}
+.ticker span::before{color:#FFE7A3!important}
+/* nav */
+.nav{background:rgba(246,241,231,.94)!important;border-bottom:1px solid var(--gold)!important;box-shadow:0 3px 0 -2px rgba(154,116,32,.5)}
+.brand-title{font-family:var(--display)!important;font-weight:700!important}
+.brand-sub{font-family:var(--body)!important;font-weight:700!important;letter-spacing:.18em!important}
+.links{font-family:var(--body)!important;font-weight:700!important;letter-spacing:.14em!important}
+.links .active,.links a.active{color:var(--rose)!important;border-bottom-color:var(--rose)!important}
+/* gilt margin on the opening screen */
+.hero{position:relative;border:2px solid var(--gold);outline:1px solid var(--gold);outline-offset:-10px;max-width:min(1220px,calc(100% - 56px));margin:28px auto 0!important;padding-left:clamp(24px,5vw,64px)!important;padding-right:clamp(24px,5vw,64px)!important;background:rgba(246,241,231,.88)}
+.hero::before,.hero::after{content:"";position:absolute;top:-11px;width:20px;height:20px;background:var(--ground) var(--khatam) center/contain no-repeat;border-radius:50%}
+.hero::before{left:-11px}.hero::after{right:-11px}
+@media(max-width:720px){.hero{max-width:calc(100% - 32px);margin-top:16px!important}}
+.hero h1{color:var(--text)!important;font-weight:700!important;letter-spacing:-.01em!important}
+.eyebrow{color:var(--text-muted)!important;font-family:var(--body)!important;font-weight:700!important;letter-spacing:.18em!important}
+.lede,.lead{color:rgba(42,14,39,.8)!important}
+.byline{color:var(--text-muted)!important;font-family:var(--label)!important;font-style:italic;text-transform:none!important;letter-spacing:0!important;font-weight:400!important}
+/* plates and photos: white mounts with gold line */
+.hero-img img,.article-figure img,.figure-grid img{background:#fff;border:1px solid var(--gold)!important;padding:8px;box-shadow:0 0 0 4px #fff,0 0 0 5px rgba(154,116,32,.55);border-radius:0!important}
+figcaption,.caption-card{color:var(--text-muted)!important}
+/* hinoki reading panels */
+.status-grid,.note-box,.caption-card,.vision article,.source-note,.matrix>div,.filters{background:var(--sheet)!important;border:1px solid rgba(154,116,32,.35)!important;border-top:6px solid var(--sheet-wood)!important;border-radius:18px!important;box-shadow:0 18px 40px -30px rgba(28,6,25,.35)}
+.status-grid strong{color:var(--text-muted)!important;letter-spacing:.18em!important;font-weight:700!important}
+.status-grid span{font-family:var(--display)!important;color:var(--text)!important;font-weight:700}
+.status-grid div{border-left-color:rgba(154,116,32,.35)!important}
+/* article headings: khatam rule above each section */
+.article h2{position:relative;padding-top:44px!important}
+.article h2::before{content:"";position:absolute;top:0;left:0;right:0;height:26px;background:var(--khatam) center/24px 24px no-repeat,linear-gradient(var(--gold),var(--gold)) left center/calc(50% - 22px) 1px no-repeat,linear-gradient(var(--gold),var(--gold)) right center/calc(50% - 22px) 1px no-repeat}
+.article a,.refs a{color:var(--rose)!important}
+/* ablaq table rows */
+th{background:var(--aubergine)!important;color:#fff!important;font-family:var(--body)!important;letter-spacing:.12em}
+tbody tr:nth-child(even) td{background:#EDE3CF}
+tbody tr:nth-child(odd) td{background:#fff}
+/* footer: aubergine with double gold rule */
+.footer{background:var(--aubergine)!important;color:#fff!important;border-top:2px solid #E2B54A;box-shadow:inset 0 9px 0 -8px #E2B54A}
+.footer h2{font-family:var(--display)!important;color:#fff!important}
+.footer h3{font-family:var(--body)!important;color:rgba(255,255,255,.6)!important;letter-spacing:.18em!important}
+.footer a:hover{color:#FF5FAE!important}
+.copy{color:rgba(255,255,255,.55)!important}
+/* forms (tour questionnaire) */
+header .head,main form,fieldset{border-radius:18px}
+button,.btn,input[type=submit]{border-radius:999px!important}
+button[type=submit],input[type=submit]{background:var(--fill-rose)!important;border-color:var(--fill-rose)!important;color:#fff!important}
+header .head h1 em,.footer h2 em{color:#FF5FAE!important}
