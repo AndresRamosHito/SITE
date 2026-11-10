@@ -5,7 +5,8 @@
 // link has been inserted by the block below.
 (function () {
   const addExpeditions = () => {
-    const page = window.location.pathname.split('/').pop() || 'index.html';
+    const slug = window.location.pathname.split('/').pop() || 'index';
+    const page = slug.includes('.') ? slug : slug + '.html';
     const links = document.getElementById('navlinks');
     if (links && !links.querySelector('a[href="expeditions.html"], a[href="/expeditions.html"]')) {
       const a = document.createElement('a');
@@ -32,12 +33,32 @@
 })();
 // Orchidarc — shared front-end behaviour
 
-// Mobile nav
+// Accessible mobile nav. Delegate link clicks so later-added navigation links also close it.
 const t = document.getElementById('navtoggle');
 const l = document.getElementById('navlinks');
 if (t && l) {
-  t.addEventListener('click', () => l.classList.toggle('open'));
-  l.querySelectorAll('a').forEach(a => a.addEventListener('click', () => l.classList.remove('open')));
+  t.setAttribute('aria-controls', 'navlinks');
+  t.setAttribute('aria-expanded', 'false');
+  const closeMenu = () => {
+    l.classList.remove('open');
+    t.setAttribute('aria-expanded', 'false');
+  };
+  t.addEventListener('click', () => {
+    const isOpen = l.classList.toggle('open');
+    t.setAttribute('aria-expanded', String(isOpen));
+  });
+  l.addEventListener('click', (event) => {
+    if (event.target.closest('a')) closeMenu();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+  document.addEventListener('click', (event) => {
+    if (!l.contains(event.target) && !t.contains(event.target)) closeMenu();
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1199) closeMenu();
+  });
 }
 
 // Reveal-on-scroll with fail-safe visibility.
@@ -63,7 +84,8 @@ if ('IntersectionObserver' in window && revealEls.length) {
   revealEls.forEach(showReveal);
 }
 
-const path = window.location.pathname.split('/').pop() || 'index.html';
+const routeSlug = window.location.pathname.split('/').pop() || 'index';
+const path = routeSlug.includes('.') ? routeSlug : routeSlug + '.html';
 const omxPoster = 'images/orchids-of-mexico/orchids-of-mexico-poster.jpg';
 
 // Add Reserve to the shared header navigation when older static pages do not include it yet.
@@ -90,6 +112,23 @@ if (navLinks && !navLinks.querySelector('a[href="/orquidea/"], a[href="orquidea/
   const storiesLink = Array.from(navLinks.querySelectorAll('a')).find(a => /Stories/i.test(a.textContent || '') || /stories\.html/i.test(a.getAttribute('href') || ''));
   if (storiesLink) storiesLink.insertAdjacentElement('afterend', orquideaLink);
   else navLinks.appendChild(orquideaLink);
+}
+
+// Ensure the primary conservation action remains accessible when the desktop CTA is hidden.
+if (navLinks && !navLinks.querySelector('.nav__mobile-cta')) {
+  const mobileAction = document.createElement('a');
+  mobileAction.href = '/take-action';
+  mobileAction.textContent = 'Take Action';
+  mobileAction.className = 'nav__mobile-cta';
+  if (path === 'take-action.html') mobileAction.setAttribute('aria-current', 'page');
+  navLinks.appendChild(mobileAction);
+}
+if (navLinks) {
+  const route = window.location.pathname.replace(/\\.html$/, '').replace(/\\/$/, '') || '/';
+  navLinks.querySelectorAll('a[href]').forEach(a => {
+    const target = new URL(a.href, window.location.href).pathname.replace(/\\.html$/, '').replace(/\\/$/, '') || '/';
+    if (route === target) a.setAttribute('aria-current', 'page');
+  });
 }
 
 // Homepage Reserve block.
@@ -261,7 +300,7 @@ if (f) {
       m.textContent = '— Please enter a valid email';
       return;
     }
-    m.textContent = "— Thank you. We'll be in touch from the cloud forest.";
-    e.value = '';
+    m.textContent = '— Newsletter subscriptions are not yet active. Please email andresr@orchidarc.org to request updates; this form does not store your address.';
+    m.setAttribute('role', 'status');
   });
 }
