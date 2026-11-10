@@ -264,7 +264,7 @@ if (path === 'orchids-of-mexico.html') {
 // Films page poster card for the feature documentary.
 if (path === 'films.html') {
   const indev = document.querySelector('.indev');
-  if (indev && !document.querySelector('.omx-film-poster')) {
+  if (indev && !document.querySelector('.omx-film-poster, .omx-film-poster-static')) {
     const wrap = document.createElement('div');
     wrap.className = 'omx-film-poster';
     wrap.style.cssText = 'display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:center;margin-top:28px;padding:20px;border:1px solid rgba(27,26,23,.16);background:rgba(255,255,255,.22)';
