@@ -377,7 +377,7 @@ hr.hairline{border:0;height:1px;background:var(--rule);margin:48px 0}
 .foot__top{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:48px;padding-bottom:64px;border-bottom:1px solid rgba(255,255,255,.1)}
 .foot__brand h2{font-family:Georgia,Cambria,"Times New Roman",serif;font-style:italic;font-weight:400;font-size:3rem;line-height:.9;letter-spacing:-.03em;margin-bottom:16px}
 .foot__brand p{opacity:.65;font-size:.95rem;max-width:32ch}
-.foot__col h5{font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;opacity:.5;margin-bottom:18px;font-weight:700}
+.foot__col h5,.foot__col h3{font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:.65rem;letter-spacing:.16em;text-transform:uppercase;opacity:.5;margin-bottom:18px;font-weight:700}
 .foot__col ul{list-style:none}
 .foot__col li{margin-bottom:10px}
 .foot__col a{font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:1rem;opacity:.85;transition:color .2s}
@@ -619,7 +619,7 @@ h1,h2,h3,h4{font-family:var(--display)}
 .prose h3{color:var(--text)}
 .specimen__name,.hb__name,.soc__handle,.discovery__txt h3,.film__title em{font-family:var(--label);font-style:italic;font-weight:400}
 em,i{font-family:inherit}
-.hero__meta,.ph__eyebrow,.section__num,.stat__label,.film__meta,.story__meta,.hb__meta,.specimen__plate,.datasheet dt,.discovery__meta dt,.pillar__num,.bigcard__num,.soc__plat,.affiliations h5,.indev__tag,.urgent__tag,.itinerary .day,.mono,.foot__col h5,.reserve-home-card__eyebrow{letter-spacing:.18em!important;font-weight:700}
+.hero__meta,.ph__eyebrow,.section__num,.stat__label,.film__meta,.story__meta,.hb__meta,.specimen__plate,.datasheet dt,.discovery__meta dt,.pillar__num,.bigcard__num,.soc__plat,.affiliations h5,.indev__tag,.urgent__tag,.itinerary .day,.mono,.foot__col h5,.foot__col h3,.reserve-home-card__eyebrow{letter-spacing:.18em!important;font-weight:700}
 .hero__meta,.ph__eyebrow,.section__num{color:var(--text-muted)}
 .stat__num{font-family:var(--display);font-weight:700;color:var(--rose)}
 .datasheet dd,.discovery__meta dd{font-family:var(--label);color:var(--text)}
