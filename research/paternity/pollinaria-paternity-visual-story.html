@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Orchid paternity — a visual story of genetic funnels | Orchidarc</title>
-<meta name="description" content="A chapter-by-chapter visual explanation of orchid pollinaria, fruit paternity, recruitment and pollination-dependent genetic funnels. Includes lab presentation controls and the final manuscript results.">
+<title>Orchid Paternity Visual Story | Orchidarc</title>
+<meta name="description" content="Explore an animated visual story of orchid pollinaria, fruit paternity and recruitment, with controls for classroom and research presentations.">
 
 
 
@@ -22,12 +22,13 @@
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:Nunito,"Trebuchet MS",system-ui,sans-serif;overflow:hidden}
 #app{display:flex;flex-direction:column;height:100%}
+.story-screenreader-heading{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 #stagewrap{flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
 canvas{display:block;border-radius:6px;background:#000}
 #bar{display:flex;align-items:center;gap:12px;padding:10px 16px;background:var(--bar);border-top:1px solid var(--rule);flex-wrap:wrap}
 body.rec #bar{display:none}
 body.rec{cursor:none}
-button,select{font:700 15px Nunito,system-ui,sans-serif;color:var(--text);background:var(--bg);border:1px solid var(--rule);border-radius:6px;height:36px;padding:0 12px;cursor:pointer}
+button,select{font:700 15px Nunito,system-ui,sans-serif;color:var(--text);background:var(--bg);border:1px solid var(--rule);border-radius:6px;height:36px;min-height:40px;padding:0 12px;cursor:pointer}
 button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #play{min-width:84px}
@@ -43,7 +44,7 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 html,body{font-family:"Segoe UI",Arial,system-ui,sans-serif;background:#091b13!important}
 #app{height:100dvh;min-height:0}#storyhead{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:13px 24px;border-bottom:1px solid var(--rule);flex:none;background:#0b2017}
 .storybrand{display:flex;align-items:center;gap:13px;color:var(--text);text-decoration:none;font:24px Georgia,serif}.storybrand svg{width:25px;height:25px;color:#d6b171}.storybrand span{font:10px "Consolas",monospace;letter-spacing:.15em;text-transform:uppercase;color:#b4c3b7;border-left:1px solid #34513e;padding-left:13px}
-.headtools{display:flex;gap:7px;align-items:center}.headtools button,.headtools a{font:12px "Segoe UI",sans-serif;height:32px;display:inline-flex;align-items:center;padding:0 11px;text-decoration:none;border:1px solid var(--rule);border-radius:3px;color:var(--text);background:transparent}
+.headtools{display:flex;gap:7px;align-items:center}.headtools button,.headtools a{font:12px "Segoe UI",sans-serif;height:40px;min-height:40px;display:inline-flex;align-items:center;padding:0 11px;text-decoration:none;border:1px solid var(--rule);border-radius:3px;color:var(--text);background:transparent}
 button,select{font:500 13px "Segoe UI",Arial,sans-serif;border-radius:4px;height:36px;background:#173425;color:#efe9dd;border-color:#34513e;transition:background .15s,border-color .15s}button:hover{background:#234631;border-color:#7a957d}button[aria-pressed="true"]{border-color:#ddbb79;color:#ddbb79}
 #stagewrap{padding:8px 16px 0;position:relative;background:radial-gradient(ellipse at 65% 30%,#1a3424,#091b13 75%);overflow:hidden;min-height:110px}
 canvas{border-radius:2px;box-shadow:0 16px 70px #0006;background:#18352a;max-width:100%;outline:none}
@@ -69,6 +70,7 @@ body.rec #storyhead,body.rec #bar,body.rec #frame-kind{display:none}body.rec #st
 </head>
 <body>
 <div id="app">
+<h1 class="story-screenreader-heading">Orchid paternity: pollinaria and genetic funnels</h1>
 <header id="storyhead"><a class="storybrand" href="https://www.orchidarc.org/pollinaria-paternity.html" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M16 29V11M16 13C4 13 2 4 6 3c6-2 10 9 10 10Zm0 0c12 0 14-9 10-10-6-2-10 9-10 10Zm0 2C6 13 4 22 8 24c5 2 8-7 8-9Zm0 0c10-2 12 7 8 9-5 2-8-7-8-9Z"/></svg>Orchidarc<span>Orchid paternity · visual story</span></a><div class="headtools"><button id="notesbtn" aria-expanded="false" aria-controls="presenter-notes">Presenter notes</button><button id="fullscreen" aria-label="Enter fullscreen">Fullscreen</button></div></header>
   <div id="stagewrap"><canvas id="cv" width="1600" height="900" role="img" aria-label="Animation: how orchid pollinaria concentrate paternity and shape the next generation" tabindex="0"></canvas><span id="frame-kind"></span></div><div id="captionbox"><p id="live-caption"></p></div>
   <div id="bar">

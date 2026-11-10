@@ -3,7 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Orchid paternity — the model atlas | Orchidarc</title>
+<title>Orchid Paternity Model Atlas | Orchidarc Research</title>
+<meta name="description" content="Explore an interactive orchid paternity model: pollinarium transfer, single-sire fruits, recruitment, genetic drift and 50-generation simulations.">
+<link rel="canonical" href="https://www.orchidarc.org/research/paternity/S1_orchid_paternity_model_explainer">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Orchid Paternity Model Atlas | Orchidarc Research">
+<meta property="og:description" content="An interactive model atlas explaining orchid fruit paternity and reproductive genetic funnels.">
+<meta property="og:url" content="https://www.orchidarc.org/research/paternity/S1_orchid_paternity_model_explainer">
 <style>
 /* ============================================================
    Tokens. Light first; dark via prefers-color-scheme, and both
@@ -63,8 +69,8 @@ body.rec #help{display:none}
 /* ---------- header ---------- */
 header#hd{position:absolute;top:46px;left:72px;right:72px;display:flex;align-items:baseline;gap:18px}
 #hd .no{font:500 16px/1 var(--sans);color:var(--muted);min-width:64px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
-#hd h1{margin:0;font:600 38px/1.15 var(--sans);letter-spacing:-.018em;text-wrap:balance}
-#hd h1 .m{font-weight:600}
+#hd h2{margin:0;font:600 38px/1.15 var(--sans);letter-spacing:-.018em;text-wrap:balance}
+#hd h2 .m{font-weight:600}
 body.first #hd{visibility:hidden}
 
 /* ---------- scene frame ---------- */
@@ -407,7 +413,9 @@ body.rec #notes{bottom:26px}
 .display{font:400 66px/1.05 Georgia,serif;max-width:17ch;letter-spacing:-.025em;color:var(--text)}
 #s-title .eyebrow{max-width:62ch;line-height:1.6}#s-title .lede{max-width:62ch;font-size:23px;line-height:1.5}#s-title .meta{max-width:100ch;}
 #atlas-nav{position:absolute;left:72px;top:30px;font:500 13px var(--sans);color:var(--muted);display:flex;align-items:center;gap:12px;z-index:5}
-#atlas-nav select{font:500 13px var(--sans);max-width:240px;background:var(--panel);color:var(--text);border:1px solid var(--rule2);border-radius:4px;padding:6px;}
+#atlas-nav select{font:500 13px var(--sans);max-width:240px;background:var(--panel);color:var(--text);border:1px solid var(--rule2);border-radius:4px;padding:6px;min-height:38px;}
+#atlas-nav .atlas-back{display:inline-flex;align-items:center;min-height:38px;padding:5px 9px;border:1px solid var(--rule2);border-radius:4px;color:var(--text);text-decoration:none;white-space:nowrap}
+#atlas-nav .atlas-back:hover,#atlas-nav .atlas-back:focus-visible{border-color:var(--sky);color:var(--sky)}
 body:not(.first) #atlas-nav{top:91px;}body.rec #atlas-nav{visibility:hidden}button:focus-visible,select:focus-visible{outline:3px solid var(--pollen);outline-offset:3px;}
 
 #p-stats .eq .gloss{font-size:17.5px;line-height:1.42;margin-bottom:22px;max-width:none}#s-rec .eq .line{font-size:24px}#s-rec .eq .align{font-size:26px}
@@ -420,8 +428,8 @@ body:not(.first) #atlas-nav{top:91px;}body.rec #atlas-nav{visibility:hidden}butt
 <meta name="twitter:card" content="summary_large_image">
 </head>
 <body>
-<div id="viewport"><div id="stage"><div id="atlas-nav"><span>ORCHIDARC / MODEL ATLAS</span><select id="scene-picker" aria-label="Choose a model scene"></select></div>
-<header id="hd"><span class="no" id="sno"></span><span id="ptag">Primer</span><h1 id="stitle"></h1><nav id="plinks" aria-label="Primer pages"></nav></header>
+<div id="viewport"><div id="stage"><div id="atlas-nav"><span>ORCHIDARC / MODEL ATLAS</span><select id="scene-picker" aria-label="Choose a model scene"></select><a class="atlas-back" href="/pollinaria-paternity" aria-label="Back to the pollinaria and paternity research overview">Research overview ↗</a></div>
+<header id="hd"><span class="no" id="sno"></span><span id="ptag">Primer</span><h2 id="stitle"></h2><nav id="plinks" aria-label="Primer pages"></nav></header>
 <div id="help" aria-hidden="true"><span><kbd>→</kbd>next</span><span><kbd>←</kbd>back</span><span><kbd>R</kbd>replay</span><span><kbd>A</kbd>autoplay</span><span><kbd>+</kbd><kbd>−</kbd>dwell</span><span><kbd>N</kbd>script</span><span><kbd>P</kbd>primer</span><span><kbd>H</kbd>hide controls</span><span><kbd>F</kbd>full screen</span><span><kbd>T</kbd>theme</span></div>
 
 <!-- Scene text follows the final manuscript and Supporting Information
@@ -432,7 +440,7 @@ body:not(.first) #atlas-nav{top:91px;}body.rec #atlas-nav{visibility:hidden}butt
   <div>
     <div class="rule" aria-hidden="true"></div>
     <p class="eyebrow">Companion to <cite>Orchid paternity: pollinaria, single-sire fruits and pollination-dependent genetic funnels</cite></p>
-    <h2 class="display">The orchid paternity model</h2>
+    <h1 class="display">The orchid paternity model</h1>
     <p class="lede b" data-b="1">A stochastic, individual-based simulation of diploid adults through 50 discrete, non-overlapping generations, without clonal growth, dormancy or a seed bank. Every scenario is neutral and cross-only: the mother is excluded from her own donor pool, so the model describes outcrossing, as in self-incompatible orchids.</p>
     <p class="lede b" data-b="2">Paternity regimes are specified distributions, not fitted species or evolving traits: single-sire fractions are set by the regime rather than emerging from it, and pollen transport is not simulated.</p>
     <p class="small meta">Engine <code>pollinaria_model_v3_3.py</code>, release v3.3.0 (<code>params_v3_3_final.json</code>), with the 2026 pollination-opportunity, factorial and establishment-correlation runs.</p>
