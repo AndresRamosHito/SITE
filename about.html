@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>About — Orchidarc</title>
-<meta name="description" content="About Orchidarc — a UK-registered conservation NGO working through field biology, conservation practice and documentary film.">
-<meta property="og:title" content="About — Orchidarc">
-<meta property="og:description" content="About Orchidarc — a UK-registered conservation NGO working through field biology, conservation practice and documentary film.">
+<title>About Orchidarc | Field Research and Orchid Conservation in Mexico</title>
+<meta name="description" content="How Orchidarc works in Mexico: documenting wild orchids, monitoring forest habitats, developing propagation methods and sharing the fieldwork through film.">
+<meta property="og:title" content="About Orchidarc | Fieldwork in Mexico">
+<meta property="og:description" content="Field notes, species research, forest conservation and documentary work from Orchidarc’s projects in Mexico.">
 <meta property="og:image" content="https://www.orchidarc.org/images/hero-cloud-forest.jpg">
 <meta name="theme-color" content="#F6F1E7">
 <link rel="icon" type="image/png" href="images/favicon.png">
@@ -19,6 +19,46 @@
 <meta property="og:url" content="https://www.orchidarc.org/about">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+
+<style>
+/* About page: restrained field-journal layout. The portrait keeps its original proportions. */
+.about-page-hero{padding-bottom:24px}
+.about-page-hero .ph__title{max-width:18ch}
+.about-page-hero .ph__lede{max-width:75ch}
+.about-opening{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,350px);gap:clamp(28px,6vw,104px);align-items:start;padding-top:30px;padding-bottom:80px;border-bottom:1px solid var(--rule)}
+.about-opening__text p{font-size:clamp(1.06rem,1.4vw,1.22rem);line-height:1.72;margin:0 0 1.2em;max-width:64ch}
+.about-opening__text p:first-child{font-family:Cambria,Georgia,serif;font-size:clamp(1.4rem,2vw,1.85rem);line-height:1.38;color:var(--ink)}
+.about-opening__registry{font:700 .75rem/1.7 Assistant,"Segoe UI",sans-serif!important;text-transform:uppercase;letter-spacing:.06em;color:var(--moss);border-top:1px solid var(--rule);padding-top:17px;margin-top:22px!important}
+.about-portrait{width:100%;max-width:350px;margin:0;justify-self:end;align-self:start}
+.about-portrait img{display:block;width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain;object-position:center;mix-blend-mode:normal;filter:none}
+.about-portrait figcaption{font:600 .78rem/1.55 Assistant,"Segoe UI",sans-serif;color:var(--moss);padding-top:12px}
+.about-methods{max-width:1100px}
+.about-methods__intro{font-size:1.1rem;line-height:1.6;max-width:66ch;margin-top:18px;color:var(--moss)}
+.about-methods__list{margin-top:40px;border-top:1px solid var(--rule)}
+.about-method{display:grid;grid-template-columns:minmax(135px,180px) minmax(0,1fr);gap:clamp(18px,4vw,64px);padding:30px 0;border-bottom:1px solid var(--rule)}
+.about-method__label{font:700 .72rem/1.6 Assistant,"Segoe UI",sans-serif;text-transform:uppercase;letter-spacing:.07em;color:var(--moss)}
+.about-method h3{font:700 clamp(1.45rem,2vw,1.8rem)/1.2 Cambria,Georgia,serif;margin:0 0 12px}
+.about-method p{font-size:1.03rem;line-height:1.7;max-width:76ch;margin:0}
+.about-method a,.about-project a,.about-people a{color:var(--ochre);text-decoration:underline;text-underline-offset:3px}
+.about-projects{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px;margin-top:30px}
+.about-project{border-top:1px solid var(--rule);padding:25px 0 32px}
+.about-project .mono{color:var(--moss);display:block;margin-bottom:10px}
+.about-project h3{font:700 1.55rem/1.23 Cambria,Georgia,serif;margin:0 0 12px}
+.about-project p{line-height:1.65;font-size:1.03rem;margin-bottom:14px;max-width:58ch}
+.about-people{max-width:1080px;padding-bottom:90px}
+.about-people p{font-size:1.08rem;line-height:1.7;max-width:78ch;margin:18px 0}
+@media(max-width:900px){
+ .about-opening{grid-template-columns:minmax(0,1fr) minmax(220px,290px);gap:32px}
+ .about-portrait{max-width:290px}
+}
+@media(max-width:720px){
+ .about-opening{grid-template-columns:1fr;padding-top:14px;padding-bottom:52px}
+ .about-portrait{width:min(100%,320px);max-width:320px;justify-self:start}
+ .about-method{grid-template-columns:1fr;gap:6px;padding:24px 0}
+ .about-projects{grid-template-columns:1fr}
+ .about-page-hero .ph__title{max-width:none}
+}
+</style>
 </head>
 <body>
 <div class="ticker" aria-hidden="true">
@@ -57,82 +97,77 @@
     <a href="take-action.html" class="nav__cta">Take Action</a>
   </div>
 </header>
-<section class="ph wrap">
-  <span class="ph__eyebrow">About</span>
-  <h1 class="ph__title">Orchidarc works through <em>field biology</em>, conservation and film.</h1>
-  <p class="ph__lede">A small UK-registered conservation NGO focused on Mexico's wild orchids.</p>
+
+<main id="main-content">
+<section class="ph wrap about-page-hero">
+  <span class="ph__eyebrow">About Orchidarc · Mexico</span>
+  <h1 class="ph__title">We study Mexico's orchids <em>where they grow.</em></h1>
+  <p class="ph__lede">Orchidarc is a UK-registered charity working mainly in Veracruz, Mexico. We document wild orchid populations, study their biology, and develop conservation work around the plants and places we know.</p>
 </section>
 
-<section class="wrap reveal">
-  <figure class="hero__frame" style="margin:32px 0 64px;aspect-ratio:16/9">
-    <img src="images/andres-with-halbingeriana.jpg" alt="Andrés Ramos in the field with Laelia halbingeriana">
-    <figcaption class="hero__caption">Director Andrés Ramos — fieldwork, Veracruz cloud forest</figcaption>
+<section class="wrap about-opening reveal" aria-label="Our approach">
+  <div class="about-opening__text">
+    <p>Most of our work starts with a field notebook: an orchid, the tree or rock it grows on, the forest around it, and a record of what has changed since the last visit.</p>
+    <p>We work in the cloud forests of Veracruz and other orchid habitats in Mexico. At the 14-hectare Orchidarc Reserve in Ixhuacán de los Reyes, we monitor orchids and their habitat while developing practical conservation and cultivation facilities. Beyond the reserve, field projects follow particular species and populations, not just attractive flowers.</p>
+    <p>Field observations lead to identification, microscopy, population studies and, where appropriate and permitted, genetic sampling. The results also tell us what we still do not know. That matters when deciding which conservation actions are justified.</p>
+    <p class="about-opening__registry">Orchidarc's work predates its registration as an England and Wales charity on 30 April 2024 · Charity no. 1208062</p>
+  </div>
+  <figure class="about-portrait">
+    <img src="images/andres-with-halbingeriana.jpg" alt="Orchidarc director Andrés Ramos documenting Laelia halbingeriana in the field" loading="lazy" decoding="async">
+    <figcaption>Andrés Ramos documenting <i>Laelia halbingeriana</i>. Field photography and species records remain central to Orchidarc's work.</figcaption>
   </figure>
 </section>
 
-<section class="section wrap reveal">
-  <div class="about">
-    <div class="about__col">
-      <p class="about__lede">Orchidarc was registered with the UK Charity Commission in 2024 (no. <strong>1208062</strong>). Most of the work is based in Mexico, with field and research collaborations in the United Kingdom, Japan, Ecuador and Costa Rica.</p>
-      <div class="about__stats">
-        <div><div class="stat__num">≈1300</div><div class="stat__label">Orchid species in Mexico</div></div>
-        <div><div class="stat__num">≈600</div><div class="stat__label">Endemic to Mexico</div></div>
-        <div><div class="stat__num">14 ha</div><div class="stat__label">Cloud forest under management</div></div>
-        <div><div class="stat__num">2024</div><div class="stat__label">Year founded</div></div>
-      </div>
-    </div>
-    <div class="about__col">
-      <p>Orchidarc began with a simple observation: some of Mexico's most threatened orchids are not obscure species. They are familiar plants — the orchids on churchyard trees, on Day of the Dead altars, and in family gardens — often widely recognised but poorly documented.</p>
-      <p>Our work is to study these species with scientific rigour, assess them properly, and support conservation led by the communities living alongside them.</p>
-      <p>We also make documentary films, because many people will never visit a Mexican cloud forest, but they can still see why these forests matter.</p>
-    </div>
+<section class="section wrap reveal about-methods" aria-labelledby="methods-title">
+  <span class="ph__eyebrow">Field practice</span>
+  <h2 id="methods-title" class="section__title">How we <em>work</em>.</h2>
+  <p class="about-methods__intro">There is no single technique that conserves an orchid. Our projects combine field observation, follow-up visits, careful cultivation, and research with the people who know the sites.</p>
+  <div class="about-methods__list">
+    <article class="about-method">
+      <span class="about-method__label">01 · Field records</span>
+      <div><h3>Find, document and return.</h3><p>We photograph plants in their habitats, record flowering and ecological context, compare identifications, and revisit populations where possible. Our <a href="herbarium.html">digital herbarium</a> makes selected records available without turning sensitive locations into a collecting guide.</p></div>
+    </article>
+    <article class="about-method">
+      <span class="about-method__label">02 · Habitat and cultivation</span>
+      <div><h3>Work on the conditions the orchids need.</h3><p>At the <a href="reserve.html">Veracruz reserve</a>, our priorities include monitoring forest conditions, restoring suitable host-tree habitat, and rebuilding cultivation infrastructure. Symbiotic propagation and acclimatisation work, including work on <i>Acineta barkeri</i>, is being developed; proposed facilities and reintroductions are not presented as completed projects.</p></div>
+    </article>
+    <article class="about-method">
+      <span class="about-method__label">03 · Research and assessment</span>
+      <div><h3>Put observations to the test.</h3><p>Species documentation feeds taxonomic work and the evidence needed for conservation assessments, including IUCN Red List work. Our <a href="research.html">research</a> also investigates how orchid pollinia attach, how stigmatic matrices behave, and how reproduction shapes the next generation. These projects involve scientific collaborators and are reported with their limitations.</p></div>
+    </article>
+    <article class="about-method">
+      <span class="about-method__label">04 · Records and films</span>
+      <div><h3>Make the work visible without exposing the plants.</h3><p>Our <a href="films.html">documentaries</a> follow orchids, their habitats and the people connected to them. <i>Lily of Allsaints</i> and <i>Oaks and Legacies</i> are available to watch; <a href="orchids-of-mexico.html"><i>Orchids of Mexico</i></a> is in development. We are also developing <a href="orquidea/">OrquIDea</a> to support responsible orchid observations and protect sensitive locality information.</p></div>
+    </article>
   </div>
 </section>
 
-<section class="section wrap reveal">
-  <h2 class="section__title" style="margin-bottom:48px">Three <em>areas of work</em>.</h2>
-  <div class="about__pillars about__pillars--full">
-    <div class="pillar">
-      <span class="pillar__num">01 — Research</span>
-      <div>
-        <h3>Field &amp; laboratory</h3>
-        <p>Floristic surveys, taxonomic work, IUCN Red List assessment, biomaterials research on orchid pollinarium adhesives, and the RAR Climate Replicator for habitat simulation. <a href="research.html">See the research →</a></p>
-      </div>
-    </div>
-    <div class="pillar">
-      <span class="pillar__num">02 — Conservation</span>
-      <div>
-        <h3>In-situ &amp; ex-situ</h3>
-        <p>Reserve management at our cloud forest site in Veracruz, symbiotic propagation of threatened species, and reintroduction work with regional protected areas including La Martinica.</p>
-      </div>
-    </div>
-    <div class="pillar">
-      <span class="pillar__num">03 — Film</span>
-      <div>
-        <h3>Documentary outreach</h3>
-        <p>Long-form documentary filmmaking that presents orchids as living organisms, cultural plants and conservation subjects, rather than as decorative scenery.</p>
-      </div>
-    </div>
+<section class="section wrap reveal" aria-labelledby="projects-title">
+  <span class="ph__eyebrow">Current programmes</span>
+  <h2 id="projects-title" class="section__title">What we are working on <em>now</em>.</h2>
+  <div class="about-projects">
+    <article class="about-project"><span class="mono">Veracruz · Habitat</span><h3>The Orchidarc Reserve</h3><p>Monitoring a 14-hectare cloud-forest site near Ixhuacán de los Reyes, with host-tree recovery and shadehouse rehabilitation among the priorities still being developed.</p><a href="reserve.html">Reserve and conservation work →</a></article>
+    <article class="about-project"><span class="mono">Veracruz · Species documentation</span><h3><i>Lepanthes</i> in the cloud forest</h3><p>Repeated field surveys, focus-stacked photographs and taxonomic work on orchids whose flowers may be only a few millimetres across. Sampling and later analysis depend on the appropriate permissions.</p><a href="lepanthes.html">See the <i>Lepanthes</i> research →</a></article>
+    <article class="about-project"><span class="mono">Veracruz · Population research</span><h3>The golden <i>Cypripedium</i></h3><p>Documenting plant variation across neighbouring habitats and the pressures on an unusually large population of Mexican lady's slipper orchids.</p><a href="cypripedium.html">Follow the <i>Cypripedium</i> work →</a></article>
+    <article class="about-project"><span class="mono">Field and laboratory · Reproduction</span><h3>What makes orchid reproduction work?</h3><p>Experimental studies of pollinarium mechanics, stigmatic materials and detached cells, alongside modelling of pollen transfer and paternity. The research connects field biology with materials science.</p><a href="research.html">Explore the research →</a></article>
   </div>
 </section>
 
-<section class="section wrap reveal">
-  <h2 class="section__title" style="margin-bottom:48px">Affiliations &amp; recognition</h2>
-  <div class="affiliations">
-    <div><h3>IUCN SSC</h3><p>Member, Orchid Specialist Group. Trained regional and global Red List assessor.</p></div>
-    <div><h3>University of Tokyo</h3><p>Doctoral research on orchid bioadhesives.</p></div>
-    <div><h3>University of Sheffield</h3><p>Founding institutional link; ongoing biomaterials collaboration.</p></div>
-    <div><h3>Universidad Veracruzana</h3><p>Mexican research partner.</p></div>
-    <div><h3>FICAA Mexico City</h3><p>Best Feature Environmental Documentary, 2025 — <em>Lily of Allsaints</em>.</p></div>
-    <div><h3>Conferences</h3><p>Encuentro Mexicano de Orquideología; World Orchid Conference; Andean Orchid Conference; Adhesion Society.</p></div>
-  </div>
+<section class="section wrap reveal about-people" aria-labelledby="people-title">
+  <span class="ph__eyebrow">People and collaboration</span>
+  <h2 id="people-title" class="section__title">A small team, <em>several disciplines</em>.</h2>
+  <p>Orchidarc is coordinated by its founder and director, Andrés Ramos, with members and field collaborators in Mexico. Local field support, site management, plant documentation, and scientific work are organised around individual projects rather than a large permanent staff.</p>
+  <p>Andrés is a member of the IUCN SSC Orchid Specialist Group and undertakes doctoral research at the University of Tokyo. Project-specific scientific work also involves colleagues at Universidad Veracruzana, Jardín Botánico Lankester at the University of Costa Rica, and other botanical and research institutions. Individual affiliations should not be confused with institutional endorsement of every Orchidarc activity.</p>
+  <p>For field collaboration, research records, or documentary screenings, write to <a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a>.</p>
 </section>
+</main>
+
 <footer class="foot">
   <div class="wrap">
     <div class="foot__top">
       <div class="foot__brand">
         <h2>Orchidarc.</h2>
-        <p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p>
+        <p>Field research, orchid conservation and documentary work in Mexico. UK charity 1208062.</p>
         <div class="foot__social">
           <a href="https://www.instagram.com/orchidarcngo/" target="_blank" rel="noopener" aria-label="Instagram">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>
