@@ -258,7 +258,7 @@ hr.hairline{border:0;height:1px;background:var(--rule);margin:48px 0}
 
 .affiliations{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
 .affiliations > div{padding:24px;border:1px solid var(--rule-soft);background:var(--paper-2);border-radius:2px}
-.affiliations h5{font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);margin-bottom:10px;font-weight:700}
+.affiliations h5,.affiliations h3{font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);margin-bottom:10px;font-weight:700}
 .affiliations p{font-size:.98rem;color:rgba(42,14,39,.78)}
 @media(max-width:760px){.affiliations{grid-template-columns:1fr}}
 
@@ -348,8 +348,8 @@ hr.hairline{border:0;height:1px;background:var(--rule);margin:48px 0}
 .itinerary li{display:grid;grid-template-columns:140px 1fr;gap:32px;padding:32px 0;border-top:1px solid var(--rule)}
 .itinerary li:last-child{border-bottom:1px solid var(--rule)}
 .itinerary .day{font-family:Assistant,"Segoe UI","Helvetica Neue",sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);padding-top:6px;font-weight:700}
-.itinerary h4{font-family:Cambria,Georgia,"Times New Roman",serif;font-weight:700;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:6px}
-.itinerary h4 em{font-style:italic}
+.itinerary h4,.itinerary h3{font-family:Cambria,Georgia,"Times New Roman",serif;font-weight:700;font-size:1.4rem;letter-spacing:-.01em;margin-bottom:6px}
+.itinerary h4,.itinerary h3 em{font-style:italic}
 .itinerary p{color:rgba(42,14,39,.78);margin:0}
 @media(max-width:540px){.itinerary li{grid-template-columns:1fr;gap:8px}}
 
@@ -619,7 +619,7 @@ h1,h2,h3,h4{font-family:var(--display)}
 .prose h3{color:var(--text)}
 .specimen__name,.hb__name,.soc__handle,.discovery__txt h3,.film__title em{font-family:var(--label);font-style:italic;font-weight:400}
 em,i{font-family:inherit}
-.hero__meta,.ph__eyebrow,.section__num,.stat__label,.film__meta,.story__meta,.hb__meta,.specimen__plate,.datasheet dt,.discovery__meta dt,.pillar__num,.bigcard__num,.soc__plat,.affiliations h5,.indev__tag,.urgent__tag,.itinerary .day,.mono,.foot__col h5,.foot__col h3,.reserve-home-card__eyebrow{letter-spacing:.18em!important;font-weight:700}
+.hero__meta,.ph__eyebrow,.section__num,.stat__label,.film__meta,.story__meta,.hb__meta,.specimen__plate,.datasheet dt,.discovery__meta dt,.pillar__num,.bigcard__num,.soc__plat,.affiliations h5,.affiliations h3,.indev__tag,.urgent__tag,.itinerary .day,.mono,.foot__col h5,.foot__col h3,.reserve-home-card__eyebrow{letter-spacing:.18em!important;font-weight:700}
 .hero__meta,.ph__eyebrow,.section__num{color:var(--text-muted)}
 .stat__num{font-family:var(--display);font-weight:700;color:var(--rose)}
 .datasheet dd,.discovery__meta dd{font-family:var(--label);color:var(--text)}
