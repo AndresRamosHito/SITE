@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OrquIDea — Citizen science for Mexico's wild orchids | Orchidarc</title>
+<title>OrquIDea | Mexico Orchid Citizen Science | Orchidarc</title>
 <meta name="description" content="OrquIDea is Orchidarc's citizen-science app for observing, photographing and documenting wild orchids responsibly without exposing sensitive locations.">
 <meta property="og:title" content="OrquIDea — Citizen science for Mexico's wild orchids">
 <meta property="og:description" content="Observe, photograph and document wild orchids responsibly. Sensitive locations are protected at the data layer.">
@@ -130,16 +130,34 @@
     <div class="foot__top">
       <div class="foot__brand"><h2>Orchidarc.</h2><p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p></div>
       <div class="foot__col"><h3>Work</h3><ul><li><a href="/films.html">Films</a></li><li><a href="/orquidea/">OrquIDea</a></li><li><a href="/herbarium.html">Herbarium</a></li><li><a href="/gallery.html">Gallery</a></li><li><a href="/research.html">Research</a></li></ul></div>
-      <div class="foot__col"><h3>Get involved</h3><ul><li><a href="https://orquidea.orchidarc.org/" target="_blank" rel="noopener">Open OrquIDea</a></li><li><a href="/take-action.html">Donate</a></li><li><a href="/mexico-tours.html">Mexico tours</a></li><li><a href="/store.html">Store</a></li></ul></div>
-      <div class="foot__col"><h5>App & legal</h5><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms & Community Rules</a></li><li><a href="/support/">Support</a></li><li><a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a></li></ul></div>
+      <div class="foot__col"><h3>Get involved</h3><ul><li><a href="https://orquidea.orchidarc.org/" target="_blank" rel="noopener">Open OrquIDea</a></li><li><a href="/take-action.html">Donate</a></li><li><a href="/expeditions.html">April 2027 expedition</a></li><li><a href="/store.html">Store</a></li></ul></div>
+      <div class="foot__col"><h3>App & legal</h3><ul><li><a href="/privacy/">Privacy Policy</a></li><li><a href="/terms/">Terms & Community Rules</a></li><li><a href="/support/">Support</a></li><li><a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a></li></ul></div>
     </div>
     <div class="foot__bottom"><span>© Orchidarc 2024–2026 — All rights reserved</span><span>OrquIDea · Citizen science with sensitive-location protection</span></div>
   </div>
 </footer>
 <script>
-  const t=document.getElementById('navtoggle');
-  const l=document.getElementById('navlinks');
-  if(t&&l){t.addEventListener('click',()=>l.classList.toggle('open'));l.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>l.classList.remove('open')));}
+(function(){
+  const toggle = document.getElementById('navtoggle');
+  const links = document.getElementById('navlinks');
+  if (!toggle || !links) return;
+  toggle.setAttribute('aria-controls', 'navlinks');
+  toggle.setAttribute('aria-expanded', 'false');
+  const action = document.createElement('a');
+  action.href = '/take-action';
+  action.textContent = 'Take Action';
+  action.className = 'nav__mobile-cta';
+  links.appendChild(action);
+  const close = () => { links.classList.remove('open'); toggle.setAttribute('aria-expanded','false'); };
+  toggle.addEventListener('click', () => {
+    const open = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+  links.addEventListener('click', event => { if (event.target.closest('a')) close(); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape') close(); });
+  document.addEventListener('click', event => { if (!links.contains(event.target) && !toggle.contains(event.target)) close(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 1199) close(); });
+})();
 </script>
 </body>
 </html>
