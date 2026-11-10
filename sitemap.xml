@@ -1,24 +1,51 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://www.orchidarc.org/</loc></url>
-  <url><loc>https://www.orchidarc.org/herbarium</loc></url>
-  <url><loc>https://www.orchidarc.org/cypripedium</loc></url>
-  <url><loc>https://www.orchidarc.org/acineta-barkeri</loc></url>
-  <url><loc>https://www.orchidarc.org/prosthechea-vitellina</loc></url>
-  <url><loc>https://www.orchidarc.org/laelia-halbingeriana</loc></url>
-  <url><loc>https://www.orchidarc.org/mexipedium-xerophyticum</loc></url>
-  <url><loc>https://www.orchidarc.org/laelia-anceps</loc></url>
+  <url><loc>https://www.orchidarc.org/expeditions</loc></url>
+  <url><loc>https://www.orchidarc.org/about</loc></url>
+  <url><loc>https://www.orchidarc.org/reserve</loc></url>
   <url><loc>https://www.orchidarc.org/films</loc></url>
   <url><loc>https://www.orchidarc.org/gallery</loc></url>
+  <url><loc>https://www.orchidarc.org/herbarium</loc></url>
   <url><loc>https://www.orchidarc.org/research</loc></url>
-  <url><loc>https://www.orchidarc.org/lepanthes</loc></url>
-  <url><loc>https://www.orchidarc.org/about</loc></url>
   <url><loc>https://www.orchidarc.org/stories</loc></url>
-  <url><loc>https://www.orchidarc.org/orquidea/</loc></url>
-  <url><loc>https://www.orchidarc.org/store</loc></url>
-  <url><loc>https://www.orchidarc.org/laelia-eyermaniana</loc></url>
-  <url><loc>https://www.orchidarc.org/expeditions</loc></url>
-  <url><loc>https://www.orchidarc.org/mexico-tours</loc></url>
-  <url><loc>https://www.orchidarc.org/reserve</loc></url>
   <url><loc>https://www.orchidarc.org/take-action</loc></url>
+  <url><loc>https://www.orchidarc.org/store</loc></url>
+  <url><loc>https://www.orchidarc.org/socials</loc></url>
+  <url><loc>https://www.orchidarc.org/mexico-tours</loc></url>
+  <url><loc>https://www.orchidarc.org/orchids-of-mexico</loc></url>
+  <url><loc>https://www.orchidarc.org/lepanthes</loc></url>
+  <url><loc>https://www.orchidarc.org/eleutherocytes</loc></url>
+  <url><loc>https://www.orchidarc.org/stigmatic-composite</loc></url>
+  <url><loc>https://www.orchidarc.org/pollination-mechanics</loc></url>
+  <url><loc>https://www.orchidarc.org/pollinaria-paternity</loc></url>
+  <url><loc>https://www.orchidarc.org/orchid-adhesives</loc></url>
+  <url><loc>https://www.orchidarc.org/climate-replicator</loc></url>
+  <url><loc>https://www.orchidarc.org/mexican-orchids-at-risk</loc></url>
+  <url><loc>https://www.orchidarc.org/disappeared-orchids-mexico</loc></url>
+  <url><loc>https://www.orchidarc.org/cypripedium</loc></url>
+  <url><loc>https://www.orchidarc.org/acineta-barkeri</loc></url>
+  <url><loc>https://www.orchidarc.org/dinedema-mariae</loc></url>
+  <url><loc>https://www.orchidarc.org/epidendrum-parkinsonianum</loc></url>
+  <url><loc>https://www.orchidarc.org/epidendrum-radioferens</loc></url>
+  <url><loc>https://www.orchidarc.org/epidendrum-veroscriptum</loc></url>
+  <url><loc>https://www.orchidarc.org/extinct-strength</loc></url>
+  <url><loc>https://www.orchidarc.org/index</loc></url>
+  <url><loc>https://www.orchidarc.org/laelia-anceps</loc></url>
+  <url><loc>https://www.orchidarc.org/laelia-eyermaniana</loc></url>
+  <url><loc>https://www.orchidarc.org/laelia-furfuracea</loc></url>
+  <url><loc>https://www.orchidarc.org/laelia-halbingeriana</loc></url>
+  <url><loc>https://www.orchidarc.org/laelia-speciosa</loc></url>
+  <url><loc>https://www.orchidarc.org/lepanthes-salvaterrae</loc></url>
+  <url><loc>https://www.orchidarc.org/mexipedium-xerophyticum</loc></url>
+  <url><loc>https://www.orchidarc.org/mormodes-maculata</loc></url>
+  <url><loc>https://www.orchidarc.org/orquidea/</loc></url>
+  <url><loc>https://www.orchidarc.org/privacy/</loc></url>
+  <url><loc>https://www.orchidarc.org/prosthechea-cochleata</loc></url>
+  <url><loc>https://www.orchidarc.org/prosthechea-karwinskii</loc></url>
+  <url><loc>https://www.orchidarc.org/prosthechea-vitellina</loc></url>
+  <url><loc>https://www.orchidarc.org/research/paternity/S1_orchid_paternity_model_explainer</loc></url>
+  <url><loc>https://www.orchidarc.org/research/paternity/pollinaria-paternity-visual-story</loc></url>
+  <url><loc>https://www.orchidarc.org/support/</loc></url>
+  <url><loc>https://www.orchidarc.org/terms/</loc></url>
 </urlset>
