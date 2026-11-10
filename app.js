@@ -124,9 +124,9 @@ if (navLinks && !navLinks.querySelector('.nav__mobile-cta')) {
   navLinks.appendChild(mobileAction);
 }
 if (navLinks) {
-  const route = window.location.pathname.replace(/\\.html$/, '').replace(/\\/$/, '') || '/';
+  const route = window.location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
   navLinks.querySelectorAll('a[href]').forEach(a => {
-    const target = new URL(a.href, window.location.href).pathname.replace(/\\.html$/, '').replace(/\\/$/, '') || '/';
+    const target = new URL(a.href, window.location.href).pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
     if (route === target) a.setAttribute('aria-current', 'page');
   });
 }
