@@ -764,3 +764,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .nav__inner { gap: 12px; }
   .film__lang { display:flex; flex-wrap:wrap; gap:8px; }
 }
+
+/* EDITORIAL HEADING PARITY: h2 replaces skipped h3 levels without a visual redesign. */
+.prose h2.editorial-promoted,
+h2.editorial-promoted {
+  font-family:Cambria,Georgia,"Times New Roman",serif;
+  font-size:1.6rem;
+  font-weight:700;
+  line-height:1.2;
+  letter-spacing:-.015em;
+  margin:36px 0 12px;
+  color:var(--text);
+}
