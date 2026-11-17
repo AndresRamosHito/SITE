@@ -23,7 +23,7 @@ a{color:inherit}.wrap{max-width:1220px;margin:auto;padding:0 32px}
 .lede{max-width:640px;margin:22px 0 0;color:rgba(42,14,39,.8);font:italic 1.25rem/1.45 Georgia,Cambria,serif}.byline{margin-top:20px;color:rgba(42,14,39,.6);font:700 .78rem Assistant,sans-serif;letter-spacing:.08em;text-transform:uppercase}
 .hero figure{margin:0}.mount{background:#fff;border:1px solid var(--gold);padding:12px}.mount img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}.hero figcaption{margin-top:10px;font:italic .95rem Georgia,serif;color:var(--moss)}
 .layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:56px;padding-top:24px;padding-bottom:96px}
-.toc{position:sticky;top:100px;align-self:start;font:600 .9rem/1.35 Assistant,sans-serif}.toc h2{font:700 .72rem Assistant,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ochre);margin:0 0 12px}.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--gold)}.toc li a{display:block;padding:6px 0 6px 14px;text-decoration:none;color:var(--moss)}.toc li a:hover{color:var(--ochre)}.toc li span{display:inline-block;min-width:28px;font:italic 700 .85rem Georgia,serif;color:var(--gold)}
+.toc{position:sticky;top:100px;align-self:start;font:600 .9rem/1.35 Assistant,sans-serif}.toc h2{font:700 .72rem Assistant,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ochre);margin:0 0 12px}.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--gold)}.toc li a{display:block;padding:6px 0 6px 14px;text-decoration:none;color:var(--moss)}.toc li a:hover{color:var(--ochre)}.toc li span{display:inline-block;min-width:28px;font:italic 700 .9rem Georgia,serif;color:var(--ochre)}
 .article{max-width:860px}
 .article h2{margin:64px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--gold);color:var(--forest);font:700 clamp(1.9rem,3.4vw,2.8rem)/1.05 Cambria,Georgia,serif;scroll-margin-top:96px}
 .article .eyebrow{margin-top:72px;margin-bottom:-48px}.article>h2:first-child{margin-top:0}
@@ -51,7 +51,7 @@ aside.rule{margin:24px 0;border:1px solid var(--gold);border-left:4px solid var(
 .plate{margin:22px 0}.plate__mount{display:block;width:100%;padding:14px;background:#fff;border:1px solid var(--gold);cursor:zoom-in;position:relative}
 .plate__mount::before,.plate__mount::after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--gold)}
 .plate__mount::before{top:5px;left:5px;border-right:0;border-bottom:0}.plate__mount::after{bottom:5px;right:5px;border-left:0;border-top:0}
-.plate img{display:block;width:100%;height:auto}.plate figcaption{margin-top:8px;font:italic .92rem/1.4 Georgia,serif;color:var(--moss)}.plate .pl{font-style:normal;font-weight:700;color:var(--gold);margin-right:4px}
+.plate img{display:block;width:100%;height:auto}.plate figcaption{margin-top:8px;font:italic .92rem/1.4 Georgia,serif;color:var(--moss)}.plate .pl{font-style:normal;font-weight:700;color:var(--ochre);margin-right:4px}
 .tabs{margin:26px 0;background:#fff;border:1px solid var(--gold);border-radius:18px;padding:18px 20px 6px}
 .tabs__label{font:700 .72rem Assistant,sans-serif!important;letter-spacing:.18em;text-transform:uppercase;color:var(--ochre)!important;margin:0 0 10px!important}
 .tabs__list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
@@ -117,6 +117,22 @@ p.pipe__stages{display:block;margin:0 0 12px!important;font:600 .8rem/1.6 Assist
 .case__obs{margin:10px 0 0;display:flex;gap:10px;align-items:flex-end}.case__obs img{width:120px;height:120px;object-fit:cover;border:1px solid var(--gold);padding:4px;background:#fff}.case__obs figcaption{font:italic .82rem Georgia,serif;color:var(--moss)}
 @media(max-width:820px){.case{grid-template-columns:1fr}}
 .tabs__panel[hidden]{display:none!important}
+
+/* readability layer, Nov 2026 */
+.brand-sub{font-size:11px!important;white-space:nowrap}
+.links a{font-size:14px!important}
+.ticker span{font-size:12.5px!important}
+.draft,.draft b{font-size:14px!important}
+.eyebrow,.toc h2,.tabs__label,.tile__k,.case__k,.case__eyebrow,.pipe__stages b,.article dt,.footer h3{font-size:12.5px!important}
+.byline{font-size:14px!important}
+.flow__w{font-size:13px!important}
+.copy{font-size:13px!important}
+.wizard__reset,.pipe__step,.tabs__list button,.chips button,details.more>summary{font-size:14.5px!important}
+.pipe__legend span,.pipe__detail em{font-size:14px!important}
+.pipe__stages{font-size:14.5px!important}
+.plate figcaption,.case__obs figcaption,.caption,figure figcaption{font-size:14.5px!important;line-height:1.5}
+.tile__d,.route li,.case__lvl b,.toc a{font-size:15px!important}
+.article td,.article th{font-size:15px}
 </style>
 </head>
 <body>
