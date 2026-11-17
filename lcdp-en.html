@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Manual metodológico para documentar orquídeas mediante Lankester Composite Digital Plates (LCDP): decisión, montaje, captura, ensamblaje y un caso de estudio en Lepanthes con reconstrucción 3D." name="description"/>
+<link href="https://www.orchidarc.org/lcdp" rel="canonical"/>
+<meta content="Manual LCDP · Documentación digital de orquídeas" property="og:title"/>
+<meta content="Cómo decidir, montar, capturar y ensamblar una Lankester Composite Digital Plate, con un caso de estudio en Lepanthes." property="og:description"/>
+<meta content="https://www.orchidarc.org/images/lcdp/lcdp-ornithocephalus.jpg" property="og:image"/>
+<meta content="article" property="og:type"/>
+<title>LCDP manual · Digital documentation of orchids · Orchidarc</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{--paper:#F6F1E7;--ink:#2A0E27;--forest:#1C0619;--moss:#5B4A58;--ochre:#B8005F;--gold:#9A7420;--rule:rgba(42,14,39,.18);--ocre:#8A5A00}
+*{box-sizing:border-box}html{scroll-behavior:smooth}html,body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.62 Assistant,"Segoe UI","Helvetica Neue",sans-serif}
+a{color:inherit}.wrap{max-width:1220px;margin:auto;padding:0 32px}
+.ticker{background:#E4007C;color:#fff;overflow:hidden}.ticker div{display:flex;gap:48px;white-space:nowrap;padding:8px 0;font:700 .68rem Assistant,"Segoe UI",sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.nav{position:sticky;top:0;z-index:20;background:rgba(246,241,231,.96);border-bottom:1px solid rgba(42,14,39,.1);backdrop-filter:blur(10px)}.nav-inner{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{display:flex;align-items:center;gap:12px;text-decoration:none}.brand img{width:40px;height:40px;object-fit:contain;border-radius:50%}.brand-title{display:block;font:700 1.35rem/1 Cambria,Georgia,"Times New Roman",serif}.brand-sub{display:block;margin-top:3px;font:700 .62rem Assistant,sans-serif;letter-spacing:.14em;text-transform:uppercase;opacity:.58}.links{display:flex;gap:22px;flex-wrap:wrap;font:700 .72rem Assistant,sans-serif;letter-spacing:.1em;text-transform:uppercase}.links a{text-decoration:none}.links .active{color:var(--ochre);border-bottom:1px solid var(--ochre)}
+.draft{margin:28px auto 0;max-width:1156px;border:1px solid var(--gold);background:#fff;padding:12px 18px;font:600 .9rem/1.45 Assistant,sans-serif;color:var(--moss)}.draft b{color:var(--ochre);letter-spacing:.14em;text-transform:uppercase;font-size:.72rem;margin-right:8px}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center;padding:64px 32px 40px;position:relative}
+.hero .gilt{position:absolute;inset:24px 16px 8px;border:2px solid var(--gold);pointer-events:none}.hero .gilt::after{content:"";position:absolute;inset:6px;border:1px solid var(--gold)}
+.hero>div,.hero>figure{position:relative;z-index:1;padding:24px}
+.eyebrow{display:block;color:var(--ochre);font:700 .72rem Assistant,sans-serif;letter-spacing:.18em;text-transform:uppercase;margin:0 0 14px}
+.hero h1{margin:0;color:var(--forest);font:700 clamp(2.4rem,5vw,4.4rem)/1 Cambria,Georgia,"Times New Roman",serif;letter-spacing:-.01em}.hero h1 em{color:var(--ochre)}
+.lede{max-width:640px;margin:22px 0 0;color:rgba(42,14,39,.8);font:italic 1.25rem/1.45 Georgia,Cambria,serif}.byline{margin-top:20px;color:rgba(42,14,39,.6);font:700 .78rem Assistant,sans-serif;letter-spacing:.08em;text-transform:uppercase}
+.hero figure{margin:0}.mount{background:#fff;border:1px solid var(--gold);padding:12px}.mount img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover}.hero figcaption{margin-top:10px;font:italic .95rem Georgia,serif;color:var(--moss)}
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:56px;padding-top:24px;padding-bottom:96px}
+.toc{position:sticky;top:100px;align-self:start;font:600 .9rem/1.35 Assistant,sans-serif}.toc h2{font:700 .72rem Assistant,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--ochre);margin:0 0 12px}.toc ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--gold)}.toc li a{display:block;padding:6px 0 6px 14px;text-decoration:none;color:var(--moss)}.toc li a:hover{color:var(--ochre)}.toc li span{display:inline-block;min-width:28px;font:italic 700 .9rem Georgia,serif;color:var(--ochre)}
+.article{max-width:860px}
+.article h2{margin:64px 0 18px;padding-bottom:10px;border-bottom:1px solid var(--gold);color:var(--forest);font:700 clamp(1.9rem,3.4vw,2.8rem)/1.05 Cambria,Georgia,serif;scroll-margin-top:96px}
+.article .eyebrow{margin-top:72px;margin-bottom:-48px}.article>h2:first-child{margin-top:0}
+.article h3{margin:36px 0 10px;color:var(--forest);font:700 1.35rem/1.2 Cambria,Georgia,serif}
+.article p{overflow-wrap:anywhere;margin:0 0 14px;color:rgba(42,14,39,.85)}.article i{font-family:Georgia,serif}
+.pending,.article .pending{color:var(--ocre);font-style:italic}.article p.eyebrow{color:var(--ochre)}.lede i{font-style:normal}
+.caption{font-size:.95rem;margin-top:22px!important}
+.tbl{overflow-x:auto;margin:10px 0 22px;background:#fff;border:1px solid var(--gold)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;line-height:1.45}th{background:#ECE3D2;text-align:left;padding:9px 11px;border-bottom:1px solid var(--gold);font-weight:700;vertical-align:bottom}td{padding:9px 11px;border-top:1px solid #E5DAC4;vertical-align:top}tr.alt td{background:#FAF6EE}td+td,th+th{border-left:1px solid #EDE3CF}
+aside.box{margin:28px 0;background:#fff;border-radius:18px;border-top:6px solid #E8D3AE;padding:20px 24px;box-shadow:0 1px 0 rgba(42,14,39,.06)}aside.box .eyebrow{margin:0 0 8px!important}aside.box p{font-size:.98rem}
+aside.rule{margin:24px 0;border:1px solid var(--gold);border-left:4px solid var(--ochre);background:#fff;padding:18px 22px}aside.rule p{font:700 1.2rem/1.35 Cambria,Georgia,serif;color:var(--forest)}aside.rule .eyebrow{margin:0 0 6px!important;font:700 .72rem Assistant,sans-serif}
+.star{display:flex;align-items:center;gap:14px;margin:48px 0;color:var(--gold)}.star::before,.star::after{content:"";flex:1;border-top:1px solid var(--gold)}
+.footer{background:var(--forest);color:var(--paper);padding:56px 0 28px}.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px}.footer h2{margin:0 0 12px;color:#FF5FAE;font:700 2.4rem/1 Cambria,Georgia,serif}.footer h3{margin:0 0 14px;color:#FF5FAE;font:700 .72rem Assistant,sans-serif;letter-spacing:.12em;text-transform:uppercase}.footer p,.footer li{color:rgba(246,241,231,.72)}.footer ul{list-style:none;margin:0;padding:0}.footer li{margin-bottom:9px}.copy{margin-top:42px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);color:rgba(246,241,231,.45);font:700 .68rem Assistant,sans-serif;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:980px){.layout{grid-template-columns:minmax(0,1fr);gap:24px}.toc{position:static}.hero{grid-template-columns:1fr}.hero figure{max-width:420px}}
+@media(max-width:820px){.nav-inner{align-items:flex-start;flex-direction:column;padding:16px 0}.wrap,.hero{padding-left:20px;padding-right:20px}.footer-grid{grid-template-columns:1fr}.draft{margin-left:20px;margin-right:20px}}
+/* ---- dynamic components ---- */
+.progress{position:fixed;top:0;left:0;right:0;height:3px;z-index:60;pointer-events:none}.progress span{display:block;height:100%;width:0;background:#E4007C}
+.toc li a.on{color:var(--ochre);font-weight:700;border-left:2px solid var(--ochre);margin-left:-1px}
+.flow{list-style:none;margin:18px 0 8px;padding:0;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;counter-reset:f}
+.flow li{position:relative}.flow li+li::before{content:"";position:absolute;left:-10px;top:34px;width:10px;border-top:1px solid var(--gold)}
+.flow a{display:flex;flex-direction:column;gap:6px;height:100%;padding:14px 14px 16px;background:#fff;border:1px solid var(--gold);border-top:5px solid #E8D3AE;border-radius:14px;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.flow a:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(42,14,39,.08)}
+.flow__n{font:italic 700 1.6rem/1 Georgia,serif;color:var(--ochre)}.flow__t{font:700 .98rem/1.25 Cambria,Georgia,serif;color:var(--forest)}.flow__w{margin-top:auto;font:700 .66rem Assistant,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--moss)}
+.plates.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.plate{margin:22px 0}.plate__mount{display:block;width:100%;padding:14px;background:#fff;border:1px solid var(--gold);cursor:zoom-in;position:relative}
+.plate__mount::before,.plate__mount::after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--gold)}
+.plate__mount::before{top:5px;left:5px;border-right:0;border-bottom:0}.plate__mount::after{bottom:5px;right:5px;border-left:0;border-top:0}
+.plate img{display:block;width:100%;height:auto}.plate figcaption{margin-top:8px;font:italic .92rem/1.4 Georgia,serif;color:var(--moss)}.plate .pl{font-style:normal;font-weight:700;color:var(--ochre);margin-right:4px}
+.tabs{margin:26px 0;background:#fff;border:1px solid var(--gold);border-radius:18px;padding:18px 20px 6px}
+.tabs__label{font:700 .72rem Assistant,sans-serif!important;letter-spacing:.18em;text-transform:uppercase;color:var(--ochre)!important;margin:0 0 10px!important}
+.tabs__list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tabs__list button,.chips button{font:700 .82rem Assistant,sans-serif;padding:7px 14px;border-radius:999px;border:1px solid var(--gold);background:var(--paper);color:var(--ink);cursor:pointer}
+.tabs__list button[aria-selected=true],.chips button[aria-pressed=true]{background:#E4007C;border-color:#E4007C;color:#fff}
+.tabs__panel .plate{margin:8px 0 14px}.tabs__panel .plate__mount{border-color:#E8D3AE}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+tr[data-g].dim td{opacity:.28}tr[data-g].hit td{background:#FCEFF6}
+.wizard{margin:18px 0 6px;background:#fff;border:1px solid var(--gold);border-radius:18px;border-top:6px solid #E8D3AE;padding:20px 24px 24px}
+.wizard__head{display:flex;justify-content:space-between;align-items:center;gap:12px}.wizard__head .eyebrow{margin:0!important}
+.wizard__reset{font:700 .78rem Assistant,sans-serif;background:none;border:0;color:var(--moss);text-decoration:underline;cursor:pointer}
+.wizard__path{list-style:none;margin:12px 0 16px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.wizard__path li{font:600 .78rem/1.3 Assistant,sans-serif;color:var(--moss);background:var(--paper);border:1px solid #E5DAC4;border-radius:999px;padding:4px 10px}
+.wizard__path li b{color:var(--ochre)}
+.wizard__q{font:700 1.45rem/1.25 Cambria,Georgia,serif;color:var(--forest);margin:0 0 6px}.wizard__h{color:var(--moss);font-size:.95rem;margin:0 0 16px}
+.wizard__opts{display:flex;flex-wrap:wrap;gap:10px}
+.wizard__opts button{font:700 .95rem Assistant,sans-serif;padding:10px 22px;border-radius:999px;border:1px solid var(--ink);background:#fff;color:var(--ink);cursor:pointer;transition:background .15s}
+.wizard__opts button:hover{background:var(--paper)}.wizard__opts button.go{background:#E4007C;border-color:#E4007C;color:#fff}
+.wizard__res{border-left:4px solid #0B7A70;background:#F1F8F6;padding:14px 18px;border-radius:0 12px 12px 0;margin-bottom:14px}
+.wizard__res strong{display:block;font:700 1.25rem/1.25 Cambria,Georgia,serif;color:var(--forest);margin-bottom:4px}.wizard__res span{color:var(--moss);font-size:.95rem}
+.wizard__res a{color:#006B62;font-weight:700}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}.wizard__card>*{animation:rise .25s ease}
+.pipe{margin:14px 0 8px;background:#fff;border:1px solid var(--gold);border-radius:18px;padding:18px 20px}
+.pipe__stages{display:flex;gap:8px;margin-bottom:10px}.pipe__stages span{border-bottom:2px solid var(--gold);padding-bottom:4px;font:700 .68rem Assistant,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pipe__grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.pipe__step{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-height:74px;padding:9px 10px;border-radius:12px;border:1px solid;background:#fff;font:600 .78rem/1.2 Assistant,sans-serif;color:var(--ink);text-align:left;cursor:pointer;transition:transform .15s}
+.pipe__step span{font:italic 700 1.1rem/1 Georgia,serif}.pipe__step:hover,.pipe__step.on{transform:translateY(-2px)}
+.pipe__step.ok{border-color:#0B7A70;background:#F1F8F6}.pipe__step.ok span{color:#006B62}
+.pipe__step.prov{border-color:#C99A2E;background:#FFF7E0}.pipe__step.prov span{color:#8A5A00}
+.pipe__step.plan{border-style:dashed;border-color:#B9AFA0;background:#fff}.pipe__step.plan span{color:var(--moss)}
+.pipe__step.on{box-shadow:0 0 0 2px #E4007C}
+.pipe__detail{margin-top:14px;min-height:64px;padding:12px 16px;background:var(--paper);border-radius:12px}.pipe__detail b{font:700 1.05rem Cambria,Georgia,serif;color:var(--forest)}.pipe__detail em{font-style:normal;font:700 .7rem Assistant,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--ochre);margin-left:8px}.pipe__detail p{margin:4px 0 0!important;font-size:.95rem}
+.pipe__legend{display:flex;flex-wrap:wrap;gap:16px;margin:12px 0 0!important;font:600 .78rem Assistant,sans-serif}.pipe__legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px;border:1px solid}
+.pipe__legend .ok::before{background:#F1F8F6;border-color:#0B7A70}.pipe__legend .prov::before{background:#FFF7E0;border-color:#C99A2E}.pipe__legend .plan::before{border-style:dashed;border-color:#B9AFA0}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+.tile{background:#fff;border:1px solid var(--gold);border-top:5px solid #E8D3AE;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.tile__v{font:700 2rem/1.05 Cambria,Georgia,serif;color:var(--forest)}.tile__v small{font-size:.95rem;margin-left:4px;color:var(--ochre)}
+.tile__k{font:700 .72rem Assistant,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--moss);margin-top:6px}.tile__d{font-size:.85rem;color:var(--moss)}
+details.more{margin:6px 0 22px}details.more summary{cursor:pointer;font:700 .82rem Assistant,sans-serif;color:var(--ochre);letter-spacing:.04em}details.more .tbl{margin-top:10px}
+.lightbox{position:fixed;inset:0;z-index:100;background:rgba(28,6,25,.86);display:flex;align-items:center;justify-content:center;padding:4vh 4vw}
+.lightbox[hidden]{display:none}.lightbox img{max-width:100%;max-height:90vh;background:#fff;padding:16px;border:1px solid var(--gold)}
+.lightbox__close{position:absolute;top:18px;right:22px;font:700 .8rem Assistant,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:none;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:7px 14px;cursor:pointer}
+@media(max-width:980px){.flow{grid-template-columns:1fr 1fr}.flow li+li::before{display:none}.pipe__grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:620px){.plates.two,.tiles{grid-template-columns:1fr}.flow{grid-template-columns:1fr}.pipe__grid{grid-template-columns:repeat(2,1fr)}.pipe__stages{display:none}.tile__v{font-size:1.7rem}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+p.pipe__stages{display:block;margin:0 0 12px!important;font:600 .8rem/1.6 Assistant,sans-serif;color:var(--moss)}p.pipe__stages b{font:700 .68rem Assistant,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--ochre);margin:0 6px 0 14px}p.pipe__stages b:first-child{margin-left:0}
+.mount img{aspect-ratio:auto!important;object-fit:contain!important;background:#000}
+.hero .mount{display:block;width:100%;cursor:zoom-in}
+.cases{padding:18px 20px 20px}.cases .tabs__list button i{font-family:Georgia,serif}
+.case{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:26px;align-items:start}
+.case__plate{margin:0}.case__plate img{background:#000}
+.case__eyebrow{font:700 .7rem Assistant,sans-serif!important;letter-spacing:.16em;text-transform:uppercase;color:var(--ochre)!important;margin:4px 0 2px!important}
+.case h3{margin:0 0 12px!important;font-size:1.7rem!important}
+.case__lvl{display:flex;align-items:center;gap:10px;margin-bottom:14px}.case__lvl b{font:700 .85rem Assistant,sans-serif;color:var(--forest)}
+.case__k{font:700 .68rem Assistant,sans-serif!important;letter-spacing:.14em;text-transform:uppercase;color:var(--moss)!important;margin:0!important}
+.meter{display:inline-flex;gap:4px}.meter span{width:22px;height:8px;border-radius:4px;background:#EDE3CF}.meter span.on{background:#E4007C}
+.case dl{margin:0 0 14px;display:grid;grid-template-columns:1fr;gap:2px}.case dt{font:700 .68rem Assistant,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--moss);margin-top:8px}.case dd{margin:0;font-size:.95rem;color:rgba(42,14,39,.86)}
+.route{list-style:none;margin:6px 0 10px;padding:0;display:flex;flex-direction:column;gap:6px}
+.route li{position:relative;padding:7px 12px 7px 30px;background:var(--paper);border:1px solid #E5DAC4;border-radius:999px;font:600 .85rem/1.3 Assistant,sans-serif}
+.route li::before{content:"";position:absolute;left:12px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:var(--gold)}
+.route li:last-child{background:#FCEFF6;border-color:#E4007C}.route li:last-child::before{background:#E4007C}
+.case__note{font:italic .95rem/1.45 Georgia,serif!important;color:var(--moss)!important}
+.case__obs{margin:10px 0 0;display:flex;gap:10px;align-items:flex-end}.case__obs img{width:120px;height:120px;object-fit:cover;border:1px solid var(--gold);padding:4px;background:#fff}.case__obs figcaption{font:italic .82rem Georgia,serif;color:var(--moss)}
+@media(max-width:820px){.case{grid-template-columns:1fr}}
+.tabs__panel[hidden]{display:none!important}
+
+/* readability layer, Nov 2026 */
+.brand-sub{font-size:11px!important;white-space:nowrap}
+.links a{font-size:14px!important}
+.ticker span{font-size:12.5px!important}
+.draft,.draft b{font-size:14px!important}
+.eyebrow,.toc h2,.tabs__label,.tile__k,.case__k,.case__eyebrow,.pipe__stages b,.article dt,.footer h3{font-size:12.5px!important}
+.byline{font-size:14px!important}
+.flow__w{font-size:13px!important}
+.copy{font-size:13px!important}
+.wizard__reset,.pipe__step,.tabs__list button,.chips button,details.more>summary{font-size:14.5px!important}
+.pipe__legend span,.pipe__detail em{font-size:14px!important}
+.pipe__stages{font-size:14.5px!important}
+.plate figcaption,.case__obs figcaption,.caption,figure figcaption{font-size:14.5px!important;line-height:1.5}
+.tile__d,.route li,.case__lvl b,.toc a{font-size:15px!important}
+.article td,.article th{font-size:15px}
+.soon{font-style:italic;color:#5B4A58;margin:0 0 18px}.lang{display:flex;flex:0 0 auto;margin-left:18px;border:1px solid #D8CBB0;border-radius:999px;overflow:hidden;background:#fff}.lang a{padding:7px 13px;font:700 13px/1 Assistant,"Segoe UI",sans-serif;letter-spacing:.1em;color:#2A0E27;text-decoration:none}.lang a:hover{color:#B8005F}.lang a[aria-current]{background:#1C0619;color:#fff}</style>
+</head>
+<body>
+<div class="ticker"><div><span>Technical manual · LCDP</span><span>Lankester Botanical Garden · Orchidarc</span><span>Lankester Composite Digital Plates</span><span>Case study: Lepanthes</span></div></div>
+<nav class="nav"><div class="wrap nav-inner"><a class="brand" href="/"><img alt="Orchidarc" src="/images/logo-mark.png"/><span><span class="brand-title">Orchidarc</span><span class="brand-sub">UK charity · registered 2024</span></span></a><div class="links"><a href="/films.html">Films</a><a href="/herbarium.html">Species</a><a href="/gallery.html">Gallery</a><a class="active" href="/research.html">Research</a><a href="/about.html">About</a><a href="/stories.html">Stories</a></div><div class="lang" role="group" aria-label="Idioma / Language"><a href="/lcdp.html" lang="es" hreflang="es">ES</a><a href="/lcdp-en.html" lang="en" hreflang="en" aria-current="page">EN</a></div></div></nav>
+<header class="hero wrap"><div aria-hidden="true" class="gilt"></div>
+<div><span class="eyebrow">Technical manual · November 2026</span>
+<h1>Digital documentation of <em>Orchidaceae</em> with LCDP</h1>
+<p class="lede">A methods manual for deciding, mounting and capturing <i>Lankester Composite Digital Plates</i>, with a case study in <i>Lepanthes</i>.</p>
+<div class="byline">Katheryn Suncion and Andrés Ramos Roldán · Lankester Botanical Garden · Orchidarc</div></div>
+<figure><button aria-label="Enlarge the plate of Ornithocephalus" class="mount plate__mount" data-lightbox="/images/lcdp/lcdp-ornithocephalus.jpg"><img alt="Lankester Composite Digital Plate of Ornithocephalus sp. by Katheryn Suncion" src="/images/lcdp/lcdp-ornithocephalus.jpg"/></button><figcaption>Pl. IV · <i>Ornithocephalus</i> sp. · LCDP by K. Suncion</figcaption></figure>
+</header>
+<div class="wrap layout">
+<nav aria-label="Contents" class="toc"><h2>Contents</h2><ol><li><a href="#presentacion">Introduction</a></li><li><a href="#principios"><span>I</span>Principles</a></li><li><a href="#anatomia-de-una-lcdp"><span>II</span>Anatomy of an LCDP</a></li><li><a href="#diagnostico-y-arbol-de-decisiones"><span>III</span>Diagnosis and decision tree</a></li><li><a href="#equipo-y-montaje"><span>IV</span>Equipment and set-up</a></li><li><a href="#captura-y-procesamiento"><span>V</span>Capture and processing</a></li><li><a href="#documentacion-tridimensional"><span>VI</span>Three-dimensional documentation</a></li><li><a href="#casos-de-estudio">Worked cases</a></li><li><a href="#caso-de-estudio-lepanthes"><span>VII</span>Case study: <i>Lepanthes</i></a></li><li><a href="#anexos">Appendices</a></li></ol></nav>
+<main class="article">
+<h2 id="presentacion">Introduction</h2>
+<h3>Aim and scope</h3>
+<p>This manual describes how to decide, mount, capture and assemble a <i>Lankester Composite Digital Plate</i> (LCDP) for Orchidaceae whose morphology is hard to record: minute flowers, three-dimensional structures, glossy or translucent surfaces, and information hidden inside the flower. It combines a decision method (what must be documented and why) with equipment and capture protocols (how to do it so that another team can repeat it).</p>
+<h3>Who it is for</h3>
+<p>Students, technicians and researchers preparing plates for taxonomic descriptions, revisions, collection databases or conservation material. It assumes basic familiarity with orchid floral morphology and with using a camera in manual mode.</p>
+<h3>How to use this manual</h3>
+<p>The workflow has five steps, and each one points to a part of the manual:</p>
+<div class="tbl"><table>
+<tr><th>Step</th><th>What is done</th><th>Where</th></tr>
+<tr><td>1</td><td>Assess the specimen</td><td>Part III, section 3.1 and Appendix A</td></tr>
+<tr class="alt"><td>2</td><td>Define the base representation and the diagnostic characters</td><td>Part II and Part III, 3.2</td></tr>
+<tr><td>3</td><td>Identify the limitations and choose strategies</td><td>Part III, 3.3 to 3.5</td></tr>
+<tr class="alt"><td>4</td><td>Mount, light and capture</td><td>Parts IV, V and VI; Appendix B</td></tr>
+<tr><td>5</td><td>Process, assemble and archive the plate</td><td>Part V, 5.4 to 5.6; Appendix D</td></tr>
+</table></div>
+<ol aria-label="Workflow" class="flow"><li><a href="#diagnostico-y-arbol-de-decisiones"><span class="flow__n">1</span><span class="flow__t">Assess the specimen</span><span class="flow__w">3.1 · Appendix A</span></a></li><li><a href="#anatomia-de-una-lcdp"><span class="flow__n">2</span><span class="flow__t">Define the base and the diagnostic characters</span><span class="flow__w">II · 3.2</span></a></li><li><a href="#diagnostico-y-arbol-de-decisiones"><span class="flow__n">3</span><span class="flow__t">Identify limitations and choose strategies</span><span class="flow__w">3.3 to 3.5</span></a></li><li><a href="#equipo-y-montaje"><span class="flow__n">4</span><span class="flow__t">Mount, light and capture</span><span class="flow__w">IV · V · VI</span></a></li><li><a href="#captura-y-procesamiento"><span class="flow__n">5</span><span class="flow__t">Process, assemble and archive</span><span class="flow__w">5.4 to 5.6 · Appendix D</span></a></li></ol><p class="caption"><b>Figure 0.</b> Workflow. Each step links to the part of the manual where it is developed.</p>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part I</p>
+<h2 id="principios">Principles</h2>
+<h3>1.1 The LCDP as a scientific document</h3>
+<p>An LCDP is a plate that brings together, in a single composition, images taken at different scales, from different orientations and with different techniques (macro photography, focus stacking, photomicrography, dissection) to communicate the diagnostic morphology of a species (Karremans, 2020). Its value lies not in each photograph on its own, but in how the whole organises the information: what is shown, at what scale and in relation to what.</p>
+<p>An LCDP should therefore be treated as evidence, not as illustration. It must let another researcher check a character without the specimen in hand, and it must be linkable to a voucher deposited in a collection. LCDPs originated at the Lankester Botanical Garden (University of Costa Rica) as part of its orchid documentation protocols. Karremans made the method available in an open-access document, <i>LCDP – 2019</i>, which covers the basic equipment, the elements to photograph, the editing rules and the publication format (Karremans, 2020).</p>
+<p>Composite digital documentation is no longer limited to orchids. The same techniques, above all focus stacking and image stitching, are applied to other plant groups and to animals such as insects (Verma and Saxena, 2025), and the Lankester protocol is one of the forerunners of that work.</p>
+<h3>1.2 The loss of morphological information</h3>
+<p>Every image turns a three-dimensional, living and often minute structure into a two-dimensional record under particular conditions of orientation, scale, focus and lighting. Something is always lost in that transformation. This manual calls <b>loss of morphological information</b> the reduction in a representation's ability to preserve one or more characters present in the organism.</p>
+<p>Loss is not necessarily a technical error. A frontal view may record the colour and shape of the perianth well and still lose the depth of a mentum; an image of the whole flower may lose the ornamentation of the callus. Documenting therefore involves three operations:</p>
+<p>1. <b>Identify</b> what information is at risk of being lost in this specimen.<br/>
+2. <b>Decide</b> whether that information has diagnostic value.<br/>
+3. <b>Reduce</b> the loss with the minimum sufficient strategy.</p>
+<p>The causes of loss fall into five limitations (size, three-dimensional form, optical properties, access to internal information and physical properties), which organise the diagnosis in Part III.</p>
+<h3>1.3 Six principles</h3>
+<div class="tbl"><table>
+<tr><th>Principle</th><th>What it requires</th><th>Practical consequence</th></tr>
+<tr><td><b>Fidelity</b></td><td>Represent the characters as they are in the specimen.</td><td>Editing improves legibility but never reconstructs, removes damage or alters characters (see 5.4).</td></tr>
+<tr class="alt"><td><b>Completeness</b></td><td>Record all the information relevant to the aim of the study.</td><td>If one image is not enough, the missing representation is added; the character is not omitted.</td></tr>
+<tr><td><b>Morphological context</b></td><td>Preserve the spatial relationships between structures.</td><td>Every isolated detail must be locatable in the whole flower.</td></tr>
+<tr class="alt"><td><b>Reproducibility</b></td><td>Another team can repeat the record.</td><td>Equipment, mounting, lighting and parameters are documented for each panel (Appendix B).</td></tr>
+<tr><td><b>Relevance</b></td><td>Choose the technique for the specimen, not out of habit.</td><td>There is no standard plate with a fixed number of panels.</td></tr>
+<tr class="alt"><td><b>Transparency</b></td><td>Every decision is explicit and justifiable.</td><td>The limitations of the material and the processing steps are recorded.</td></tr>
+</table></div>
+<h3>1.4 The decision rule</h3>
+<aside class="rule">
+<p class="eyebrow">Single rule</p>
+<p style="font-family: Georgia, serif; font-size: 12.5pt;"><b>Every panel on the plate answers an information need that the existing representation does not cover.</b></p>
+</aside>
+<p>Everything else follows from this rule:</p>
+<p>· A plate is judged by the information it preserves, not by how it looks.<br/>
+· Planning starts from the characters that must be shown, not from the equipment available.<br/>
+· An extra view that repeats existing information is redundant, even if it is a good photograph.<br/>
+· The same species may need different plates if the aim of the study changes.</p>
+<aside class="box">
+<p class="eyebrow"><i>Lepanthes</i> in this part</p>
+<p><i>Lepanthes</i> is an extreme case of information loss. The flowers are often a few millimetres across, the petals are transversely bilobed and the bilaminate lip clasps the column and hides part of it. A single frontal view loses scale, depth and the lip–column relationship at once, and that relationship is often diagnostic. This is why the genus runs through the whole manual. The worked example is <i>Lepanthes</i> sp. nov., from the Rufford project «El Oro del Cofre».</p>
+</aside>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part II</p>
+<h2 id="anatomia-de-una-lcdp">Anatomy of an LCDP</h2>
+<h3>2.1 Canonical panels</h3>
+<p>The base representation of an LCDP is the set of panels against which missing information is assessed. Not all are compulsory; the table shows when each is included.</p>
+<div class="tbl"><table>
+<tr><th>Panel</th><th>Contents</th><th>When it is included</th></tr>
+<tr><td>Habit</td><td>Whole plant or a representative portion, with scale.</td><td>When growth form, leaves or inflorescence provide characters.</td></tr>
+<tr class="alt"><td>Inflorescence</td><td>Arrangement of the flowers and their relation to the leaf or stem.</td><td>When the position or type of inflorescence is diagnostic.</td></tr>
+<tr><td>Flower, frontal view</td><td>Whole flower in its natural orientation.</td><td>Always.</td></tr>
+<tr class="alt"><td>Flower, lateral view</td><td>Profile of the flower: ovary, mentum, position of the lip.</td><td>Almost always; required if there is a mentum, spur or hinged lip.</td></tr>
+<tr><td>Dissected perianth</td><td>Sepals, petals and lip spread out, in relative position.</td><td>Always.</td></tr>
+<tr class="alt"><td>Lip</td><td>Views of the lip (adaxial, lateral, spread) and its ornamentation.</td><td>Always; the number of views depends on the diagnosis.</td></tr>
+<tr><td>Column</td><td>Ventral and lateral views; anther, stigma, rostellum.</td><td>Always.</td></tr>
+<tr class="alt"><td>Pollinarium</td><td>Pollinia with viscidium, caudicles or stipe.</td><td>Whenever it can be removed without destroying it.</td></tr>
+<tr><td>Details</td><td>Enlargements, photomicrographs, sections, 3D views.</td><td>Only if they answer an identified limitation (Part III).</td></tr>
+</table></div>
+<h3>2.2 Template</h3>
+<p>The Lankester guide (Karremans, 2020) sets the starting format: letter-size plate (215.9 × 279.4 mm), black background, at least 300 ppi and 16-bit RGB.</p>
+<p>The final format depends on the journal. In <i>Species Orchidacearum</i>, for example, only horizontal scales are used, one under each element, white, 6 px thick with two 10 px vertical end bars. The measurement is in white Arial 12 pt, centred 20 px above the scale, with number and unit separated by a space (for example, «5 mm»). Each element carries a capital letter in Arial 14 pt by its lower corner, in the order of the botanical description (2.3).</p>
+<h3>2.3 Scales, labelling and plate caption</h3>
+<p>· Each panel has its own scale bar, calibrated for its magnification. A shared scale is only valid if the panels have exactly the same magnification.<br/>
+· Panel letters follow the order of the botanical description: plant, inflorescence, flower, perianth, lip, column, anther cap and pollinarium.<br/>
+· Scale values must be comparable at a glance: 1, 3, 5 or 10 mm, with no decimals and no uninformative values such as 7, 9 or 11. Horizontal and vertical scales are not mixed, and slanted scales are never used (Karremans, 2020).<br/>
+· The plate caption includes: scientific name with author, voucher (collector and number), collection or herbarium of deposit, authorship of the photographs and of the composition, and the identification of each panel with its scale value.</p>
+<h3>2.4 Metadata and voucher</h3>
+<p>Each LCDP is linked to a voucher. Lankester records come almost entirely from wild material with locality data, and the plate must keep that traceability.</p>
+<div class="tbl"><table>
+<tr><th>Field</th><th>Notes</th></tr>
+<tr><td>Taxon and determiner</td><td>Accepted name, author and who determined it.</td></tr>
+<tr class="alt"><td>Collector and number</td><td>As written on the voucher.</td></tr>
+<tr><td>Locality and coordinates</td><td>For threatened or much-collected species, publish generalised coordinates and keep the exact ones in the internal record.</td></tr>
+<tr class="alt"><td>Deposit</td><td>Herbarium, living collection or spirit material; accession number.</td></tr>
+<tr><td>Date of capture and state of the material</td><td>Living or fixed; hours since collection.</td></tr>
+<tr class="alt"><td>Settings per panel</td><td>Reference to the record sheet in Appendix B.</td></tr>
+</table></div>
+<h3>2.5 Floral structures and their documentation challenges</h3>
+<p>This table replaces the general morphological description of the earlier manual. It covers only what matters for deciding how to document each structure (Pridgeon, 2014).</p>
+<div class="tbl"><table>
+<tr><th>Structure</th><th>Usual documentation challenge</th><th>Typical strategy</th></tr>
+<tr><td>Sepals</td><td>Partial fusion (synsepal, mentum) that hides depth.</td><td>Lateral view; dissection to show the degree of fusion.</td></tr>
+<tr class="alt"><td>Petals</td><td>Small, sometimes lobed, ornamented or translucent.</td><td>Stacked detail; transmitted light if translucent.</td></tr>
+<tr><td>Lip</td><td>Three-dimensional, with calli, lamellae, trichomes or cavities; may be hinged.</td><td>Several views, raking light for relief, dissection or section if there are cavities.</td></tr>
+<tr class="alt"><td>Column</td><td>Hidden by the lip or petals; anther, stigma and rostellum on different planes.</td><td>Remove the perianth; ventral and lateral views with stacking.</td></tr>
+<tr><td>Pollinarium</td><td>Minute; deforms or is lost when handled.</td><td>Removal under a stereo microscope; photomicrography on a slide.</td></tr>
+<tr class="alt"><td>Spur or nectary</td><td>Depth and contents not visible from outside.</td><td>Lateral view; longitudinal section if the interior is diagnostic.</td></tr>
+<tr><td>Ovary and pedicel</td><td>Resupination changes the apparent orientation of the flower.</td><td>Include in the lateral view to fix the orientation.</td></tr>
+<tr class="alt"><td>Surfaces</td><td>Papillae, trichomes or gloss that diffuse light does not record.</td><td>Directed or polarised lighting; photomicrography.</td></tr>
+</table></div>
+<aside class="box">
+<p class="eyebrow"><i>Lepanthes</i> in this part</p>
+<p>Panels planned for a <i>Lepanthes</i> LCDP: habit with ramicauls and lepanthiform sheaths; inflorescence in relation to the leaf; frontal and lateral flower; dissected perianth; bilobed petals in detail; bilaminate lip with its appendix; column; pollinia; and, where relevant, one or more views of the 3D model.</p>
+</aside>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part III</p>
+<h2 id="diagnostico-y-arbol-de-decisiones">Diagnosis and decision tree</h2>
+<h3>3.1 State of the specimen</h3>
+<p>The first decision is whether the material is usable. The quality of the plate depends more on the flower chosen than on any later technique.</p>
+<div class="tbl"><table>
+<tr><th>Check</th><th>If it fails</th></tr>
+<tr><td>Full anthesis, no wilting or dehydration</td><td>Choose another flower; if buds are about to open, wait.</td></tr>
+<tr class="alt"><td>Floral parts intact, no insect or handling damage</td><td>Choose another flower; if there is none, document it and record the damage in the caption.</td></tr>
+<tr><td>Pollinarium present</td><td>Look for an unvisited flower; record its absence if there is none.</td></tr>
+<tr class="alt"><td>Natural orientation preserved</td><td>Photograph the flower in situ before cutting it.</td></tr>
+</table></div>
+<p>Digital editing is no substitute for a good flower: it is not used to rebuild parts, hide damage or correct deformities.</p>
+<div class="plates two"><figure class="plate"><button aria-label="Enlarge: State of the specimen" class="plate__mount" data-lightbox="/images/lcdp/lcdp-estado-especimen.svg"><img alt="Decision diagram: State of the specimen" loading="lazy" src="/images/lcdp/lcdp-estado-especimen.svg"/></button><figcaption><span class="pl">Fig. 3.1a</span> State of the specimen. Diagram by K. Suncion, redrawn.</figcaption></figure><figure class="plate"><button aria-label="Enlarge: Floral architecture" class="plate__mount" data-lightbox="/images/lcdp/lcdp-arquitectura-floral.svg"><img alt="Decision diagram: Floral architecture" loading="lazy" src="/images/lcdp/lcdp-arquitectura-floral.svg"/></button><figcaption><span class="pl">Fig. 3.1b</span> Floral architecture. Diagram by K. Suncion, redrawn.</figcaption></figure></div>
+<h3>3.2 Is the base representation enough?</h3>
+<p>With the base panels of 2.1 defined, list the diagnostic characters of the group and check, one by one, whether each character is clearly visible in some panel. Only the characters that are not visible lead to an additional decision. This check is the entry point of the tree (3.5).</p>
+<p>Diagnostic value is assessed at the start, not at the end: a character with no value for distinguishing or characterising the taxon does not justify an extra panel, however hard it is to see.</p>
+<figure class="plate"><button aria-label="Enlarge: Is the base representation enough? Entry point to the five limitations" class="plate__mount" data-lightbox="/images/lcdp/lcdp-representacion-base.svg"><img alt="Decision diagram: Is the base representation enough? Entry point to the five limitations" loading="lazy" src="/images/lcdp/lcdp-representacion-base.svg"/></button><figcaption><span class="pl">Fig. 3.2</span> Is the base representation enough? Entry point to the five limitations. Diagram by K. Suncion, redrawn.</figcaption></figure>
+<h3>3.3 The five limitations</h3>
+<p>When a diagnostic character is not visible, the cause fits one or more of these limitations. They are not mutually exclusive.</p>
+<div class="tbl"><table>
+<tr><th>Limitation</th><th>Signs in the specimen</th><th>Check question</th><th>Response</th></tr>
+<tr><td><b>Size</b></td><td>Minute structures, fine ornamentation, trichomes.</td><td>Does the character lose definition at the scale of the panel?</td><td>Detail at higher magnification; photomicrography beyond the macro range.</td></tr>
+<tr class="alt"><td><b>3D form</b></td><td>Volume, curvature, cavities, parts on different planes.</td><td>Can one view convey depth, orientation and the relationship between parts?</td><td>Complementary view; 3D model if several views are not enough.</td></tr>
+<tr><td><b>Optical properties</b></td><td>Gloss, white parts, saturated colours, shallow depth of field.</td><td>Is the character visible to the eye but not in the image?</td><td>Improve the record: light, polarisation, exposure, colour, stacking.</td></tr>
+<tr class="alt"><td><b>Internal access</b></td><td>Cavities, parts covering others, internal structures.</td><td>Is the character invisible from outside?</td><td>First another orientation; if that is not enough, dissection, section or cut.</td></tr>
+<tr><td><b>Physical properties</b></td><td>Thin, translucent or fragile parts, or parts that dehydrate quickly.</td><td>Does the structure change during preparation or capture?</td><td>Early capture, humidity control, transmitted light, dissection order.</td></tr>
+</table></div>
+<div class="tabs" data-tabs=""><p class="tabs__label">Tree by limitation</p><div class="tabs__list" role="tablist"><button aria-controls="pan-tamano" aria-selected="true" id="tab-tamano" role="tab">Size</button><button aria-controls="pan-forma" aria-selected="false" id="tab-forma" role="tab">3D form</button><button aria-controls="pan-optica" aria-selected="false" id="tab-optica" role="tab">Optical properties</button><button aria-controls="pan-interna" aria-selected="false" id="tab-interna" role="tab">Internal access</button><button aria-controls="pan-fisica" aria-selected="false" id="tab-fisica" role="tab">Physical properties</button></div><div aria-labelledby="tab-tamano" class="tabs__panel" id="pan-tamano" role="tabpanel"><p>Size only counts if the character loses definition at the scale of the panel and has diagnostic value.</p><figure class="plate"><button aria-label="Enlarge: Limitation: size" class="plate__mount" data-lightbox="/images/lcdp/lcdp-tamano.svg"><img alt="Decision diagram: Limitation: size" loading="lazy" src="/images/lcdp/lcdp-tamano.svg"/></button><figcaption><span class="pl">Fig. 3.3a</span> Limitation: size. Diagram by K. Suncion, redrawn.</figcaption></figure></div><div aria-labelledby="tab-forma" class="tabs__panel" hidden="" id="pan-forma" role="tabpanel"><p>A view is added only if it shows depth, relief or orientation that the main view does not.</p><figure class="plate"><button aria-label="Enlarge: Limitation: 3D form" class="plate__mount" data-lightbox="/images/lcdp/lcdp-forma-3d.svg"><img alt="Decision diagram: Limitation: 3D form" loading="lazy" src="/images/lcdp/lcdp-forma-3d.svg"/></button><figcaption><span class="pl">Fig. 3.3b</span> Limitation: 3D form. Diagram by K. Suncion, redrawn.</figcaption></figure></div><div aria-labelledby="tab-optica" class="tabs__panel" hidden="" id="pan-optica" role="tabpanel"><p>The information is in the flower but does not reach the image: correct the capture, not the specimen.</p><figure class="plate"><button aria-label="Enlarge: Limitation: optical properties" class="plate__mount" data-lightbox="/images/lcdp/lcdp-propiedades-opticas.svg"><img alt="Decision diagram: Limitation: optical properties" loading="lazy" src="/images/lcdp/lcdp-propiedades-opticas.svg"/></button><figcaption><span class="pl">Fig. 3.3c</span> Limitation: optical properties. Diagram by K. Suncion, redrawn.</figcaption></figure></div><div aria-labelledby="tab-interna" class="tabs__panel" hidden="" id="pan-interna" role="tabpanel"><p>Before dissecting or cutting, always try an alternative orientation.</p><figure class="plate"><button aria-label="Enlarge: Limitation: internal access" class="plate__mount" data-lightbox="/images/lcdp/lcdp-acceso-interno.svg"><img alt="Decision diagram: Limitation: internal access" loading="lazy" src="/images/lcdp/lcdp-acceso-interno.svg"/></button><figcaption><span class="pl">Fig. 3.3d</span> Limitation: internal access. Diagram by K. Suncion, redrawn.</figcaption></figure></div><div aria-labelledby="tab-fisica" class="tabs__panel" hidden="" id="pan-fisica" role="tabpanel"><p>Delicacy, thinness, translucency or dehydration matter if they change the structure during capture.</p><figure class="plate"><button aria-label="Enlarge: Limitation: physical properties" class="plate__mount" data-lightbox="/images/lcdp/lcdp-propiedades-fisicas.svg"><img alt="Decision diagram: Limitation: physical properties" loading="lazy" src="/images/lcdp/lcdp-propiedades-fisicas.svg"/></button><figcaption><span class="pl">Fig. 3.3e</span> Limitation: physical properties. Diagram by K. Suncion, redrawn.</figcaption></figure></div></div>
+<p>Two rules prevent the most common mistakes. First: a limitation only counts if it affects a diagnostic character. Second: before intervening on the specimen (dissecting or cutting), always try an alternative orientation.</p>
+<h3>3.4 Master matrix</h3>
+<p>Links each limitation to the strategy, the specific resource and the section of the manual where the procedure is described.</p>
+<div aria-label="Filter by limitation" class="chips" data-filter="matriz" role="group"><button aria-pressed="true" data-g="all">All</button><button aria-pressed="false" data-g="T">Size</button><button aria-pressed="false" data-g="3D">3D form</button><button aria-pressed="false" data-g="O">Optical</button><button aria-pressed="false" data-g="I">Internal</button><button aria-pressed="false" data-g="F">Physical</button></div><div class="tbl" id="matriz"><table>
+<tr><th>Limitation</th><th>What is lost</th><th>Strategy</th><th>Resource</th><th>See</th></tr>
+<tr data-g="T"><td>Size</td><td>Detail and definition</td><td>Detail or enlargement</td><td>Macro at higher magnification, stereo microscope</td><td>4.1, 4.2</td></tr>
+<tr class="alt" data-g="T"><td>Extreme size</td><td>Microstructure</td><td>Photomicrography</td><td>Microscope with camera, stacking, stitching of fields</td><td>5.3</td></tr>
+<tr data-g="3D"><td>3D form</td><td>Volume and depth</td><td>Complementary view</td><td>Lateral, posterior, three-quarter views</td><td>2.1, 4.5</td></tr>
+<tr class="alt" data-g="3D"><td>Complex 3D form</td><td>Spatial relationships no view resolves</td><td>Three-dimensional model</td><td>3D workflow</td><td>Part VI</td></tr>
+<tr data-g="3D"><td>Orientation</td><td>Arrangement of parts</td><td>Complementary view</td><td>View of the lip–column relationship; flower in situ</td><td>2.1</td></tr>
+<tr class="alt" data-g="O"><td>Relief or ornamentation</td><td>Surface texture</td><td>Better recording or detail</td><td>Raking or directed lighting</td><td>4.3</td></tr>
+<tr data-g="O"><td>Gloss and reflections</td><td>Detail under the reflection</td><td>Better recording</td><td>Diffusion, cross-polarisation</td><td>4.3</td></tr>
+<tr class="alt" data-g="O"><td>White or coloured parts</td><td>Highlights, colour fidelity</td><td>Better recording</td><td>Controlled expose-to-the-right, colour chart, white balance</td><td>4.4, 5.1</td></tr>
+<tr data-g="O"><td>Depth of field</td><td>Sharpness across planes</td><td>Better recording</td><td>Focus stacking</td><td>5.2</td></tr>
+<tr class="alt" data-g="I"><td>Internal information</td><td>Cavities and hidden structures</td><td>Internal representation</td><td>Dissection, section, cut</td><td>4.6</td></tr>
+<tr data-g="F"><td>Translucency</td><td>Outlines and venation</td><td>Better recording</td><td>Transmitted light</td><td>4.3</td></tr>
+<tr class="alt" data-g="F"><td>Fragility or dehydration</td><td>Original shape</td><td>Adapted representation</td><td>Early capture, humid chamber, dissection order</td><td>4.5, 4.6</td></tr>
+<tr data-g="*"><td>Several at once</td><td>More than one type</td><td>Combination</td><td>Per each applicable row</td><td>3.5</td></tr>
+</table></div><figure class="plate"><button aria-label="Enlarge: Choosing the representation strategy" class="plate__mount" data-lightbox="/images/lcdp/lcdp-seleccion-estrategia.svg"><img alt="Decision diagram: Choosing the representation strategy" loading="lazy" src="/images/lcdp/lcdp-seleccion-estrategia.svg"/></button><figcaption><span class="pl">Fig. 3.4</span> Choosing the representation strategy. Diagram by K. Suncion, redrawn.</figcaption></figure>
+<h3>3.5 Integrated decision tree</h3>
+<p>Text version of the tree. Run through it once for each diagnostic character that is not visible in the base representation.</p>
+<div class="tbl"><table>
+<tr><th>No.</th><th>Question</th><th>If the answer is...</th></tr>
+<tr><td>0</td><td>Is the specimen usable? (3.1)</td><td>No: another flower, wait, or document while recording the limitations. Yes: step 1.</td></tr>
+<tr class="alt"><td>1</td><td>Does the character have diagnostic value?</td><td>No: no panel is added. Yes: step 2.</td></tr>
+<tr><td>2</td><td>Is it clearly visible in the base representation?</td><td>Yes: no panel is added. No: step 3.</td></tr>
+<tr class="alt"><td>3</td><td>Is it visible from outside?</td><td>No: does another orientation reveal it? Yes, complementary view; no, dissection or section. Yes: step 4.</td></tr>
+<tr><td>4</td><td>Is it visible but without enough definition?</td><td>Because of scale: detail or photomicrography. Because of depth of field: stacking. Because of light, gloss or colour: better recording. If not: step 5.</td></tr>
+<tr class="alt"><td>5</td><td>Is its shape, or its relationship with other parts, clear?</td><td>No: complementary view; if several views are not enough, 3D model. Yes: step 6.</td></tr>
+<tr><td>6</td><td>Does the structure change during preparation or capture?</td><td>Yes: early capture, humidity control, transmitted light. No: done.</td></tr>
+<tr class="alt"><td>7</td><td>Was more than one answer triggered?</td><td>Combine them, checking that each new panel adds information the others do not give.</td></tr>
+</table></div>
+<div aria-live="polite" class="wizard" id="wizard"><div class="wizard__head"><span class="eyebrow">Interactive tree</span><button class="wizard__reset" type="button">Start again</button></div><ol class="wizard__path"></ol><div class="wizard__card"></div></div><p class="caption"><b>Figure 3.5.</b> The tree from the table above, step by step. Answer for one specific character; each result names the section where the technique is described.</p>
+<h3>3.6 Diagnosis sheet</h3>
+<p>The printable version of 3.1 to 3.5, for use at the bench, is in Appendix A.</p>
+<aside class="box">
+<p class="eyebrow"><i>Lepanthes</i> in this part</p>
+<p>Quick run through the tree for a typical <i>Lepanthes</i> flower:<br/>
+· <b>Size:</b> yes. Lip and column need a stereo microscope or photomicrography.<br/>
+· <b>3D form:</b> yes. The bilaminate lip wraps the column; no single view shows the relationship.<br/>
+· <b>Internal access:</b> yes. The column and the lip appendix are partly hidden; dissection is needed.<br/>
+· <b>Physical properties:</b> yes. The parts dehydrate and deform shortly after cutting.<br/>
+This is the case where every strategy is combined, which is why Part VII exists.</p>
+</aside>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part IV</p>
+<h2 id="equipo-y-montaje">Equipment and set-up</h2>
+<h3>4.1 Settings by scale</h3>
+<div class="tbl"><table>
+<tr><th>Scenario</th><th>Magnification range</th><th>Body and optics</th><th>Support and focusing</th><th>Use on the plate</th></tr>
+<tr><td>Field</td><td>—</td><td>—</td><td>—</td><td>Habit, flower in situ</td></tr>
+<tr class="alt"><td>Macro studio</td><td>Just over 2x</td><td>OM-1 Mark II; Laowa 60 mm 2x with Canon–OM adapter</td><td>Home-built rail</td><td>Flower, perianth, lip</td></tr>
+<tr><td>Stereo microscope</td><td>—</td><td>—</td><td>—</td><td>Column, pollinarium, details</td></tr>
+<tr class="alt"><td>Microscope</td><td>—</td><td>Leica DM3000 with DFC7000 GT camera</td><td>—</td><td>Microstructure</td></tr>
+</table></div>
+<h3>4.2 Cameras and optics</h3>
+<p>Case study: OM System OM-1 Mark II camera with a Laowa 60 mm 2x macro lens and Canon–OM adapter, giving just over 2x, on a home-built focusing rail.</p>
+<p>Record the real step of the rail. In the case study the step estimated by the operator (0.4 to 0.6 mm per frame) did not match the one derived from fitting the views together (between 0.12 and 0.24 mm), and forcing the estimated value multiplied the error by 10 to 20 times. To fix the scale, photograph a stage micrometer or a scale bar at the same magnification.</p>
+<h3>4.3 Lighting</h3>
+<p>Case study: two Godox flashes recorded as «MF2».</p>
+<h3>4.4 Backgrounds and colour control</h3>
+<p class="soon">In preparation.</p>
+<h3>4.5 Preparing and mounting the specimen</h3>
+<p>If a 3D model is planned, the mount must let the flower turn without being taken down. In the case study the flower was remounted between views, so each view has an independent pose and could only be registered with anatomical landmarks; any movement of sepals, petals or lip blades between mounts mixes with the registration error. If the support does not rotate, include a small rigid reference, such as a pin head, in every view.</p>
+<h3>4.6 Dissection</h3>
+<aside class="box">
+<p class="eyebrow"><i>Lepanthes</i> in this part</p>
+<p><i>Lepanthes</i> sp. nov. was photographed at just over 2x, with the flower fresh and with the pedicel, ovary, bract and a neighbouring bud kept in frame. The equipment is in 4.1 to 4.3.</p>
+</aside>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part V</p>
+<h2 id="captura-y-procesamiento">Capture and processing</h2>
+<h3>5.1 Parameters by type of shot</h3>
+<div class="tbl"><table>
+<tr><th>Type of shot</th><th>Aperture</th><th>ISO</th><th>Format</th><th>Notes (diffraction, exposure, flash)</th></tr>
+<tr><td>Habit</td><td>—</td><td>—</td><td>RAW</td><td>—</td></tr>
+<tr class="alt"><td>Whole flower</td><td>—</td><td>—</td><td>RAW</td><td>—</td></tr>
+<tr><td>Macro dissection</td><td>—</td><td>—</td><td>RAW</td><td>—</td></tr>
+<tr class="alt"><td>Stereo microscope</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+</table></div>
+<h3>5.2 Focus stacking</h3>
+<p>Software in the case study: Helicon Focus 8.3.11, method C. From each stack the clean fused image is kept; it serves as the texture and the pixel reference for that view.</p>
+<p>If there will be a 3D model, the aligned layers are also exported (RGBA PNG, one per frame, about 5066 × 3840 px). The alpha channel marks the in-focus region Helicon chose. All 3D geometry is built from these layers, not from the OBJ of Helicon's 3D viewer, which in the case study was a 256 × 256 height map with inverted depth and a flipped, watermarked texture.</p>
+<p>Helicon prints its watermark on the last layer of each stack, in colour and in alpha, so that layer is excluded. Also check the direction of the stack: in the case study the exported layers ran from far to near, the reverse of the shooting order. Where parts overlap, the part in front must have the frame index closest to the lens.</p>
+<h3>5.3 Photomicrography</h3>
+<p>Verma and Saxena (2025) describe a workflow that suits structures needing a microscope: a DSLR mounted on a trinocular microscope with 4x, 10x and 20x plan achromat objectives, cable release to avoid vibration, and a flash with diffuser. The focus step is calculated from the depth of field of each objective: 1 to 2 µm at 20x, and 5 to 10 µm at 4x and 10x. When the structure does not fit in one field, overlapping fields are taken, each is stacked, and they are then stitched into a mosaic.</p>
+<h3>5.4 Editing: what is allowed and what is not</h3>
+<div class="tbl"><table>
+<tr><th>Allowed</th><th>Not allowed</th></tr>
+<tr><td>White balance and colour correction with a reference chart</td><td>Changing the colour of a structure</td></tr>
+<tr class="alt"><td>Exposure, contrast and curves applied to the whole image</td><td>Local adjustments that hide or create relief</td></tr>
+<tr><td>Cropping and rotating to orient the panel</td><td>Distorting or scaling along one axis only</td></tr>
+<tr class="alt"><td>Removing dust or fibres from the background, and accidental stains or damage (for example, on the leaves) when it is a correction that does not alter the original morphology</td><td>Removing trichomes, pollen or any structure belonging to the specimen, or adding elements not observed in that individual</td></tr>
+<tr><td>Replacing the background when the outline is unambiguous</td><td>Rebuilding broken or missing parts</td></tr>
+<tr class="alt"><td>Correcting stacking artefacts using the original layers</td><td>Combining parts from different flowers without saying so</td></tr>
+</table></div>
+<h3>5.5 Assembling and exporting the plate</h3>
+<p>This is how plates are assembled at Lankester today, in Adobe Photoshop (Karremans, 2020). An LCDP is more than a set of photographs: it follows a visual logic that starts at capture and must give a balanced, informative result.</p>
+<p>1. <b>File.</b> Create a file in the format of 2.2 and work on it as a PSD, with each element on its own layer.<br/>
+2. <b>Originals.</b> Each photograph is first developed from RAW (NEF, DNG or similar), adjusting brightness, contrast and colour temperature. Each element is photographed next to a measurement reference that is later replaced by the scale bar.<br/>
+3. <b>Layout.</b> Follow the reading order, left to right and top to bottom. The flower, the most important element, goes in the top left corner; the habit closes the plate in the bottom right corner (top right if the plant is pendent), and the dissected perianth usually goes at the bottom. The other elements fill the free space, as each specimen allows. Plates must be comparable across species: the same elements, photographed the same way and in equivalent positions.<br/>
+4. <b>Orientation.</b> Natural orientation is respected (pendent plants, non-resupinate flowers), each element sits straight vertically or horizontally, and all face the inside of the plate.<br/>
+5. <b>Sizes.</b> What is small in reality must not outgrow what is large: anther and pollinarium are enlarged, but never beyond the habit or the flower, and the habit, though reduced, remains one of the dominant elements.<br/>
+6. <b>Space.</b> The plate should be full, without large gaps. Elements may overlap with a shadow if no information is lost.<br/>
+7. <b>Scales and letters.</b> Placed according to 2.2 and 2.3, close to their element and aligned with each other.</p>
+<h3>5.6 Archiving and file naming</h3>
+<aside class="box">
+<p class="eyebrow"><i>Lepanthes</i> in this part</p>
+<p>Three stacks of the same flower: lateral (33 frames), ventral (61) and frontal (23), fused in Helicon Focus 8.3.11 with method C and also exported as aligned layers for the 3D model.</p>
+</aside>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part VI</p>
+<h2 id="documentacion-tridimensional">Three-dimensional documentation</h2>
+<p>This part summarises the three-dimensional reconstruction method developed with <i>Lepanthes</i> sp. nov. in November 2026. It is provisional and describes the state of model v9.</p>
+<h3>6.1 When 3D is justified</h3>
+<p>A three-dimensional model answers the 3D-form limitation when complementary views do not resolve the spatial relationship between parts, or when the number of views needed would make the plate unreadable. Like any panel, it is justified by the information it adds, not by the technique.</p>
+<h3>6.2 The Lepanthes 3D workflow</h3>
+<p>The aim is a solid, complete and metric surface model of a flower a few millimetres across, built from focus stacks taken from three angles: lateral, frontal and ventral. The work follows three stages in a fixed order: smooth, complete geometry without texture; geometric surface detail (papillae on petals and lip, scaly relief on sepals); and colour texture. In the case study the first stage is finished and the other two are planned.</p>
+<p>The geometry is built from the lateral and frontal views. The ventral view provides colour only, because its depth proved internally inconsistent: the anther ended up displaced by 1.85 mm and no single depth scale fitted the view.</p>
+<p class="caption"><b>Figure 6.1.</b> Reconstruction workflow of model v9. Tap a step to see what it does.</p><div class="pipe" id="pipe"><p class="pipe__stages"><b>Stage 1</b> steps 1–14 · smooth, complete geometry <b>Stage 2</b> step 15 · surface detail <b>Stage 3</b> step 16 · colour texture</p><div class="pipe__grid"><button class="pipe__step ok" data-desc="Export from Helicon Focus (5.2)" data-n="1" data-name="Aligned layers" data-st="Validated"><span>1</span>Aligned layers</button><button class="pipe__step ok" data-desc="Frame of maximum focus (Laplacian) with sub-frame refinement, combined with depth from alpha compositing; per-pixel confidence" data-n="2" data-name="Depth per view" data-st="Validated"><span>2</span>Depth per view</button><button class="pipe__step ok" data-desc="Thresholds of saturation, luminance and sharpness; foreign objects (a hair) are removed before any mirroring" data-n="3" data-name="Flower masks" data-st="Validated"><span>3</span>Flower masks</button><button class="pipe__step ok" data-desc="Homologous points (sepal apices, bract, petal lobes) and similarity fit; the depth scale per frame comes from the fit" data-n="4" data-name="Alignment and scale" data-st="Validated"><span>4</span>Alignment and scale</button><button class="pipe__step ok" data-desc="Offset between overlapping surfaces against frame index; linear correction of the frontal view" data-n="5" data-name="Cross-check of scale" data-st="Validated"><span>5</span>Cross-check of scale</button><button class="pipe__step ok" data-desc="Gaussian within regions bounded by occlusion edges, never across them" data-n="6" data-name="Depth smoothing" data-st="Validated"><span>6</span>Depth smoothing</button><button class="pipe__step ok" data-desc="Sampling of each view and removal of sheets duplicated by imperfect registration" data-n="7" data-name="Point cloud" data-st="Validated"><span>7</span>Point cloud</button><button class="pipe__step ok" data-desc="Symmetry plane from homologous pairs; mirrored infill only where real surface is missing; pedicel, ovary and bud are not mirrored" data-n="8" data-name="Symmetry" data-st="Validated"><span>8</span>Symmetry</button><button class="pipe__step ok" data-desc="Poisson reconstruction, trimming by distance and by silhouette in both views, hole closing" data-n="9" data-name="Surface" data-st="Validated"><span>9</span>Surface</button><button class="pipe__step ok" data-desc="Sepal; petal, lip and column; pedicel, ovary and bud, from colour" data-n="10" data-name="Organ labelling" data-st="Validated"><span>10</span>Organ labelling</button><button class="pipe__step prov" data-desc="Single closed solid from the intersection of the lateral and frontal silhouettes" data-n="11" data-name="Lip" data-st="Validated; provisional shape"><span>11</span>Lip</button><button class="pipe__step prov" data-desc="Infill may not curve more than the photographed surface of the same organ, nor may new margins turn more than the photographed outlines" data-n="12" data-name="Curvature laws" data-st="Validated; margin law provisional"><span>12</span>Curvature laws</button><button class="pipe__step prov" data-desc="Fitting of steps at joins and bounded smoothing" data-n="13" data-name="Finishing" data-st="Provisional"><span>13</span>Finishing</button><button class="pipe__step ok" data-desc="Full GLB and light GLB, in millimetres" data-n="14" data-name="Export" data-st="Validated"><span>14</span>Export</button><button class="pipe__step plan" data-desc="Spheres of 0.025 mm radius on petals and lip; scaly relief on sepals" data-n="15" data-name="Surface detail" data-st="Planned"><span>15</span>Surface detail</button><button class="pipe__step plan" data-desc="Projection of the clean images; ventral composite for column, lip and appendix" data-n="16" data-name="Colour texture" data-st="Planned"><span>16</span>Colour texture</button></div><div aria-live="polite" class="pipe__detail"></div><p class="pipe__legend"><span class="ok">Validated</span><span class="prov">Validated with provisional parts</span><span class="plan">Planned</span></p></div><details class="more"><summary>View as table (Table 6.1)</summary><div class="tbl"><table>
+<tr><th>Step</th><th>What is done</th><th>Status</th></tr>
+<tr><td>1. Aligned layers</td><td>Export from Helicon Focus (5.2)</td><td>Validated</td></tr>
+<tr class="alt"><td>2. Depth per view</td><td>Frame of maximum focus (Laplacian) with sub-frame refinement, combined with depth from alpha compositing; per-pixel confidence</td><td>Validated</td></tr>
+<tr><td>3. Flower masks</td><td>Thresholds of saturation, luminance and sharpness; foreign objects (a hair) are removed before any mirroring</td><td>Validated</td></tr>
+<tr class="alt"><td>4. Alignment and scale</td><td>Homologous points (sepal apices, bract, petal lobes) and similarity fit; the depth scale per frame comes from the fit</td><td>Validated</td></tr>
+<tr><td>5. Cross-check of scale</td><td>Offset between overlapping surfaces against frame index; linear correction of the frontal view</td><td>Validated</td></tr>
+<tr class="alt"><td>6. Depth smoothing</td><td>Gaussian within regions bounded by occlusion edges, never across them</td><td>Validated</td></tr>
+<tr><td>7. Point cloud</td><td>Sampling of each view and removal of sheets duplicated by imperfect registration</td><td>Validated</td></tr>
+<tr class="alt"><td>8. Symmetry</td><td>Symmetry plane from homologous pairs; mirrored infill only where real surface is missing; pedicel, ovary and bud are not mirrored</td><td>Validated</td></tr>
+<tr><td>9. Surface</td><td>Poisson reconstruction, trimming by distance and by silhouette in both views, hole closing</td><td>Validated</td></tr>
+<tr class="alt"><td>10. Organ labelling</td><td>Sepal; petal, lip and column; pedicel, ovary and bud, from colour</td><td>Validated</td></tr>
+<tr><td>11. Lip</td><td>Single closed solid from the intersection of the lateral and frontal silhouettes</td><td>Validated; provisional shape</td></tr>
+<tr class="alt"><td>12. Curvature laws</td><td>Infill may not curve more than the photographed surface of the same organ, nor may new margins turn more than the photographed outlines</td><td>Validated; margin law provisional</td></tr>
+<tr><td>13. Finishing</td><td>Fitting of steps at joins and bounded smoothing</td><td>Provisional</td></tr>
+<tr class="alt"><td>14. Export</td><td>Full GLB and light GLB, in millimetres</td><td>Validated</td></tr>
+<tr><td>15. Surface detail</td><td>Spheres of 0.025 mm radius on petals and lip; scaly relief on sepals</td><td>Planned</td></tr>
+<tr class="alt"><td>16. Colour texture</td><td>Projection of the clean images; ventral composite for column, lip and appendix</td><td>Planned</td></tr>
+</table></div></details>
+<p>The parameters of each step, the scripts (depth_from_layers.py and lepanthes_geom_pipeline.py) and the approaches tried and discarded are in the 3D methods manual.</p>
+<p class="caption"><b>Figure 6.2.</b> Quality-control metrics for model v9.</p><div class="tiles"><div class="tile"><span class="tile__v">0.08<small>mm</small></span><span class="tile__k">Alignment error</span><span class="tile__d">RMS of the fit between views</span></div><div class="tile"><span class="tile__v">39<small>µm</small></span><span class="tile__k">Separation between views</span><span class="tile__d">Lateral–frontal median</span></div><div class="tile"><span class="tile__v">90.8<small>%</small></span><span class="tile__k">Fidelity</span><span class="tile__d">Surface within 30 µm of the data</span></div><div class="tile"><span class="tile__v">1.39<small>°</small></span><span class="tile__k">Roughness</span><span class="tile__d">Median angle of the normal</span></div><div class="tile"><span class="tile__v">0.19–0.28<small>mm</small></span><span class="tile__k">Symmetry mismatch</span><span class="tile__d">Between mirrored pairs</span></div><div class="tile"><span class="tile__v">1.24<small>M</small></span><span class="tile__k">Triangles</span><span class="tile__d">Full model; 400,000 in the light one</span></div></div><details class="more"><summary>All metrics (Table 6.2)</summary><div class="tbl"><table>
+<tr><th>Metric</th><th>Definition</th><th>Model v9</th></tr>
+<tr><td>Alignment error</td><td>RMS of the fit between views</td><td>≈ 0.08 mm</td></tr>
+<tr class="alt"><td>Symmetry mismatch</td><td>Distance between mirrored pairs</td><td>0.19–0.28 mm</td></tr>
+<tr><td>Separation between views</td><td>Lateral–frontal median, point to plane</td><td>39 µm</td></tr>
+<tr class="alt"><td>Fidelity</td><td>Surface within 30 µm of the data; median distance</td><td>90.8 %; 4.1 µm</td></tr>
+<tr><td>Roughness</td><td>Median angle between the normal and the normal averaged at 25 µm</td><td>1.39°</td></tr>
+<tr class="alt"><td>Steps at joins</td><td>Margin vertices 8–50 µm from another sheet</td><td>505</td></tr>
+<tr><td>Topology</td><td>Open edges; non-manifold edges</td><td>8593; 0</td></tr>
+<tr class="alt"><td>Mesh size</td><td>Triangles, full / light model</td><td>1,244,651 / 399,999</td></tr>
+<tr><td>Extent</td><td>Bounding box, with the provisional scale (6.4)</td><td>9.41 × 5.75 × 4.36 mm</td></tr>
+</table></div></details>
+<p>Before a version is accepted, the model is rendered from the lateral camera, the frontal camera and an oblique view, and compared with the previous version and with the photographs.</p>
+<h3>6.3 Integrating 3D into the LCDP</h3>
+<p>Available outputs: full model and light model (400,000 triangles) in GLB format, in millimetres. They open in Blender with File › Import › glTF 2.0.</p>
+<h3>6.4 Limitations of the case study</h3>
+<p><b>Scale.</b> Absolute scale was fixed by convention: 10 mm between the apex of the dorsal sepal and the midpoint of the lateral sepal apices. At exactly 2x, the optics would put that distance at about 7.6 mm, so the model may be oversized by around 30 %.</p>
+<p><b>Remounting.</b> The flower was remounted between views. Any change of shape between mounts is absorbed into the alignment error and the symmetry mismatch, and has not been measured separately. Recommendations to avoid it are in 4.2 and 4.5.</p>
+<p><b>Lip.</b> With two views, the lip solid comes out box-like. The next step is to use the ventral outline as a third carving view.</p>
+<p><b>Margins.</b> About 3 % of the margin still exceeds the curvature law, and some 8,600 open edges remain, mostly along thin margins where only one face was reconstructed.</p>
+<aside class="box">
+<p class="eyebrow"><i>Lepanthes</i> in this part</p>
+<p>The model shows what no single view resolves: the lip as one continuous structure, made of two curved blades that touch the column without merging with it, and its position relative to the petals and column.</p>
+</aside>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Cases</p>
+<h2 id="casos-de-estudio">Worked cases: four LCDPs</h2>
+<p>Four real specimens documented by Katheryn Suncion, ordered from least to most complex. Each goes through the same process: observe, diagnose, decide, represent and integrate. Together they cover the main situations in the manual: a sufficient base representation, a flower with three-dimensional architecture, a flower with optical challenges, and a minute flower with several limitations at once.</p><div class="tabs cases" data-tabs=""><div class="tabs__list" role="tablist"><button aria-controls="cpan-prosthechea-neglecta" aria-selected="true" id="ctab-prosthechea-neglecta" role="tab"><i>Prosthechea neglecta</i></button><button aria-controls="cpan-stanhopea-confusa" aria-selected="false" id="ctab-stanhopea-confusa" role="tab"><i>Stanhopea confusa</i></button><button aria-controls="cpan-lycaste-leucantha" aria-selected="false" id="ctab-lycaste-leucantha" role="tab"><i>Lycaste leucantha</i></button><button aria-controls="cpan-ornithocephalus" aria-selected="false" id="ctab-ornithocephalus" role="tab"><i>Ornithocephalus sp.</i></button></div><div aria-labelledby="ctab-prosthechea-neglecta" class="tabs__panel case" id="cpan-prosthechea-neglecta" role="tabpanel"><figure class="plate case__plate"><button aria-label="Enlarge the plate of Prosthechea neglecta" class="plate__mount" data-lightbox="/images/lcdp/lcdp-prosthechea-neglecta.jpg"><img alt="LCDP of Prosthechea neglecta" loading="lazy" src="/images/lcdp/lcdp-prosthechea-neglecta.jpg"/></button><figcaption><span class="pl">Pl. I</span> <i>Prosthechea neglecta</i> · LCDP by K. Suncion</figcaption></figure><div class="case__card"><p class="case__eyebrow">Case I · Essential representation</p><h3><i>Prosthechea neglecta</i></h3><div class="case__lvl"><span class="case__k">Complexity</span><span class="meter"><span class="on"></span><span class=""></span><span class=""></span><span class=""></span></span><b>Low</b></div><dl><dt>Challenge</dt><dd>Standard representation of an LCDP.</dd><dt>Criteria triggered</dt><dd>State of the specimen · floral architecture · diagnostic value</dd><dt>Strategies</dt><dd>Base representation only</dd></dl><p class="case__k">Route through the tree</p><ol class="route"><li>Base representation</li><li>Information sufficient</li><li>No complementary strategies</li></ol><p class="case__note">Two enlargements were added for the layout of the plate, not out of documentary need.</p><figure class="case__obs"><img alt="Prosthechea neglecta, specimen observed" loading="lazy" src="/images/lcdp/obs-prosthechea-neglecta.jpg"/><figcaption>Specimen observed</figcaption></figure></div></div><div aria-labelledby="ctab-stanhopea-confusa" class="tabs__panel case" hidden="" id="cpan-stanhopea-confusa" role="tabpanel"><figure class="plate case__plate"><button aria-label="Enlarge the plate of Stanhopea confusa" class="plate__mount" data-lightbox="/images/lcdp/lcdp-stanhopea-confusa.jpg"><img alt="LCDP of Stanhopea confusa" loading="lazy" src="/images/lcdp/lcdp-stanhopea-confusa.jpg"/></button><figcaption><span class="pl">Pl. II</span> <i>Stanhopea confusa</i> · LCDP by K. Suncion</figcaption></figure><div class="case__card"><p class="case__eyebrow">Case II · Floral architecture</p><h3><i>Stanhopea confusa</i></h3><div class="case__lvl"><span class="case__k">Complexity</span><span class="meter"><span class="on"></span><span class="on"></span><span class="on"></span><span class=""></span></span><b>High</b></div><dl><dt>Challenge</dt><dd>Three-dimensionality and information hidden in the lip.</dd><dt>Criteria triggered</dt><dd>Floral architecture · structural complexity · access to information</dd><dt>Strategies</dt><dd>Complementary views (lateral, frontal and three-quarter) and a transverse section</dd></dl><p class="case__k">Route through the tree</p><ol class="route"><li>Base representation insufficient</li><li>Three-dimensionality → complementary views</li><li>Hidden information → transverse section</li></ol><p class="case__note">The lip cavity cannot be seen from outside: the cut reveals cavities and glands.</p><figure class="case__obs"><img alt="Stanhopea confusa, specimen observed" loading="lazy" src="/images/lcdp/obs-stanhopea-confusa.jpg"/><figcaption>Specimen observed</figcaption></figure></div></div><div aria-labelledby="ctab-lycaste-leucantha" class="tabs__panel case" hidden="" id="cpan-lycaste-leucantha" role="tabpanel"><figure class="plate case__plate"><button aria-label="Enlarge the plate of Lycaste leucantha" class="plate__mount" data-lightbox="/images/lcdp/lcdp-lycaste-leucantha.jpg"><img alt="LCDP of Lycaste leucantha" loading="lazy" src="/images/lcdp/lcdp-lycaste-leucantha.jpg"/></button><figcaption><span class="pl">Pl. III</span> <i>Lycaste leucantha</i> · LCDP by K. Suncion</figcaption></figure><div class="case__card"><p class="case__eyebrow">Case III · White flowers</p><h3><i>Lycaste leucantha</i></h3><div class="case__lvl"><span class="case__k">Complexity</span><span class="meter"><span class="on"></span><span class="on"></span><span class=""></span><span class=""></span></span><b>Intermediate</b></div><dl><dt>Challenge</dt><dd>Optical properties of a white flower.</dd><dt>Criteria triggered</dt><dd>Structural complexity · optical properties</dd><dt>Strategies</dt><dd>Diffuse lighting, exposure control and white balance</dd></dl><p class="case__k">Route through the tree</p><ol class="route"><li>Base representation: visible morphology</li><li>Optical properties: whites, reflections, texture</li><li>Capture control</li></ol><p class="case__note">The information is visible but can be lost through lighting: texture, volume and white must be preserved.</p><figure class="case__obs"><img alt="Lycaste leucantha, specimen observed" loading="lazy" src="/images/lcdp/obs-lycaste-leucantha.jpg"/><figcaption>Specimen observed</figcaption></figure></div></div><div aria-labelledby="ctab-ornithocephalus" class="tabs__panel case" hidden="" id="cpan-ornithocephalus" role="tabpanel"><figure class="plate case__plate"><button aria-label="Enlarge the plate of Ornithocephalus sp." class="plate__mount" data-lightbox="/images/lcdp/lcdp-ornithocephalus.jpg"><img alt="LCDP of Ornithocephalus sp." loading="lazy" src="/images/lcdp/lcdp-ornithocephalus.jpg"/></button><figcaption><span class="pl">Pl. IV</span> <i>Ornithocephalus sp.</i> · LCDP by K. Suncion</figcaption></figure><div class="case__card"><p class="case__eyebrow">Case IV · Multiple documentation challenges</p><h3><i>Ornithocephalus sp.</i></h3><div class="case__lvl"><span class="case__k">Complexity</span><span class="meter"><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span></span><b>Very high</b></div><dl><dt>Challenge</dt><dd>Small size, three-dimensionality and very delicate tissues.</dd><dt>Criteria triggered</dt><dd>Floral architecture · structural complexity · accessibility · diagnostic value</dd><dt>Strategies</dt><dd>Macro, focus stacking, complementary views and lighting control</dd></dl><p class="case__k">Route through the tree</p><ol class="route"><li>Base representation insufficient</li><li>Size → macro and detail</li><li>3D → lateral and three-quarter views</li><li>Thin tissues → light control</li><li>Depth → stacking</li></ol><p class="case__note">The case closest to <i>Lepanthes</i>: several limitations at once, resolved in a single LCDP.</p><figure class="case__obs"><img alt="Ornithocephalus sp., specimen observed" loading="lazy" src="/images/lcdp/obs-ornithocephalus.jpg"/><figcaption>Specimen observed</figcaption></figure></div></div></div>
+<div aria-hidden="true" class="star"><svg height="22" viewbox="0 0 24 24" width="22"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect height="14" width="14" x="5" y="5"></rect><rect height="14" transform="rotate(45 12 12)" width="14" x="5" y="5"></rect></g></svg></div>
+<p class="eyebrow">Part VII</p>
+<h2 id="caso-de-estudio-lepanthes">Case study: <i>Lepanthes</i></h2>
+<h3>7.1 Why <i>Lepanthes</i></h3>
+<p>Worked example: <i>Lepanthes</i> sp. nov., Rufford project «El Oro del Cofre», November 2026. The genus brings together all five limitations of Part III: flowers a few millimetres across, bilobed petals, a bilaminate lip that clasps the column, parts that dehydrate soon after cutting, and surface papillae that, at this magnification, dominate the depth signal.</p>
+<h3>7.2 Applied diagnosis</h3>
+<p class="soon">In preparation.</p>
+<h3>7.3 Photographic protocol</h3>
+<p>Specimen: <i>Lepanthes</i> sp. nov., fresh flower with pedicel, ovary, bract and a neighbouring bud in frame. The equipment and shots are described in the boxes of Parts IV and V.</p>
+<h3>7.4 Dissection and photomicrography</h3>
+<p class="soon">In preparation.</p>
+<h3>7.5 3D model</h3>
+<p>Current state: model v9 of <i>Lepanthes</i> sp. nov. The geometry stage is finished and validated with the metrics of Part VI; surface detail and colour texture are planned.</p>
+<h3>7.6 Final annotated LCDP</h3>
+<p class="soon">In preparation.</p>
+<h2 id="anexos">Appendices</h2>
+<h3>Appendix A. Diagnosis sheet</h3>
+<div class="tbl"><table>
+<tr><th>Field</th><th>Record</th></tr>
+<tr><td>Taxon / collector and number</td><td></td></tr>
+<tr class="alt"><td>State of the specimen (3.1): usable / with limitations</td><td></td></tr>
+<tr><td>Diagnostic characters of the group</td><td></td></tr>
+<tr class="alt"><td>Characters not visible in the base</td><td></td></tr>
+<tr><td>Limitation per character (S / 3D / O / I / P)</td><td></td></tr>
+<tr class="alt"><td>Strategy chosen per character</td><td></td></tr>
+<tr><td>Resulting panels</td><td></td></tr>
+</table></div>
+<h3>Appendix B. Settings record per panel</h3>
+<div class="tbl"><table>
+<tr><th>Field</th><th>Value</th></tr>
+<tr><td>Panel / scenario</td><td></td></tr>
+<tr class="alt"><td>Body, optics, measured magnification</td><td></td></tr>
+<tr><td>Lighting (scheme 4.3)</td><td></td></tr>
+<tr class="alt"><td>Aperture, ISO, shutter speed or flash</td><td></td></tr>
+<tr><td>Stacking: step, layers, software</td><td></td></tr>
+<tr class="alt"><td>Editing applied</td><td></td></tr>
+</table></div>
+<h3>Appendix C. Glossary</h3>
+<p class="soon">In preparation.</p>
+<h3>Appendix D. LCDP template</h3>
+<p class="soon">In preparation.</p>
+<h3>Appendix E. References</h3>
+<p>Arditti, J. (1992). <i>Fundamentals of orchid biology</i>. Wiley.</p>
+<p>Eggli, U. (2020). Orchidaceae. In <i>Monocotyledons</i> (pp. 1299–1304). Springer. https://doi.org/10.1007/978-3-662-56486-8_21</p>
+<p>Karremans, A. P. (2020). <i>LCDP - 2019</i>. https://doi.org/10.13140/RG.2.2.10420.07048</p>
+<p>Pridgeon, A. M. (2014). Introduction. In W. L. Stern (Ed.), <i>Anatomy of the monocotyledons, Volume X: Orchidaceae</i>. Oxford University Press. https://doi.org/10.1093/acprof:osobl/9780199689071.003.0001</p>
+<p>Verma, S., and Saxena, A. (2025). Advanced imaging techniques: combining focus stacking and image stitching in biological photomicrography. <i>International Journal for Multidisciplinary Research</i>, 7(1). https://doi.org/10.36948/ijfmr.2025.v07i01.37209</p>
+</main>
+</div>
+<footer class="footer"><div class="wrap"><div class="footer-grid"><div><h2>Orchidarc.</h2><p>UK-registered conservation NGO working to protect the wild orchids of Mexico through research, action and cinema.</p></div><div><h3>Research</h3><ul><li><a href="/research.html">Research overview</a></li><li><a href="/lepanthes.html">Lepanthes</a></li><li><a href="/herbarium.html">Herbarium</a></li></ul></div><div><h3>Contact</h3><ul><li><a href="mailto:andresr@orchidarc.org">andresr@orchidarc.org</a></li><li>Mexico · UK · Japan</li><li>Charity no. 1208062</li></ul></div></div><div class="copy">© Orchidarc 2024–2026 · Text: K. Suncion and A. Ramos Roldán · LCDP plates: K. Suncion</div></div></footer>
+<div aria-hidden="true" class="progress"><span></span></div>
+<div class="lightbox" hidden=""><button aria-label="Close" class="lightbox__close">Close</button><img alt=""/></div>
+<script>(function(){
+// progress + scrollspy
+var bar=document.querySelector('.progress span');var links=[].slice.call(document.querySelectorAll('.toc a'));
+var heads=links.map(function(a){return document.getElementById(a.getAttribute('href').slice(1))});
+function onScroll(){var h=document.documentElement;var p=h.scrollTop/(h.scrollHeight-h.clientHeight);bar.style.width=(p*100)+'%';
+ var cur=0;heads.forEach(function(el,i){if(el&&el.getBoundingClientRect().top<140)cur=i});links.forEach(function(a,i){a.classList.toggle('on',i===cur)})}
+window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+// tabs
+document.querySelectorAll('[data-tabs]').forEach(function(t){var bs=t.querySelectorAll('[role=tab]');bs.forEach(function(b){b.addEventListener('click',function(){
+ bs.forEach(function(x){x.setAttribute('aria-selected',x===b);document.getElementById(x.getAttribute('aria-controls')).hidden=(x!==b)})})})});
+// matrix filter
+document.querySelectorAll('[data-filter]').forEach(function(c){var tb=document.getElementById(c.dataset.filter);var bs=c.querySelectorAll('button');
+ bs.forEach(function(b){b.addEventListener('click',function(){bs.forEach(function(x){x.setAttribute('aria-pressed',x===b)});var g=b.dataset.g;
+ tb.querySelectorAll('tr[data-g]').forEach(function(r){var m=g==='all'||r.dataset.g===g||r.dataset.g==='*';r.classList.toggle('dim',!m);r.classList.toggle('hit',m&&g!=='all')})})})});
+// lightbox
+var lb=document.querySelector('.lightbox'),lbi=lb.querySelector('img');
+document.querySelectorAll('[data-lightbox]').forEach(function(b){b.addEventListener('click',function(){lbi.src=b.dataset.lightbox;lbi.alt=b.querySelector('img').alt;lb.hidden=false;lb.querySelector('button').focus()})});
+function close(){lb.hidden=true;lbi.src=''}lb.addEventListener('click',function(e){if(e.target!==lbi)close()});document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!lb.hidden)close()});
+// pipeline
+var pipe=document.getElementById('pipe');if(pipe){var det=pipe.querySelector('.pipe__detail');var steps=pipe.querySelectorAll('.pipe__step');
+ function show(b){steps.forEach(function(x){x.classList.toggle('on',x===b)});det.innerHTML='<b>'+b.dataset.n+'. '+b.dataset.name+'</b><em>'+b.dataset.st+'</em><p>'+b.dataset.desc+'</p>'}
+ steps.forEach(function(b){b.addEventListener('click',function(){show(b)})});show(steps[0])}
+// decision tree
+var T={
+ q0:{q:'Is the specimen usable?',h:'Full anthesis, intact parts, pollinarium present and natural orientation (3.1).',o:[['Yes','q1'],['No','r0']]},
+ r0:{r:'Choose another flower or wait',d:'If buds are about to open, wait. If there is no other flower, document it and record the limitations in the plate caption.',s:'diagnostico-y-arbol-de-decisiones',sl:'3.1'},
+ q1:{q:'Does the character have diagnostic value?',h:'It helps distinguish or characterise the taxon within its group.',o:[['Yes','q2'],['No','r1']]},
+ r1:{r:'No panel is added',d:'A character without diagnostic value does not justify a panel, however hard it is to see.'},
+ q2:{q:'Is it clearly visible in the base representation?',h:'Frontal and lateral flower, perianth, lip, column and pollinarium (2.1).',o:[['Yes','r2'],['No','q3']]},
+ r2:{r:'The base representation is enough',d:'Every panel answers a need the existing representation does not cover. Here there is none.'},
+ q3:{q:'Is it visible from outside?',h:'Or is it in a cavity, under another part or inside?',o:[['Yes','q4'],['No','q3b']]},
+ q3b:{q:'Does another orientation reveal it?',h:'Before intervening on the specimen, always try another view.',o:[['Yes','r3a'],['No','r3b']]},
+ r3a:{r:'Complementary view',d:'Lateral, posterior or three-quarter, depending on the character.',s:'anatomia-de-una-lcdp',sl:'2.1',n:'q4'},
+ r3b:{r:'Dissection, section or cut',d:'Photograph before each cut and keep the context of the part in the flower.',s:'equipo-y-montaje',sl:'4.6',n:'q4'},
+ q4:{q:'Is it visible, but without enough definition?',h:'The character is in the image, but cannot be read well.',o:[['Yes','q4b'],['No','q5']]},
+ q4b:{q:'What is missing?',h:'Choose the main cause.',o:[['Scale','r4a'],['Depth of field','r4b'],['Light, gloss or colour','r4c']]},
+ r4a:{r:'Detail at higher magnification',d:'Stereo microscope or, beyond the macro range, photomicrography.',s:'captura-y-procesamiento',sl:'4.1 · 5.3',n:'q5'},
+ r4b:{r:'Focus stacking',d:'Record the real rail step and check the direction of the stack.',s:'captura-y-procesamiento',sl:'5.2',n:'q5'},
+ r4c:{r:'Better recording',d:'Raking or directed light, cross-polarisation against gloss, controlled exposure and a colour chart.',s:'equipo-y-montaje',sl:'4.3 · 4.4',n:'q5'},
+ q5:{q:'Are its shape and its relationship with other parts clear?',h:'Depth, curvature, orientation relative to the column or lip.',o:[['Yes','q6'],['No','q5b']]},
+ q5b:{q:'Are one or two complementary views enough?',h:'If many would be needed, the plate becomes unreadable.',o:[['Yes','r5a'],['No','r5b']]},
+ r5a:{r:'Complementary view',d:'Include the view that shows the missing spatial relationship.',s:'anatomia-de-una-lcdp',sl:'2.1',n:'q6'},
+ r5b:{r:'Three-dimensional model',d:'It is justified by the information it adds, not by the technique.',s:'documentacion-tridimensional',sl:'Part VI',n:'q6'},
+ q6:{q:'Does the structure change during preparation or capture?',h:'It dehydrates, deforms, is translucent or very fragile.',o:[['Yes','r6a'],['No','r6b']]},
+ r6a:{r:'Early capture and humidity control',d:'Photograph the most fragile parts first; use a humid chamber, and transmitted light if translucent.',s:'equipo-y-montaje',sl:'4.5 · 4.6',end:1},
+ r6b:{r:'Done',d:'If more than one answer was triggered along the way, combine the strategies, checking that each panel adds something new.',end:1}};
+var W=document.getElementById('wizard');if(!W)return;var card=W.querySelector('.wizard__card'),path=W.querySelector('.wizard__path');var hist=[];
+function esc(s){return s}
+function render(id){var n=T[id];card.innerHTML='';
+ path.innerHTML=hist.map(function(x){return '<li>'+x[0]+' <b>'+x[1]+'</b></li>'}).join('');
+ if(n.q){card.innerHTML='<p class="wizard__q">'+n.q+'</p><p class="wizard__h">'+n.h+'</p><div class="wizard__opts">'+n.o.map(function(o,i){return '<button type="button" data-i="'+i+'">'+o[0]+'</button>'}).join('')+'</div>';
+  card.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){var o=n.o[+b.dataset.i];hist.push([n.q.replace(/^¿|\?$/g,''),o[0]]);render(o[1])})})}
+ else{var h='<div class="wizard__res"><strong>'+n.r+'</strong><span>'+n.d+(n.s?' See <a href="#'+n.s+'">'+n.sl+'</a>.':'')+'</span></div><div class="wizard__opts">';
+  if(n.n)h+='<button type="button" class="go" data-next>Keep checking the character</button>';
+  h+='<button type="button" data-reset>Another character</button></div>';card.innerHTML=h;
+  var nx=card.querySelector('[data-next]');if(nx)nx.addEventListener('click',function(){hist.push(['Result',n.r]);render(n.n)});
+  card.querySelector('[data-reset]').addEventListener('click',function(){hist=[['The specimen is usable','Yes']];render('q1')})}}
+W.querySelector('.wizard__reset').addEventListener('click',function(){hist=[];render('q0')});render('q0');
+})();
+</script>
+</body>
+</html>
