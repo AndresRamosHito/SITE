@@ -136,7 +136,7 @@ p.pipe__stages{display:block;margin:0 0 12px!important;font:600 .8rem/1.6 Assist
 /* ---- 3D model viewer (Fig. 6.6) ---- */
 .m3d{position:relative;margin:26px 0 0;aspect-ratio:16/10;background:#1C0619 url(/images/lepanthes-3d/poster.jpg) center/cover no-repeat;border:1px solid var(--gold);box-shadow:0 0 0 4px #fff,0 0 0 5px var(--gold)}
 .m3d model-viewer{display:block;width:100%;height:100%;background:transparent;--poster-color:transparent}
-.m3d__load{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border:0;border-radius:999px;background:#E4007C;color:#fff;font:700 15px/1 Assistant,"Segoe UI",sans-serif;letter-spacing:.06em;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.m3d__load{white-space:nowrap;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border:0;border-radius:999px;background:#E4007C;color:#fff;font:700 15px/1 Assistant,"Segoe UI",sans-serif;letter-spacing:.06em;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.35)}
 .m3d__load span{font-weight:400;opacity:.85;font-size:13px}.m3d__load:hover,.m3d__load:focus-visible{background:#B8005F;outline:2px solid #fff;outline-offset:2px}
 .m3d.is-loading .m3d__load{pointer-events:none;opacity:.7}.m3d.is-loading .m3d__load::after{content:"…"}
 .m3d__bar{position:absolute;left:12px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px;opacity:0;pointer-events:none;transition:opacity .3s}
@@ -146,6 +146,7 @@ p.pipe__stages{display:block;margin:0 0 12px!important;font:600 .8rem/1.6 Assist
 .m3d__key{display:flex;flex-wrap:wrap;gap:6px 16px;list-style:none;margin:14px 0 0!important;padding:0!important}
 .m3d__key li{display:flex;align-items:center;gap:7px;font-size:14px;margin:0!important}.m3d__key i{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.18);display:inline-block}
 @media(max-width:640px){.m3d{aspect-ratio:4/5}.m3d__bar{left:8px;right:8px;bottom:8px}.m3d__bar button{padding:6px 10px;font-size:11.5px}}
+.m3d.is-on{background-image:none}
 </style>
 </head>
 <body>
