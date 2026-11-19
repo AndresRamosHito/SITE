@@ -133,6 +133,19 @@ p.pipe__stages{display:block;margin:0 0 12px!important;font:600 .8rem/1.6 Assist
 .plate figcaption,.case__obs figcaption,.caption,figure figcaption{font-size:14.5px!important;line-height:1.5}
 .tile__d,.route li,.case__lvl b,.toc a{font-size:15px!important}
 .article td,.article th{font-size:15px}
+/* ---- 3D model viewer (Fig. 6.6) ---- */
+.m3d{position:relative;margin:26px 0 0;aspect-ratio:16/10;background:#1C0619 url(/images/lepanthes-3d/poster.jpg) center/cover no-repeat;border:1px solid var(--gold);box-shadow:0 0 0 4px #fff,0 0 0 5px var(--gold)}
+.m3d model-viewer{display:block;width:100%;height:100%;background:transparent;--poster-color:transparent}
+.m3d__load{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:10px;padding:13px 24px;border:0;border-radius:999px;background:#E4007C;color:#fff;font:700 15px/1 Assistant,"Segoe UI",sans-serif;letter-spacing:.06em;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.m3d__load span{font-weight:400;opacity:.85;font-size:13px}.m3d__load:hover,.m3d__load:focus-visible{background:#B8005F;outline:2px solid #fff;outline-offset:2px}
+.m3d.is-loading .m3d__load{pointer-events:none;opacity:.7}.m3d.is-loading .m3d__load::after{content:"…"}
+.m3d__bar{position:absolute;left:12px;bottom:12px;display:flex;flex-wrap:wrap;gap:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.m3d.is-on .m3d__bar{opacity:1;pointer-events:auto}
+.m3d__bar button{padding:7px 13px;border:1px solid rgba(226,181,74,.7);border-radius:999px;background:rgba(28,6,25,.75);color:#F6F1E7;font:700 12.5px/1 Assistant,"Segoe UI",sans-serif;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.m3d__bar button:hover,.m3d__bar button:focus-visible,.m3d__bar button[aria-pressed=true]{background:#E2B54A;color:#1C0619;outline:none}
+.m3d__key{display:flex;flex-wrap:wrap;gap:6px 16px;list-style:none;margin:14px 0 0!important;padding:0!important}
+.m3d__key li{display:flex;align-items:center;gap:7px;font-size:14px;margin:0!important}.m3d__key i{width:13px;height:13px;border-radius:50%;border:1px solid rgba(0,0,0,.18);display:inline-block}
+@media(max-width:640px){.m3d{aspect-ratio:4/5}.m3d__bar{left:8px;right:8px;bottom:8px}.m3d__bar button{padding:6px 10px;font-size:11.5px}}
 </style>
 </head>
 <body>
@@ -461,7 +474,7 @@ Es el caso en que se combinan todas las estrategias, lo que justifica la Parte V
 <div class="star" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24"><g fill="none" stroke="#9A7420" stroke-width="1.2"><rect x="5" y="5" width="14" height="14"/><rect x="5" y="5" width="14" height="14" transform="rotate(45 12 12)"/></g></svg></div>
 <p class="eyebrow">Parte VI</p>
 <h2 id="documentacion-tridimensional">Documentación tridimensional</h2>
-<p>Esta parte resume el método de reconstrucción tridimensional desarrollado con <i>Lepanthes</i> sp. nov. en noviembre de 2026. Es provisional y describe el estado del modelo v9.</p>
+<p>Esta parte resume el método de reconstrucción tridimensional desarrollado con <i>Lepanthes</i> sp. nov. en noviembre de 2026. Es provisional. Describe dos generaciones del modelo: el modelo de superficie v9 (6.2) y el modelo por órganos v12b (6.3), que es el vigente.</p>
 
 <h3>6.1 Cuándo se justifica el 3D</h3>
 <p>Un modelo tridimensional responde a la limitación de forma 3D cuando las vistas complementarias no resuelven la relación espacial entre piezas, o cuando el número de vistas necesarias haría la lámina ilegible. Como cualquier panel, se justifica por la información que añade y no por la técnica.</p>
@@ -499,17 +512,38 @@ Es el caso en que se combinan todas las estrategias, lo que justifica la Parte V
 <tr class="alt"><td>Escalones en uniones</td><td>Vértices de margen a 8–50 µm de otra lámina</td><td>505</td></tr>
 <tr><td>Topología</td><td>Aristas abiertas; aristas no variedad</td><td>8593; 0</td></tr>
 <tr class="alt"><td>Tamaño de malla</td><td>Triángulos, modelo completo / ligero</td><td>1 244 651 / 399 999</td></tr>
-<tr><td>Extensión</td><td>Caja envolvente, con la escala provisional (6.4)</td><td>9,41 × 5,75 × 4,36 mm</td></tr>
+<tr><td>Extensión</td><td>Caja envolvente, con la escala provisional (6.5)</td><td>9,41 × 5,75 × 4,36 mm</td></tr>
 </table></div></details>
 <p>Antes de aceptar una versión, se renderiza el modelo desde la cámara lateral, la frontal y una vista oblicua, y se compara con la versión anterior y con las fotografías.</p>
 
-<h3>6.3 Integración del 3D en la LCDP</h3>
-<p>Salidas disponibles: modelo completo y modelo ligero (400 000 triángulos) en formato GLB, en milímetros. Se abren en Blender con Archivo › Importar › glTF 2.0. <span class="pending">[Definir: qué vistas renderizadas entran en la lámina, cómo se rotulan y dónde se deposita y enlaza el modelo.]</span></p>
-<h3>6.4 Limitaciones del caso de estudio</h3>
+<h3>6.3 Modelo por órganos (v10–v12b)</h3>
+<p>El modelo v9 es una sola superficie reconstruida a partir de la nube de puntos. Reproduce bien las piezas planas y bien fotografiadas, pero no las que se tapan entre sí: el labelo sale con aspecto de caja y los márgenes finos quedan abiertos (6.5). Desde v10 la flor se reconstruye de otra manera: cada órgano es un sólido cerrado propio, construido a partir de su contorno, trazado a mano sobre las fotografías, y de la profundidad que esas mismas fotografías dan para él. En v11 se reconstruyó así el centro de la flor (pétalos, labelo y columna) sobre los sépalos de v10; en v12 se reconstruyeron todos los órganos y ya no queda superficie de v10.</p>
+<p><b>Entradas.</b> Las tres imágenes fusionadas (frontal, lateral y ventral) con su pose y su escala del ajuste entre vistas (6.2, pasos 2 y 4), los mapas de profundidad de cada vista, el plano de simetría (paso 8) y un contorno por órgano y por vista, trazado como vector (SVG) sobre la imagen fusionada. Los contornos de cada fotografía se ordenan de delante atrás, de modo que cada píxel de profundidad se asigna al órgano más cercano a la lente que lo contiene.</p>
+<p><b>Construcción.</b> Cada órgano usa la forma más sencilla que explica sus datos (Tabla 6.3). Antes de construirlo, su contorno se regulariza: se suavizan los nodos del trazado y se redondea cualquier esquina más cerrada que 0,06 mm. Las piezas pares se construyen en un lado y se reflejan en el plano de simetría. La tabla distingue lo que se ajustó a datos de lo que se colocó con una plantilla, porque solo lo primero puede usarse como evidencia morfológica.</p>
+<p class="caption"><b>Tabla 6.3.</b> Órganos del modelo v12b: cómo se construye cada uno y qué datos lo fijan.</p>
+<div class="tbl"><table>
+<tr><th>Órgano</th><th>Cómo se construye</th><th>Datos que lo fijan</th><th>Tipo</th></tr>
+<tr><td>Sépalos</td><td>Sépalo dorsal y sinsépalo (unión de los contornos de los dos sépalos laterales, que son connados), como láminas con grosor</td><td>Profundidad de las vistas frontal y lateral dentro de cada contorno</td><td>Ajustado</td></tr>
+<tr class="alt"><td>Pétalos</td><td>Contorno frontal y una superficie de altura rígida (spline de placa delgada, λ = 10) ajustada a la profundidad, con 0,05 mm de grosor; el pétalo lejano es el reflejo del cercano. En v12b la base se prolonga en una uña estrecha hasta la columna</td><td>Contorno y profundidad frontales</td><td>Ajustado; uña según plantilla</td></tr>
+<tr><td>Labelo: láminas</td><td>Cada lámina es la sección rellena de la superficie ajustada a esa lámina, en forma de bastón y un 30 % menos profunda de abajo arriba; guarda una holgura con la columna</td><td>Contornos lateral y frontal: la lámina debe proyectarse dentro de ambos y quedar en su lado del plano de simetría</td><td>Ajustado</td></tr>
+<tr class="alt"><td>Labelo: conectivos y apéndice</td><td>Una banda que une las dos láminas bajo la columna y un cono pequeño en su extremo distal</td><td>Ninguno</td><td>Esquemático</td></tr>
+<tr><td>Columna</td><td>Tubo con el eje en el plano de simetría; el radio en ese plano sale del contorno lateral y el transversal, del frontal; extremos redondeados y antera añadida</td><td>Contornos lateral y frontal</td><td>Ajustado</td></tr>
+<tr class="alt"><td>Ovario y pedicelo, botón y raquis</td><td>Tubos a lo largo del eje medio del contorno lateral, con secciones circulares de la semianchura del contorno</td><td>Contorno y profundidad laterales</td><td>Ajustado</td></tr>
+</table></div>
+<p><b>Ensamblaje.</b> La columna se apoya en la cara anterior de los sépalos y el ovario en la posterior, sin atravesar la lámina; los tallos entran en el raquis. Las uniones se hacen por unión booleana de sólidos cerrados y, después, el modelo se reduce con una decimación que conserva la topología.</p>
+<p><b>Control.</b> Cada órgano se compara con su contorno y con su profundidad en cada fotografía, y el modelo se renderiza desde las tres cámaras junto a las fotos (Figura 6.3). También se miden las distancias entre órganos: en v12b el labelo queda a 20 µm de la columna sin tocarla, los pétalos a unos 165 µm del labelo, y solo se interpenetran, unas decenas de micras, las uniones previstas entre columna, sépalos, ovario, botón y raquis.</p>
+<figure class="plate"><button class="plate__mount" data-lightbox="/images/lepanthes-3d/v12-three-views.jpg" aria-label="Ampliar la figura 6.3"><img src="/images/lepanthes-3d/v12-three-views.jpg" alt="Fotografías frontal, lateral y ventral de Lepanthes sp. nov. junto a los modelos v11 y v12 renderizados desde las mismas cámaras" loading="lazy"></button><figcaption><span class="pl">Fig. 6.3</span> Las tres cámaras: fotografías (arriba), modelo v11, con el centro reconstruido sobre los sépalos de v10 (centro), y modelo v12, con todos los órganos reconstruidos (abajo). Tonos de v12: verde, sépalos; amarillo, pétalos; azul, labelo; blanco, columna; verde claro, ovario y pedicelo; rosa, botón; gris, raquis. Rótulos del original en inglés.</figcaption></figure>
+<figure class="plate"><button class="plate__mount" data-lightbox="/images/lepanthes-3d/v12-labellum-rods.jpg" aria-label="Ampliar la figura 6.4"><img src="/images/lepanthes-3d/v12-labellum-rods.jpg" alt="Labelo modelado como lámina gruesa y como bastones rellenos, frente a las fotografías" loading="lazy"></button><figcaption><span class="pl">Fig. 6.4</span> Labelo como lámina gruesa (versión anterior, centro) y como bastones rellenos un 30 % menos profundos (vigente, abajo), frente a las fotografías.</figcaption></figure>
+<figure class="plate"><button class="plate__mount" data-lightbox="/images/lepanthes-3d/v12b-petal-bases.jpg" aria-label="Ampliar la figura 6.5"><img src="/images/lepanthes-3d/v12b-petal-bases.jpg" alt="Pétalos libres en v12 y con la base prolongada hasta la columna en v12b" loading="lazy"></button><figcaption><span class="pl">Fig. 6.5</span> v12: pétalos libres, a 240 µm de la columna. v12b: bases de los pétalos prolongadas hasta la columna.</figcaption></figure>
+<div class="m3d" data-m3d><model-viewer src="/models/lepanthes-sp-nov-v12b.glb" camera-controls touch-action="pan-y" interaction-prompt="none" exposure="0.8" shadow-intensity="0" tone-mapping="aces" camera-orbit="40deg 80deg auto" alt="Modelo tridimensional de Lepanthes sp. nov., versión v12b"><button type="button" class="m3d__load">Ver el modelo 3D <span>1,3 MB</span></button></model-viewer><div class="m3d__bar" role="group" aria-label="Vistas del modelo"><button type="button" data-orbit="0deg 90deg auto">Lateral</button><button type="button" data-orbit="0deg 0deg auto">Frontal</button><button type="button" data-orbit="90deg 90deg auto">Ventral</button><button type="button" data-orbit="40deg 80deg auto">Oblicua</button></div></div><ul class="m3d__key"><li><i style="background:#B9CBA4"></i>Sépalos</li><li><i style="background:#E3CB8C"></i>Pétalos</li><li><i style="background:#93ABD6"></i>Labelo</li><li><i style="background:#F1EEE8"></i>Columna</li><li><i style="background:#C8DBB4"></i>Ovario y pedicelo</li><li><i style="background:#E2B4C6"></i>Botón</li><li><i style="background:#B7B4B0"></i>Raquis</li></ul>
+<p class="caption"><b>Figura 6.6.</b> Modelo v12b de <i>Lepanthes</i> sp. nov., con los tonos de la Figura 6.3. Arrastra para girarlo y usa la rueda o dos dedos para acercarte. La escala es provisional (6.5).</p>
+<h3>6.4 Integración del 3D en la LCDP</h3>
+<p>Salidas del modelo vigente (v12b): modelo completo (777 286 triángulos) y modelo ligero (421 114) en formato GLB, en milímetros, con un objeto por órgano. Se abren en Blender con Archivo › Importar › glTF 2.0. Para la web se publica una copia comprimida (1,3 MB) con un tono por órgano: la de la Figura 6.6 y la página de <i>Lepanthes</i>. <span class="pending">[Definir: qué vistas renderizadas entran en la lámina, cómo se rotulan y dónde se deposita y enlaza el modelo.]</span></p>
+<h3>6.5 Limitaciones del caso de estudio</h3>
 <p><b>Escala.</b> La escala absoluta se fijó por convención: 10 mm entre el ápice del sépalo dorsal y el punto medio de los ápices de los sépalos laterales. A un aumento de exactamente 2x, la óptica situaría esa distancia en unos 7,6 mm, así que el modelo podría estar sobredimensionado en torno a un 30 %. <span class="pending">[Pendiente: escala definitiva, idealmente con una imagen de micrómetro.]</span></p>
 <p><b>Remontaje.</b> La flor se volvió a montar entre vistas. Cualquier cambio de forma entre montajes queda absorbido en el error de alineación y en el desajuste de simetría, y no se ha medido por separado. Las recomendaciones para evitarlo están en 4.2 y 4.5.</p>
-<p><b>Labelo.</b> Con dos vistas, el sólido del labelo sale con aspecto de caja. El siguiente paso es usar el contorno ventral como tercera vista de tallado.</p>
-<p><b>Márgenes.</b> Alrededor del 3 % del margen supera todavía la ley de curvatura, y quedan unas 8600 aristas abiertas, sobre todo en márgenes finos donde solo se reconstruyó una cara.</p>
+<p><b>Labelo.</b> En v9, con dos vistas, el sólido del labelo salía con aspecto de caja. En v12b las láminas se ajustan a los contornos como bastones rellenos (6.3), pero los conectivos bajo la columna y el apéndice siguen siendo esquemáticos: se colocaron con una plantilla y no se ajustaron a datos.</p>
+<p><b>Márgenes.</b> En v9, alrededor del 3 % del margen supera todavía la ley de curvatura, y quedan unas 8600 aristas abiertas, sobre todo en márgenes finos donde solo se reconstruyó una cara.</p>
 
 <aside class="box">
 <p class="eyebrow"><i>Lepanthes</i> en esta parte</p>
@@ -535,7 +569,7 @@ Es el caso en que se combinan todas las estrategias, lo que justifica la Parte V
 <h3>7.4 Disección y fotomicrografía</h3>
 <p class="pending">[ ]</p>
 <h3>7.5 Modelo 3D</h3>
-<p>Estado actual: modelo v9 de <i>Lepanthes</i> sp. nov.. La etapa de geometría está terminada y validada con las métricas de la Parte VI; el detalle de superficie y la textura de color están planificados.</p>
+<p>Estado actual: modelo v12b de <i>Lepanthes</i> sp. nov., construido órgano por órgano (6.3) y visible en la Figura 6.6. La geometría está completa; el detalle de superficie y la textura de color siguen planificados.</p>
 <h3>7.6 LCDP final anotada</h3>
 <p class="pending">[Lámina completa y comentario panel por panel: qué limitación resuelve cada uno.]</p>
 
@@ -644,6 +678,13 @@ function render(id){var n=T[id];card.innerHTML='';
   card.querySelector('[data-reset]').addEventListener('click',function(){hist=[['El espécimen es apto','Sí']];render('q1')})}}
 W.querySelector('.wizard__reset').addEventListener('click',function(){hist=[];render('q0')});render('q0');
 })();
+// 3D model viewer: loads model-viewer and the model only on request
+document.querySelectorAll('[data-m3d]').forEach(function(box){var mv=box.querySelector('model-viewer'),go=box.querySelector('.m3d__load'),bs=box.querySelectorAll('[data-orbit]');
+ function start(){if(box.classList.contains('is-loading')||box.classList.contains('is-on'))return;self.ModelViewerElement=self.ModelViewerElement||{};self.ModelViewerElement.dracoDecoderLocation='/js/draco/';box.classList.add('is-loading');
+  mv.addEventListener('load',function(){box.classList.remove('is-loading');box.classList.add('is-on');if(go)go.remove();bs[bs.length-1]&&bs[bs.length-1].setAttribute('aria-pressed','true');mv.focus&&mv.focus()},{once:true});
+  import('/js/model-viewer.min.js').catch(function(){box.classList.remove('is-loading')})}
+ if(go)go.addEventListener('click',start);
+ bs.forEach(function(b){b.setAttribute('aria-pressed','false');b.addEventListener('click',function(){mv.cameraOrbit=b.dataset.orbit;bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')})})})});
 </script>
 </body>
 </html>
